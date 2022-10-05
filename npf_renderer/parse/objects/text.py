@@ -1,7 +1,7 @@
 """Objects representing Text content type and all of its option in Tumblr's NPF """
 
 import enum
-from typing import NamedTuple
+from typing import NamedTuple,  Union
 
 
 class InlineFormatType(enum.Enum):
@@ -23,12 +23,6 @@ class TextBlockSubtypes(enum.Enum):
     chat = 5
     ordered_list_item = 6
     unordered_list_item = 7
-
-
-class TextBlock(NamedTuple):
-    text: str
-    subtype: TextBlockSubtypes = None,
-    indent_level: int = None
 
 
 class InlineBaseTextFormatting(NamedTuple):
@@ -59,4 +53,16 @@ class InlineColorTextFormatting(NamedTuple):
     start: int
     end: int
     hex: str
+
+
+INLINE_FMT_TYPES = Union[InlineBaseTextFormatting, InlineLinkTextFormatting,
+                         InlineMentionTextFormatting, InlineColorTextFormatting]
+
+
+class TextBlock(NamedTuple):
+    text: str
+    subtype: TextBlockSubtypes = None
+    indent_level: int = None
+
+    inline_formatting: list[INLINE_FMT_TYPES] = None
 
