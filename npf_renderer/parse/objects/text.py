@@ -31,18 +31,18 @@ class TextBlock(NamedTuple):
     indent_level: int = None
 
 
-class BaseTextFormatting(NamedTuple):
+class InlineBaseTextFormatting(NamedTuple):
     start: int
     end: int
 
 
-class LinkTextFormatting(NamedTuple):
+class InlineLinkTextFormatting(NamedTuple):
     start: int
     end: int
     url: str
 
 
-class MentionTextFormatting(NamedTuple):
+class InlineMentionTextFormatting(NamedTuple):
     start: int
     end: int
 
@@ -51,7 +51,7 @@ class MentionTextFormatting(NamedTuple):
     blog_uuid: str
 
 
-class ColorTextFormatting(NamedTuple):
+class InlineColorTextFormatting(NamedTuple):
     start: int
     end: int
     hex: str
