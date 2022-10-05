@@ -27,22 +27,25 @@ class TextBlockSubtypes(enum.Enum):
 
 class TextBlock(NamedTuple):
     text: str
-    subtype: int = None
+    subtype: TextBlockSubtypes = None,
     indent_level: int = None
 
 
 class InlineBaseTextFormatting(NamedTuple):
+    type: InlineFormatType
     start: int
     end: int
 
 
 class InlineLinkTextFormatting(NamedTuple):
+    type: InlineFormatType
     start: int
     end: int
     url: str
 
 
 class InlineMentionTextFormatting(NamedTuple):
+    type: InlineFormatType
     start: int
     end: int
 
@@ -52,6 +55,7 @@ class InlineMentionTextFormatting(NamedTuple):
 
 
 class InlineColorTextFormatting(NamedTuple):
+    type: InlineFormatType
     start: int
     end: int
     hex: str
