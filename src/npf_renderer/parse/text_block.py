@@ -7,8 +7,8 @@ class TextBlockNPFParser(BaseNPFParser):
 
     The logic works like this. When render_content calls upon the logic in this namespace, it uses the process() method.
     Which attempts to see if the given content is applicable. If it is then it quickly calls parse() with the given
-    content and returns the output. If not None is returned and the parsing part of render_content() when quickly
-    iterate to the next parser()
+    content and returns the output. If not None is returned then the parsing part of render_content() will quickly
+    iterate to the next parser
 
     """
     @staticmethod
@@ -21,7 +21,7 @@ class TextBlockNPFParser(BaseNPFParser):
         text = content["text"]
         # Subtype is None if content.get("subtype") doesn't find anything.
         if subtype := content.get("subtype"):
-            subtype = getattr(models.TextBlockSubtypes, subtype)
+            subtype = getattr(models.TextBlockSubtypes, subtype.replace("-", "_"))
 
         inline_formats = None
         if inline_formatting := content.get("formatting"):

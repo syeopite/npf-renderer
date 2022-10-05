@@ -1,4 +1,4 @@
-"""Objects representing Text content type and all of its option in Tumblr's NPF """
+"""Objects representing text content type and all of its option in Tumblr's NPF """
 
 import enum
 from typing import NamedTuple,  Union
