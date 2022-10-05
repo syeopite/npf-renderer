@@ -4,12 +4,12 @@ from abc import ABC, abstractmethod
 class BaseNPFParser(ABC):
     @staticmethod
     @abstractmethod
-    def process(post, content):
+    def process(content):
         pass
 
     @staticmethod
     @abstractmethod
-    def parse(post, content):
+    def parse(content):
         pass
 
 
