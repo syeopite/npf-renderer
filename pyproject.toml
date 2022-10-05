@@ -1,0 +1,11 @@
+[project]
+name = "npf_renderer"
+version = "0.0.1"
+dependencies = [
+    "dominate",
+]
+
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = "tests"
