@@ -1,0 +1,10 @@
+# Python Enviorment and byte code.
+__pycache__/
+venv/
+
+# Misc caches
+.mypy_cache
+
+# Development
+/TODO
+.idea/
