@@ -1,3 +1,6 @@
+from npf_renderer import objects
+
+
 simple_test = (  # Basic Example
     {
         "content": [
@@ -7,7 +10,11 @@ simple_test = (  # Basic Example
             }
         ]
     },
-    "b3d4c7a8e759763dddb06d05b2c86d5eb13f4b46"
+    [
+        objects.text_block.TextBlock(
+            text="Hello world!"
+        )
+    ]
 )
 
 longer_and_with_empty_string_test = (  # Empty Space Test
@@ -27,7 +34,17 @@ longer_and_with_empty_string_test = (  # Empty Space Test
             }
         ]
     },
-    "a4fb1c72c9dbbd3abae5c29f39089547972058c6"
+    [
+        objects.text_block.TextBlock(
+            text="ello!"
+        ),
+        objects.text_block.TextBlock(
+            text=""
+        ),
+        objects.text_block.TextBlock(
+            text="my name is cyle!"
+        )
+    ]
 )
 
 subtype_string_test = (
@@ -48,7 +65,18 @@ subtype_string_test = (
             }
         ]
     },
-    "99bf1fce5e81af66a2bd18b8ee8cc1a424a0f3d5"
+    [
+        objects.text_block.TextBlock(
+            text="New Post Forms Manifesto",
+            subtype=objects.text_block.Subtypes.HEADING1
+        ),
+        objects.text_block.TextBlock(
+            text="There comes a moment in every company's life that they must redefine the rules..."
+        ),
+        objects.text_block.TextBlock(
+            text="We can choose to embrace this moment courageously, or we may choose to cower in fear."
+        )
+    ]
 )
 
 subtype_string_test_2 = (
@@ -81,7 +109,27 @@ subtype_string_test_2 = (
         ]
     },
 
-    "d53118cd115ab930846a8fb1abf9b8cca573e941"
+    [
+        objects.text_block.TextBlock(
+            text="Sward's Shopping List",
+            subtype=objects.text_block.Subtypes.HEADING1
+        ),
+        objects.text_block.TextBlock(
+            text="Sword",
+            subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM
+        ),
+        objects.text_block.TextBlock(
+            text="Candy",
+            subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM
+        ),
+        objects.text_block.TextBlock(
+            text="But especially don't forget:"
+        ),
+        objects.text_block.TextBlock(
+            text="Death, which is uncountable on this list.",
+            subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM
+        ),
+    ]
 )
 
 subtype_and_indent_level_test = (
@@ -121,7 +169,38 @@ subtype_and_indent_level_test = (
             "text": "First level: Pears",
         }
     ]
-}, "dd8eb210e5fd225eba2490d80eff0528bf6bc0d0"
+},
+    [
+        objects.text_block.TextBlock(
+            text="Sward's Shopping List",
+            subtype=objects.text_block.Subtypes.HEADING1
+        ),
+        objects.text_block.TextBlock(
+            text="First level: Fruit",
+            subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
+            nest=[
+                objects.text_block.TextBlock(
+                    text="Second level: Apples",
+                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                    nest=[
+                        objects.text_block.TextBlock(
+                            text="Third Level: Green",
+                            subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM
+                        ),
+                    ]
+                ),
+                objects.text_block.TextBlock(
+                    text="Second level: Pears",
+                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                ),
+            ]
+        ),
+
+        objects.text_block.TextBlock(
+            text="First level: Pears",
+            subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM
+        ),
+    ]
 )
 
 inline_formatting_test = (
@@ -138,7 +217,18 @@ inline_formatting_test = (
             ]
         },
     ]},
-    "e8bbcbc6a3c95bf926fbf55f6853c58e9a8832b4"
+    [
+        objects.text_block.TextBlock(
+            text="some small text",
+            inline_formatting=[
+                objects.inline.Standard(
+                    type=objects.inline.FMTTypes.SMALL,
+                    start=5,
+                    end=10
+                )
+            ]
+        )
+    ]
 )
 
 #     {"content": }, "12345"
@@ -155,7 +245,19 @@ inline_formatting_link_test = (
                 "url": "https://www.nasa.gov"
             }
         ]
-    }]}, "bc4210f4cf0b574128b5fec47b9080066d98c939"
+    }]}, [
+        objects.text_block.TextBlock(
+            text="Found this link for you",
+            inline_formatting=[
+                objects.inline.Link(
+                    type=objects.inline.FMTTypes.LINK,
+                    start=6,
+                    end=10,
+                    url="https://www.nasa.gov"
+                )
+            ]
+        )
+    ]
 )
 inline_formatting_mention_test = ({"content": [{
     "type": "text",
@@ -172,7 +274,22 @@ inline_formatting_mention_test = ({"content": [{
             }
         }
     ]
-}]}, "f02d678c2124238e6f8bcc493b08776dce74d818")
+}]}, [
+    objects.text_block.TextBlock(
+        text="Shout out to @david",
+        inline_formatting=[
+            objects.inline.Mention(
+                type=objects.inline.FMTTypes.MENTION,
+                start=13,
+                end=19,
+
+                blog_uuid="t:123456abcdf",
+                blog_name="david",
+                blog_url="https://davidslog.com/"
+            )
+        ]
+    )
+])
 
 inline_formatting_color_test = ({"content": [{
     "type": "text",
@@ -185,7 +302,19 @@ inline_formatting_color_test = ({"content": [{
             "hex": "#ff492f"
         }
     ]
-}]}, "332a28f36f2cc38e7ee5a60095d655d027377866")
+}]}, [
+    objects.text_block.TextBlock(
+        text="Celebrate Pride Month",
+        inline_formatting=[
+            objects.inline.Color(
+                type=objects.inline.FMTTypes.COLOR,
+                start=10,
+                end=15,
+                hex="#ff492f"
+            )
+        ]
+    )
+])
 
 test_inline_overlapping = ({
     "content": [
@@ -206,4 +335,20 @@ test_inline_overlapping = ({
             ]
         }
     ]
-}, "740d07f3d27809e503c363439062735f59861575")
+}, [
+    objects.text_block.TextBlock(
+        text="supercalifragilisticexpialidocious",
+        inline_formatting=[
+            objects.inline.Standard(
+                type=objects.inline.FMTTypes.BOLD,
+                start=0,
+                end=20,
+            ),
+            objects.inline.Standard(
+                type=objects.inline.FMTTypes.ITALIC,
+                start=9,
+                end=34,
+            )
+        ]
+    )
+])

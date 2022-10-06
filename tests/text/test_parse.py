@@ -4,16 +4,16 @@ from npf_renderer.parse.parse import Parser
 
 import logging
 
+import pprint
+printer = pprint.PrettyPrinter(indent=4)
 
-def helper_function(raw, answer_hash):
+
+def helper_function(raw, answer):
     parser = Parser(raw["content"])
     parsed_results = parser.parse()
-
-    hashed_result = hashlib.sha1(str(parsed_results).encode("utf-8")).hexdigest()
-
     logging.info(f"Parsed: {parsed_results}")
-    logging.info(f"Hashed to: {hashed_result}")
-    assert hashed_result == answer_hash
+
+    assert parsed_results == answer
 
 
 def test_simple_text_parse():
@@ -22,7 +22,6 @@ def test_simple_text_parse():
 
 def test_empty_string_parse():
     helper_function(*longer_and_with_empty_string_test)
-
 
 def test_subtype_string_parse():
     helper_function(*subtype_string_test)
