@@ -1,13 +1,13 @@
 from example_data import *
 import hashlib
-from npf_renderer.parse.text_block import TextBlockNPFParser
+from npf_renderer.parse.parse import Parser
+
 import logging
 
 
 def helper_function(raw, answer_hash):
-    parsed_results = []
-    for block in raw["content"]:
-        parsed_results.append(TextBlockNPFParser.process(block))
+    parser = Parser(raw["content"])
+    parsed_results = parser.parse()
 
     hashed_result = hashlib.sha1(str(parsed_results).encode("utf-8")).hexdigest()
 
