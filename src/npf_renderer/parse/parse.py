@@ -65,10 +65,10 @@ class Parser:
                 nest_ = None
 
             return text_block.TextBlock(
-                text=text,
-                subtype=subtype,
+                text=text_,
+                subtype=subtype_,
                 nest=nest_,
-                inline_formatting=inline_formats,
+                inline_formatting=inline_formatting_,
             )
 
         text = self.current["text"]
@@ -88,7 +88,7 @@ class Parser:
             # When an indent_level attr is set, we should also probably either be one of the list subtypes or a indented
             # block quote subtype. This check shouldn't be needed, however.
             if peekaboo["type"] != "text" or not (indent_level := peekaboo.get("indent_level")):
-                return create_text_block(text, subtype, inline_formatting, nest_array)
+                return create_text_block(text, subtype, inline_formats, nest_array)
 
             # If the next element's indent level is higher than ours (stored as nest_level), they are our children.
             # Thus, we'll store them under us.
@@ -99,9 +99,9 @@ class Parser:
                 # If not however, then they are either our siblings,  in the same level as our parent,
                 # or an even "higher" (or lower with regard to indent_level) level; so we'll return and let whoever
                 # called us process them (or delegate to higher levels)
-                return create_text_block(text, subtype, inline_formatting, nest_=nest_array)
+                return create_text_block(text, subtype, inline_formats, nest_=nest_array)
 
-        return create_text_block(text, subtype, inline_formatting, nest_=nest_array)
+        return create_text_block(text, subtype, inline_formats, nest_=nest_array)
 
     @staticmethod
     def _parse_inline_text(inline_formatting):
