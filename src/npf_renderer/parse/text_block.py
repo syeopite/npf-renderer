@@ -21,7 +21,7 @@ class TextBlockNPFParser(BaseNPFParser):
         text = content["text"]
         # Subtype is None if content.get("subtype") doesn't find anything.
         if subtype := content.get("subtype"):
-            subtype = getattr(text_block.TextBlockSubtypes, subtype.upper().replace("-", "_"))
+            subtype = getattr(text_block.Subtypes, subtype.upper().replace("-", "_"))
 
         inline_formats = None
         if inline_formatting := content.get("formatting"):

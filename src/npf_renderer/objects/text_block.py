@@ -9,7 +9,7 @@ from typing import NamedTuple
 from .inline import INLINE_FMT_TYPES
 
 
-class TextBlockSubtypes(enum.Enum):
+class Subtypes(enum.Enum):
     """Enum representing NPF's Text Block's subtype values"""
     HEADING1 = 0
     HEADING2 = 1
@@ -24,7 +24,7 @@ class TextBlockSubtypes(enum.Enum):
 class TextBlock(NamedTuple):
     """Object representing Tumblr's NPF's Text Block"""
     text: str
-    subtype: TextBlockSubtypes = None
+    subtype: Subtypes = None
     indent_level: int = None
 
     inline_formatting: list[INLINE_FMT_TYPES] = None
