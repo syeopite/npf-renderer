@@ -1,5 +1,5 @@
 from .base import BaseNPFParser
-from ..objects import text as models
+from ..objects import text_block, inline
 
 
 class TextBlockNPFParser(BaseNPFParser):
@@ -21,33 +21,33 @@ class TextBlockNPFParser(BaseNPFParser):
         text = content["text"]
         # Subtype is None if content.get("subtype") doesn't find anything.
         if subtype := content.get("subtype"):
-            subtype = getattr(models.TextBlockSubtypes, subtype.upper().replace("-", "_"))
+            subtype = getattr(text_block.TextBlockSubtypes, subtype.upper().replace("-", "_"))
 
         inline_formats = None
         if inline_formatting := content.get("formatting"):
             inline_formats = []
             for inline_format in inline_formatting:
                 start, end = inline_format["start"], inline_format["end"]
-                inline_type = getattr(models.InlineFormatType, inline_format["type"].upper())
+                inline_type = getattr(inline.FMTTypes, inline_format["type"].upper())
 
                 match inline_type:
-                    case (models.InlineFormatType.BOLD | models.InlineFormatType.ITALIC |
-                          models.InlineFormatType.STRIKETHROUGH | models.InlineFormatType.SMALL):
-                        inline_formats.append(models.InlineBaseTextFormatting(
+                    case (inline.FMTTypes.BOLD | inline.FMTTypes.ITALIC |
+                          inline.FMTTypes.STRIKETHROUGH | inline.FMTTypes.SMALL):
+                        inline_formats.append(inline.Standard(
                             start=start,
                             end=end,
                             type=inline_type
                         ))
-                    case models.InlineFormatType.LINK:
-                        inline_formats.append(models.InlineLinkTextFormatting(
+                    case inline.FMTTypes.LINK:
+                        inline_formats.append(inline.Link(
                             start=start,
                             end=end,
                             type=inline_type,
                             url=inline_format["url"]
                         ))
-                    case models.InlineFormatType.MENTION:
+                    case inline.FMTTypes.MENTION:
                         blog = inline_format["blog"]
-                        inline_formats.append(models.InlineMentionTextFormatting(
+                        inline_formats.append(inline.Mention(
                             start=start,
                             end=end,
                             type=inline_type,
@@ -56,8 +56,8 @@ class TextBlockNPFParser(BaseNPFParser):
                             blog_uuid=blog["uuid"],
                             blog_url=blog["url"]
                         ))
-                    case models.InlineFormatType.COLOR:
-                        inline_formats.append(models.InlineColorTextFormatting(
+                    case inline.FMTTypes.COLOR:
+                        inline_formats.append(inline.Color(
                             start=start,
                             end=end,
                             type=inline_type,
@@ -67,7 +67,7 @@ class TextBlockNPFParser(BaseNPFParser):
 
         indent_level = content.get("indent_level")
 
-        return models.TextBlock(
+        return text_block.TextBlock(
             text=text,
             subtype=subtype,
             indent_level=indent_level,

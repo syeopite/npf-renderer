@@ -138,7 +138,7 @@ inline_formatting_test = (
             ]
         },
     ]},
-    "bb53ffa588f8e48670959d60ef1e98a256c8b794"
+    "e8bbcbc6a3c95bf926fbf55f6853c58e9a8832b4"
 )
 
 #     {"content": }, "12345"
@@ -155,7 +155,7 @@ inline_formatting_link_test = (
                 "url": "https://www.nasa.gov"
             }
         ]
-    }]}, "163b2ebc5872199029d8f670e7a26a2149375656"
+    }]}, "bc4210f4cf0b574128b5fec47b9080066d98c939"
 )
 inline_formatting_mention_test = ({"content": [{
     "type": "text",
@@ -172,7 +172,7 @@ inline_formatting_mention_test = ({"content": [{
             }
         }
     ]
-}]}, "c94e0d1d1009f7f3376486abe0b3bf811f649b9a")
+}]}, "f02d678c2124238e6f8bcc493b08776dce74d818")
 
 inline_formatting_color_test = ({"content": [{
     "type": "text",
@@ -185,7 +185,7 @@ inline_formatting_color_test = ({"content": [{
             "hex": "#ff492f"
         }
     ]
-}]}, "0812b6954481f0e76211693ef3733f590e766f64")
+}]}, "332a28f36f2cc38e7ee5a60095d655d027377866")
 
 test_inline_overlapping = ({
     "content": [
@@ -206,4 +206,4 @@ test_inline_overlapping = ({
             ]
         }
     ]
-}, "6e81372ba5756d8d1cd77716e47917ca50af65f8")
+}, "740d07f3d27809e503c363439062735f59861575")
