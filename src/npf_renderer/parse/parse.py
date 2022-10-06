@@ -36,7 +36,19 @@ class Parser:
         self.current = self.content_array[self.cursor]
         return self.current
 
-    def _parse_text(self):
+    def _parse_text(self, nest_level=0):
+        def create_text_block(text_, subtype_, inline_formatting_, nest_=None):
+            """Create a TextBlock object based on the data we have parsed"""
+            if not nest_:
+                nest_ = None
+
+            return text_block.TextBlock(
+                text=text,
+                subtype=subtype,
+                nest=nest_,
+                inline_formatting=inline_formats,
+            )
+
         text = self.current["text"]
         if subtype := self.current.get("subtype"):
             subtype = getattr(text_block.Subtypes, subtype.upper().replace("-", "_"))
@@ -45,12 +57,24 @@ class Parser:
         if inline_formatting := self.current.get("formatting"):
             inline_formats = self._parse_inline_text(inline_formatting)
 
+        # Oh, recursion my beloved!
+        #
+        # Begins the check to see if we have any children in the next round
+        nest_array = []
+        while peekaboo := self._peek():
+            # Our children can only be TextBlock and ones with a set indent_level attr
+            if peekaboo["type"] != "text" or not (indent_level := peekaboo.get("indent_level")):
+                return create_text_block(text, subtype, inline_formatting, nest_array)
 
-        return text_block.TextBlock(
-            text=text,
-            subtype=subtype,
-            inline_formatting=inline_formats
-        )
+            # If the next element's indent level is higher than ours (stored as nest_level), they are our children.
+            # Thus, we'll store them under us.
+            if indent_level > nest_level:
+                self.__next()
+                nest_array.append(self._parse_text(nest_level=nest_level + 1))
+            else:
+                return create_text_block(text, subtype, inline_formatting, nest_=nest_array)
+
+        return create_text_block(text, subtype, inline_formatting, nest_=nest_array)
 
     @staticmethod
     def _parse_inline_text(inline_formatting):
