@@ -21,6 +21,9 @@ class Subtypes(enum.Enum):
     UNORDERED_LIST_ITEM = 7
 
 
+ListsSubtype = (Subtypes.ORDERED_LIST_ITEM, Subtypes.UNORDERED_LIST_ITEM)
+
+
 class TextBlock(NamedTuple):
     """Object representing Tumblr's NPF's Text Block"""
     text: str
