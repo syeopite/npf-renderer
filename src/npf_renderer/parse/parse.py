@@ -45,12 +45,10 @@ class Parser:
         if inline_formatting := self.current.get("formatting"):
             inline_formats = self._parse_inline_text(inline_formatting)
 
-        indent_level = self.current.get("indent_level")
 
         return text_block.TextBlock(
             text=text,
             subtype=subtype,
-            indent_level=indent_level,
             inline_formatting=inline_formats
         )
 

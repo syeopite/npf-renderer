@@ -25,7 +25,7 @@ class TextBlock(NamedTuple):
     """Object representing Tumblr's NPF's Text Block"""
     text: str
     subtype: Subtypes = None
-    indent_level: int = None
+    nest: 'list[TextBlock]' = None
 
     inline_formatting: list[INLINE_FMT_TYPES] = None
 
