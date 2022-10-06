@@ -1,5 +1,5 @@
 from .base import BaseNPFParser
-from .objects import text as models
+from ..objects import text as models
 
 
 class TextBlockNPFParser(BaseNPFParser):
