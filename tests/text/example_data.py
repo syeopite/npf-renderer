@@ -48,7 +48,7 @@ subtype_string_test = (
             }
         ]
     },
-    "be148356a4f66e8c7a11c829e476163ea3fa3dac"
+    "a8f3095c2f57025a23ea2eb6b9eff9b6538e6f44"
 )
 
 subtype_string_test_2 = (
@@ -81,7 +81,7 @@ subtype_string_test_2 = (
         ]
     },
 
-    "c2282f20aadb75280632e31db95c7eaae5add2fd"
+    "b3cadb14b69caca25da3d11bfd7ae84679611aeb"
 )
 
 subtype_and_indent_level_test = (
@@ -121,7 +121,7 @@ subtype_and_indent_level_test = (
             "text": "First level: Pears",
         }
     ]
-}, "b9c9d13c517d1eca77b64ef3b534ec06abad9a16"
+}, "45387e623aa404082bab47155f758812f94d8234"
 )
 
 inline_formatting_test = (

@@ -15,14 +15,14 @@ class InlineFormatType(enum.Enum):
 
 
 class TextBlockSubtypes(enum.Enum):
-    heading1 = 0
-    heading2 = 1
-    quirky = 2
-    quote = 3
-    indented = 4
-    chat = 5
-    ordered_list_item = 6
-    unordered_list_item = 7
+    HEADING1 = 0
+    HEADING2 = 1
+    QUIRKY = 2
+    QUOTE = 3
+    INDENTED = 4
+    CHAT = 5
+    ORDERED_LIST_ITEM = 6
+    UNORDERED_LIST_ITEM = 7
 
 
 class InlineBaseTextFormatting(NamedTuple):
