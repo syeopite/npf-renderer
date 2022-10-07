@@ -55,7 +55,7 @@ class Parser(helpers.CursorIterator):
 
         # Begins the check to see if we have any children in the next element(s)
         nest_array = []
-        while peekaboo := self._peek():
+        while peekaboo := self.peek():
             # Our children can only be TextBlock and ones with a set indent_level attr (which implies that they are
             # related to us)
             #
@@ -67,7 +67,7 @@ class Parser(helpers.CursorIterator):
             # If the next element's indent level is higher than ours (stored as nest_level), they are our children.
             # Thus, we'll store them under us.
             if indent_level > nest_level:
-                self._next()
+                self.next()
                 nest_array.append(self._parse_text(nest_level=nest_level + 1))
             else:
                 # If not however, then they are either our siblings,  in the same level as our parent,
@@ -134,7 +134,7 @@ class Parser(helpers.CursorIterator):
 
     def parse(self):
         """Begins the parsing chain and returns the final list of parsed objects"""
-        while self._next():
+        while self.next():
             self.__parse_block()
 
         return self.parsed_result

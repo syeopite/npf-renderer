@@ -18,7 +18,7 @@ class Formatter(helpers.CursorIterator):
         # We are currently at the zeroth level. And lists at the zeroth level
         # should be merged if they are next to each other and of the same type.
         if self.current.subtype in objects.text_block.ListsSubtype:
-            while peekaboo := self._peek():
+            while peekaboo := self.peek():
                 if (not isinstance(peekaboo, objects.text_block.TextBlock)
                         or (peekaboo.subtype not in objects.text_block.ListsSubtype)):
 
@@ -26,7 +26,7 @@ class Formatter(helpers.CursorIterator):
 
                 if peekaboo.subtype == self.current.subtype:
                     # Formatted block should be a list element such as ul, ol here
-                    self._next()
+                    self.next()
                     formatted_block.add(text_formatter.TextFormatter(self.current, create_list_element=False).format())
 
         return formatted_block
@@ -43,7 +43,7 @@ class Formatter(helpers.CursorIterator):
 
     def format(self):
         """Begins the parsing chain and returns the final list of parsed objects"""
-        while self._next():
+        while self.next():
             self.__format_block()
 
         return self.post

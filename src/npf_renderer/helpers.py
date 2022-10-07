@@ -17,7 +17,7 @@ class CursorIterator:
         """Checks if we have reached the end of the content list"""
         return self._iter_length <= self.cursor
 
-    def _next(self):
+    def next(self):
         """Go to the next element in the iterator and returns True if successful"""
         try:
             self.current = next(self.__iterable_iter)
@@ -27,7 +27,7 @@ class CursorIterator:
 
         return True
 
-    def _peek(self):
+    def peek(self):
         """Takes a peek at the next element"""
         if self._at_end:
             return False
