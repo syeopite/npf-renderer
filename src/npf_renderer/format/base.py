@@ -1,0 +1,81 @@
+import dominate.tags
+
+from . import text_formatter
+from .. import objects
+
+
+class Formatter:
+    def __init__(self, content, layout=None, trails=None):
+        """Initializes the parser with a list of content blocks (json objects) to parse"""
+        self.content_list = content
+        self.content_iter = iter(content)
+
+        self.post = dominate.tags.div(cls="post")
+
+        self.cursor = 0
+        self.current = None
+        self.content_length = len(content)  # Prevents calculating len(self.content_list) over and over again
+
+    @property
+    def _at_end(self):
+        """Checks if we have reached the end of the content list"""
+        return self.content_length <= self.cursor
+
+    def __next(self):
+        """Go to the next element in the iterator and returns True if successful"""
+        try:
+            self.current = next(self.content_iter)
+            self.cursor += 1
+        except StopIteration:
+            return False
+
+        return True
+
+    def _peek(self):
+        """Takes a peek at the next element"""
+        if self._at_end:
+            return False
+
+        return self.content_list[self.cursor]
+
+    def __format_text(self):
+        """Formats TextBlock(s) into usable HTML code"""
+        formatted_block = text_formatter.TextFormatter(self.current).format()
+
+        # We are currently at the zeroth level. And lists at the zeroth level
+        # should be merged if they are next to each other and of the same type.
+        if self.current.subtype in objects.text_block.ListsSubtype:
+            while peekaboo := self._peek():
+                if (not isinstance(peekaboo, objects.text_block.TextBlock)
+                        or (peekaboo.subtype not in objects.text_block.ListsSubtype)):
+
+                    return formatted_block
+
+                if peekaboo.subtype == self.current.subtype:
+                    # Formatted block should be a list element such as ul, ol here
+                    self.__next()
+                    formatted_block.add(text_formatter.TextFormatter(self.current, create_list_element=False).format())
+
+        return formatted_block
+
+    def __format_block(self):
+        """Formats a content block and adds it to the main post
+
+        Works by routing specific content types to corresponding format methods
+        """
+        match self.current:
+            case objects.text_block.TextBlock():
+                block = self.__format_text()
+                self.post.add(block)
+
+    def format(self):
+        """Begins the parsing chain and returns the final list of parsed objects"""
+        while self.__next():
+            self.__format_block()
+
+        return self.post
+
+
+def format_content(parsed_contents, layouts=None, trails=None):
+    return Formatter(parsed_contents).format()
+
