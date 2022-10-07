@@ -1,16 +1,14 @@
 import dominate.tags
+import dominate.util
 
 from .. import objects
 
 
 class TextFormatter:
-    def __init__(self, parent_tag: dominate.tags.dom_tag, text_block: objects.text_block.TextBlock,
+    def __init__(self, text_block: objects.text_block.TextBlock,
                  layout=None, trails=None, create_list_element=True):
-        self.parent_tag = parent_tag
         self.text_block = text_block
-
         self.create_list_element = create_list_element
-
         self.tag = self.create_tag()
 
     def create_tag(self):
@@ -43,8 +41,45 @@ class TextFormatter:
                     elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
                         return dominate.tags.li(cls="unordered-list-item")
 
-    def parse(self):
-        pass
+    def format(self):
 
+        # If we created a list element we are going to now create a list item for our text
+        if self.text_block.subtype in objects.text_block.ListsSubtype and self.create_list_element:
+            if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
+                working_tag = dominate.tags.li(self.text_block.text, cls="ordered-list-item")
+            elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
+                working_tag = dominate.tags.li(self.text_block.text, cls="unordered-list-item")
+            else:  # Unreachable
+                raise RuntimeError
+        else:
+            working_tag = dominate.util.text(self.text_block.text)
 
+        self.tag.add(working_tag)
 
+        # Has nested elements. Also means our subtype is either indented or one of the list types
+        if self.text_block.nest:
+            list_to_use = None
+            first_time_trigger = True
+
+            # These can be mixed... but note that **there can only be one subtype and it will be that of the closest
+            # tag***...
+            #
+            # https://www.tumblr.com/docs/npf#text-block-subtype-list-item
+            for element in self.text_block.nest:
+                if element.subtype in objects.text_block.ListsSubtype:
+                    if first_time_trigger:
+                        first_time_trigger = False
+                        list_to_use = TextFormatter(element).format()
+                    else:
+                        # If here then we've already created a list tag as the first_time_trigger option went off
+                        # So subsequent list items at the same level are just going to use that one. We don't need to
+                        # check if the list types are different because nested lists at the same level can only
+                        # have the same type
+                        list_item_tag = TextFormatter(element, create_list_element=False).format()
+                        list_to_use.add(list_item_tag)
+                else:
+                    working_tag.add(TextFormatter(element).format())
+
+            working_tag.add(list_to_use)
+
+        return self.tag
