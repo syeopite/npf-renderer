@@ -1,3 +1,10 @@
+"""An HTML renderer for the TextBlock object
+
+formatter = TextFormatter(text_block)
+formatter.parse()
+
+"""
+
 import dominate.tags
 import dominate.util
 
@@ -5,14 +12,36 @@ from .. import objects
 
 
 class TextFormatter:
+    """An HTML renderer for the TextBlock object"""
     def __init__(self, text_block: objects.text_block.TextBlock,
                  layout=None, trails=None, create_list_element=True):
+        """Renders a TextBlock object into HTML
+
+        You should probably not be using this class directly!
+
+        Parameters:
+            text_block:
+                The TextBlock object in question.
+            create_list_element:
+                Boolean denoting whether list elements should be enclosed in a <ul> or <ol> element.
+                Level zero list merging is delegated to the outer formatter but everything below is handled through
+                recursion within the logic of self.format(). See code for more information
+
+        """
         self.text_block = text_block
         self.create_list_element = create_list_element
         self.tag = self.create_tag()
 
     def create_tag(self):
+        """Create an HTML tag to use as the base for the current TextBlock
 
+        Primary based on the subtype. If nonexistent, then a standard paragraph element is used.
+
+        All elements have the text-block class
+        All subtypes have classes corresponding to their types.
+
+        If the text block has inline formatting then an additional inline-formatted class is added
+        """
         additional_classes = ""
         if self.text_block.inline_formatting:
             additional_classes += " inline-formatted"
