@@ -90,15 +90,9 @@ subtype_string_test_2 = (
         ]
     },
     [
-        objects.text_block.TextBlock(
-            text="Sward's Shopping List", subtype=objects.text_block.Subtypes.HEADING1
-        ),
-        objects.text_block.TextBlock(
-            text="Sword", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM
-        ),
-        objects.text_block.TextBlock(
-            text="Candy", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM
-        ),
+        objects.text_block.TextBlock(text="Sward's Shopping List", subtype=objects.text_block.Subtypes.HEADING1),
+        objects.text_block.TextBlock(text="Sword", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM),
+        objects.text_block.TextBlock(text="Candy", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM),
         objects.text_block.TextBlock(text="But especially don't forget:"),
         objects.text_block.TextBlock(
             text="Death, which is uncountable on this list.",
@@ -114,9 +108,7 @@ subtype_string_test_2 = (
         ),
         tags.p("But especially don't forget:", cls="text-block"),
         tags.ul(
-            tags.li(
-                "Death, which is uncountable on this list.", cls="unordered-list-item"
-            ),
+            tags.li("Death, which is uncountable on this list.", cls="unordered-list-item"),
             cls="text-block unordered-list",
         ),
         cls="post",
@@ -158,9 +150,7 @@ subtype_and_indent_level_test = (
         ]
     },
     [
-        objects.text_block.TextBlock(
-            text="Sward's Shopping List", subtype=objects.text_block.Subtypes.HEADING1
-        ),
+        objects.text_block.TextBlock(text="Sward's Shopping List", subtype=objects.text_block.Subtypes.HEADING1),
         objects.text_block.TextBlock(
             text="First level: Fruit",
             subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
@@ -225,13 +215,16 @@ inline_formatting_test = (
     [
         objects.text_block.TextBlock(
             text="some small text",
-            inline_formatting=[
-                objects.inline.Standard(
-                    type=objects.inline.FMTTypes.SMALL, start=5, end=10
-                )
-            ],
+            inline_formatting=[objects.inline.Standard(type=objects.inline.FMTTypes.SMALL, start=5, end=10)],
         )
     ],
+    tags.div(
+        tags.p(
+            tags.span("some ", tags.small("small", cls="inline-small"), " text", cls="inline-formatted-content"),
+            cls="text-block",
+        ),
+        cls="post",
+    ),
 )
 
 #     {"content": }, "12345"
@@ -266,7 +259,18 @@ inline_formatting_link_test = (
             ],
         )
     ],
-    tags.div(tags.p(tags.a(cls="link"), cls="text")),
+    tags.div(
+        tags.p(
+            tags.span(
+                "Found ",
+                tags.a("this", href="https://www.nasa.gov", cls="inline-link"),
+                " link for you",
+                cls="inline-formatted-content",
+            ),
+            cls="text-block",
+        ),
+        cls="post",
+    ),
 )
 inline_formatting_mention_test = (
     {
@@ -304,6 +308,17 @@ inline_formatting_mention_test = (
             ],
         )
     ],
+    tags.div(
+        tags.p(
+            tags.span(
+                "Shout out to ",
+                tags.a("@david", cls="inline-mention", href="https://davidslog.com/"),
+                cls="inline-formatted-content",
+            ),
+            cls="text-block",
+        ),
+        cls="post",
+    ),
 )
 
 inline_formatting_color_test = (
@@ -312,9 +327,7 @@ inline_formatting_color_test = (
             {
                 "type": "text",
                 "text": "Celebrate Pride Month",
-                "formatting": [
-                    {"start": 10, "end": 15, "type": "color", "hex": "#ff492f"}
-                ],
+                "formatting": [{"start": 10, "end": 15, "type": "color", "hex": "#ff492f"}],
             }
         ]
     },
@@ -322,12 +335,22 @@ inline_formatting_color_test = (
         objects.text_block.TextBlock(
             text="Celebrate Pride Month",
             inline_formatting=[
-                objects.inline.Color(
-                    type=objects.inline.FMTTypes.COLOR, start=10, end=15, hex="#ff492f"
-                )
+                objects.inline.Color(type=objects.inline.FMTTypes.COLOR, start=10, end=15, hex="#ff492f")
             ],
         )
     ],
+    tags.div(
+        tags.p(
+            tags.span(
+                "Celebrate ",
+                tags.span("Pride", cls="inline-color", style="color: #ff492f;"),
+                " Month",
+                cls="inline-formatted-content",
+            ),
+            cls="text-block",
+        ),
+        cls="post",
+    ),
 )
 
 test_inline_overlapping = (
@@ -358,6 +381,21 @@ test_inline_overlapping = (
                     end=34,
                 ),
             ],
-        )
+        ),
     ],
+    tags.div(
+        tags.p(
+            tags.span(
+                tags.b(
+                    "supercali",
+                    tags.i("fragilistic", cls="inline-italics"),
+                    cls="inline-bold",
+                ),
+                tags.i("expialidocious", cls="inline-italics"),
+                cls="inline-formatted-content",
+            ),
+            cls="text-block",
+        ),
+        cls="post",
+    ),
 )
