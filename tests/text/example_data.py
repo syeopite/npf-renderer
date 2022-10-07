@@ -10,7 +10,7 @@ simple_test = (  # Basic Example
             text="Hello world!",
         )
     ],
-    tags.div(tags.p("Hello world!", cls="text"), cls="post"),
+    tags.div(tags.p("Hello world!", cls="text-block"), cls="post"),
 )
 
 
@@ -28,9 +28,9 @@ longer_and_with_empty_string_test = (  # Empty Space Test
         objects.text_block.TextBlock(text="my name is cyle!"),
     ],
     tags.div(
-        tags.p("ello!", cls="text"),
-        tags.p("", cls="text"),
-        tags.p("my name is cyle!", cls="text"),
+        tags.p("ello!", cls="text-block"),
+        tags.p("", cls="text-block"),
+        tags.p("my name is cyle!", cls="text-block"),
         cls="post",
     ),
 )
@@ -62,14 +62,14 @@ subtype_string_test = (
         ),
     ],
     tags.div(
-        tags.h1("New Post Forms Manifesto", cls="heading1"),
+        tags.h1("New Post Forms Manifesto", cls="text-block heading1"),
         tags.p(
             "There comes a moment in every company's life that they must redefine the rules...",
-            cls="text",
+            cls="text-block",
         ),
         tags.p(
             "We can choose to embrace this moment courageously, or we may choose to cower in fear.",
-            cls="text",
+            cls="text-block",
         ),
         cls="post",
     ),
@@ -106,18 +106,18 @@ subtype_string_test_2 = (
         ),
     ],
     tags.div(
-        tags.h1("Sward's Shopping List", cls="heading1"),
+        tags.h1("Sward's Shopping List", cls="text-block heading1"),
         tags.ol(
             tags.li("Sword", cls="ordered-list-item"),
             tags.li("Candy", cls="ordered-list-item"),
-            cls="ordered-list",
+            cls="text-block ordered-list",
         ),
-        tags.p("But especially don't forget:", cls="text"),
+        tags.p("But especially don't forget:", cls="text-block"),
         tags.ul(
             tags.li(
                 "Death, which is uncountable on this list.", cls="unordered-list-item"
             ),
-            cls="unordered-list",
+            cls="text-block unordered-list",
         ),
         cls="post",
     ),
@@ -187,7 +187,7 @@ subtype_and_indent_level_test = (
         ),
     ],
     tags.div(
-        tags.h1("Sward's Shopping List", cls="heading1"),
+        tags.h1("Sward's Shopping List", cls="text-block heading1"),
         tags.ol(
             tags.li(
                 "First level: Fruit",
@@ -196,17 +196,17 @@ subtype_and_indent_level_test = (
                         "Second level: Apples",
                         tags.ol(
                             tags.li("Third Level: Green", cls="ordered-list-item"),
-                            cls="ordered-list",
+                            cls="text-block ordered-list",
                         ),
                         cls="unordered-list-item",
                     ),
                     tags.li("Second level: Pears", cls="unordered-list-item"),
-                    cls="unordered-list",
+                    cls="text-block unordered-list",
                 ),
                 cls="ordered-list-item",
             ),
             tags.li("First level: Pears", cls="ordered-list-item"),
-            cls="ordered-list",
+            cls="text-block ordered-list",
         ),
         cls="post",
     ),
