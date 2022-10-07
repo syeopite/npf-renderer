@@ -1,3 +1,5 @@
+from dominate import tags
+
 from npf_renderer import objects
 
 
@@ -12,10 +14,12 @@ simple_test = (  # Basic Example
     },
     [
         objects.text_block.TextBlock(
-            text="Hello world!"
+            text="Hello world!",
         )
-    ]
+    ],
+    tags.div(tags.p("Hello world!", cls="text"), cls="post")
 )
+
 
 longer_and_with_empty_string_test = (  # Empty Space Test
     {
@@ -44,7 +48,13 @@ longer_and_with_empty_string_test = (  # Empty Space Test
         objects.text_block.TextBlock(
             text="my name is cyle!"
         )
-    ]
+    ],
+    tags.div(
+        tags.p("ello!", cls="text"),
+        tags.p("", cls="text"),
+        tags.p("my name is cyle!", cls="text"),
+
+        cls="post")
 )
 
 subtype_string_test = (
@@ -76,7 +86,15 @@ subtype_string_test = (
         objects.text_block.TextBlock(
             text="We can choose to embrace this moment courageously, or we may choose to cower in fear."
         )
-    ]
+    ],
+    tags.div(
+        tags.h1("New Post Forms Manifesto", cls="heading1"),
+        tags.p("There comes a moment in every company's life that they must redefine the rules...", cls="text"),
+        tags.p("We can choose to embrace this moment courageously, or we may choose to cower in fear.", cls="text"),
+
+        cls="post"
+    )
+
 )
 
 subtype_string_test_2 = (
@@ -129,47 +147,64 @@ subtype_string_test_2 = (
             text="Death, which is uncountable on this list.",
             subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM
         ),
-    ]
+    ],
+    tags.div(
+        tags.h1("Sward's Shopping List", cls="heading1"),
+        tags.ol(
+            tags.li("Sword", cls="ordered-list-item"),
+            tags.li("Candy", cls="ordered-list-item"),
+
+            cls="ordered-list"
+        ),
+
+        tags.p("But especially don't forget:", cls="text"),
+        tags.ul(
+            tags.li("Death, which is uncountable on this list.", cls="unordered-list-item"),
+
+            cls="unordered-list"
+        ),
+        cls="post"
+    )
 )
 
 subtype_and_indent_level_test = (
-{
-    "content": [
-        {
-            "type": "text",
-            "subtype": "heading1",
-            "text": "Sward's Shopping List"
-        },
-        {
-            "type": "text",
-            "subtype": "ordered-list-item",
-            "text": "First level: Fruit",
-        },
-        {
-            "type": "text",
-            "subtype": "unordered-list-item",
-            "text": "Second level: Apples",
-            "indent_level": 1
-        },
-        {
-            "type": "text",
-            "subtype": "ordered-list-item",
-            "text": "Third Level: Green",
-            "indent_level": 2
-        },
-        {
-            "type": "text",
-            "subtype": "unordered-list-item",
-            "text": "Second level: Pears",
-            "indent_level": 1
-        },
-        {
-            "type": "text",
-            "subtype": "ordered-list-item",
-            "text": "First level: Pears",
-        }
-    ]
-},
+    {
+        "content": [
+            {
+                "type": "text",
+                "subtype": "heading1",
+                "text": "Sward's Shopping List"
+            },
+            {
+                "type": "text",
+                "subtype": "ordered-list-item",
+                "text": "First level: Fruit",
+            },
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "text": "Second level: Apples",
+                "indent_level": 1
+            },
+            {
+                "type": "text",
+                "subtype": "ordered-list-item",
+                "text": "Third Level: Green",
+                "indent_level": 2
+            },
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "text": "Second level: Pears",
+                "indent_level": 1
+            },
+            {
+                "type": "text",
+                "subtype": "ordered-list-item",
+                "text": "First level: Pears",
+            }
+        ]
+    },
     [
         objects.text_block.TextBlock(
             text="Sward's Shopping List",
@@ -200,7 +235,46 @@ subtype_and_indent_level_test = (
             text="First level: Pears",
             subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM
         ),
-    ]
+    ],
+
+    tags.div(
+        tags.h1("Sward's Shopping List", cls="heading1"),
+        tags.ol(
+            tags.li(
+                "First level: Fruit",
+
+                tags.ul(
+                    tags.li(
+                        "Second level: Apples",
+                        tags.ol(
+                            tags.li(
+                                "Third Level: Green",
+                                cls="ordered-list-item"
+                            ),
+                            cls="ordered-list"
+                        ),
+                        cls="unordered-list-item"
+                    ),
+
+                    tags.li(
+                        "Second level: Pears",
+                        cls="unordered-list-item"
+                    ),
+
+                    cls="unordered-list"
+                ),
+
+                cls="ordered-list-item"
+            ),
+
+            tags.li(
+                "First level: Pears",
+                cls="ordered-list-item"
+            ),
+            cls="ordered-list"
+        ),
+        cls="post"
+    )
 )
 
 inline_formatting_test = (
