@@ -111,25 +111,26 @@ class InlineFormatter(helpers.CursorIterator):
         with parent_tag:
             match self.ops.current.type:
                 case objects.inline.FMTTypes.BOLD:
-                    self.perform_operation(dominate.tags.b(), till)
+                    self.perform_operation(dominate.tags.b(cls="inline-bold"), till)
 
                 case objects.inline.FMTTypes.ITALIC:
-                    self.perform_operation(dominate.tags.i(), till)
+                    self.perform_operation(dominate.tags.i(cls="inline-italics"), till)
 
                 case objects.inline.FMTTypes.STRIKETHROUGH:
-                    self.perform_operation(dominate.tags.s(), till)
+                    self.perform_operation(dominate.tags.s(cls="inline-strikethrough"), till)
 
                 case objects.inline.FMTTypes.SMALL:
-                    self.perform_operation(dominate.tags.small(), till)
+                    self.perform_operation(dominate.tags.small(cls="inline-small"), till)
 
                 case objects.inline.FMTTypes.LINK:
-                    self.perform_operation(dominate.tags.a(href=self.ops.current.url), till)
+                    self.perform_operation(dominate.tags.a(href=self.ops.current.url, cls="inline-link"), till)
 
                 case objects.inline.FMTTypes.MENTION:
-                    self.perform_operation(dominate.tags.a(href=self.ops.current.blog_url, cls="mention"), till)
+                    self.perform_operation(dominate.tags.a(href=self.ops.current.blog_url, cls="inline-mention"), till)
 
                 case objects.inline.FMTTypes.COLOR:
-                    self.perform_operation(dominate.tags.span(style=f"color: {self.ops.current.hex};"), till)
+                    self.perform_operation(dominate.tags.span(style=f"color: {self.ops.current.hex};",
+                                                              cls="inline-color"), till)
 
     def format(self):
         # Begin operations iteration
