@@ -66,9 +66,9 @@ class TextFormatter:
             case _:
                 if self.create_list_element:
                     if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                        return dominate.tags.ol(cls="ordered-list" + additional_classes)
+                        return dominate.tags.ol(cls="text-block ordered-list" + additional_classes)
                     elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                        return dominate.tags.ul(cls="unordered-list" + additional_classes)
+                        return dominate.tags.ul(cls="text-block unordered-list" + additional_classes)
                 else:
                     if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
                         return dominate.tags.li(cls="ordered-list-item" + additional_classes)
