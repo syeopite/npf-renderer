@@ -77,3 +77,6 @@ def test_second_has_lower_end_index():
 def test_second_has_lower_end_index_2():
     helper_function({"content": second_has_lower_end_index_test_2[0]}, second_has_lower_end_index_test_2[1])
 
+
+def test_hyper_overlap():
+    helper_function({"content": hyper_overlap_test[0]}, hyper_overlap_test[1])

@@ -122,8 +122,32 @@ class InlineFormatter(helpers.CursorIterator):
         except StopIteration:
             pass
 
+    def get_tag_of_operation(self, operation):
+        match operation.type:
+            case objects.inline.FMTTypes.BOLD:
+                return dominate.tags.b(cls="inline-bold")
+
+            case objects.inline.FMTTypes.ITALIC:
+                return dominate.tags.i(cls="inline-italics")
+
+            case objects.inline.FMTTypes.STRIKETHROUGH:
+                return dominate.tags.s(cls="inline-strikethrough")
+
+            case objects.inline.FMTTypes.SMALL:
+                return dominate.tags.small(cls="inline-small")
+
+            case objects.inline.FMTTypes.LINK:
+                return dominate.tags.a(href=operation.url, cls="inline-link")
+
+            case objects.inline.FMTTypes.MENTION:
+                return dominate.tags.a(href=operation.blog_url, cls="inline-mention")
+
+            case objects.inline.FMTTypes.COLOR:
+                return dominate.tags.span(style=f"color: {operation.hex};", cls="inline-color")
+
     def route_operations(self, till, parent_tag=None):
-        """Delegate formatting to corresponding functions till the specified amount.
+        """Delegate formatting to specific tags
+
         Adds result to the given parent_tag or self.parent_tag when unset
         """
         if self._at_end:
@@ -132,29 +156,32 @@ class InlineFormatter(helpers.CursorIterator):
         if not parent_tag:
             parent_tag = self.parent_tag
 
-        with parent_tag:
-            match self.ops.current.type:
-                case objects.inline.FMTTypes.BOLD:
-                    self.perform_operation(dominate.tags.b(cls="inline-bold"), till)
+        tag = self.get_tag_of_operation(self.ops.current)
 
-                case objects.inline.FMTTypes.ITALIC:
-                    self.perform_operation(dominate.tags.i(cls="inline-italics"), till)
+        # Check and handle for same overlaps
+        nested_child_tags = []
+        while ((peek := self.ops.peek())
+               and (peek.start == self.ops.current.start)
+               and (peek.end == self.ops.current.end)):
+            child_tag = self.get_tag_of_operation(peek)
+            self.ops.next()
 
-                case objects.inline.FMTTypes.STRIKETHROUGH:
-                    self.perform_operation(dominate.tags.s(cls="inline-strikethrough"), till)
+            nested_child_tags.append(child_tag)
 
-                case objects.inline.FMTTypes.SMALL:
-                    self.perform_operation(dominate.tags.small(cls="inline-small"), till)
+        for child_tag_one, child_tag_two in itertools.pairwise(nested_child_tags):
+            child_tag_one.add(child_tag_two)
 
-                case objects.inline.FMTTypes.LINK:
-                    self.perform_operation(dominate.tags.a(href=self.ops.current.url, cls="inline-link"), till)
+        # Add first child tag in the list to our main tag, which should have all the others nested within
+        # and to save some code we also run perform_operation in here with either the last of the nested_child_tags list
+        # as it's the innermost tag, or we just run perform_operation with our normal main tag
+        if nested_child_tags:
+            tag.add(nested_child_tags[0])
 
-                case objects.inline.FMTTypes.MENTION:
-                    self.perform_operation(dominate.tags.a(href=self.ops.current.blog_url, cls="inline-mention"), till)
+            self.perform_operation(current_tag=nested_child_tags[-1], till=till)
+        else:
+            self.perform_operation(current_tag=tag, till=till)
 
-                case objects.inline.FMTTypes.COLOR:
-                    self.perform_operation(dominate.tags.span(style=f"color: {self.ops.current.hex};",
-                                                              cls="inline-color"), till)
+        parent_tag.add(tag)
 
     def format(self):
         # Begin operations iteration

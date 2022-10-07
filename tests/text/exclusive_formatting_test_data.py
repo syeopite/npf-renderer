@@ -189,3 +189,55 @@ second_has_lower_end_index_test_2 = (
         cls="post"
     )
 )
+
+hyper_overlap_test = (
+    [
+        {
+            "type": "text",
+            "text": "The hypersonic brown fox jumped over the sleeping dog",
+            "subtype": "indented",
+            "formatting": [
+                {"start": 4, "end": 24, "type": "color", "hex": "#964B00"},
+                {"start": 4, "end": 24, "type": "link", "url": "https://www.youtube.com/watch?v=jofNR_WkoCE"},
+                {"start": 4, "end": 24, "type": "bold"},
+                {"start": 4, "end": 24, "type": "strikethrough"},
+                {"start": 4, "end": 24, "type": "italic"},
+                {"start": 4, "end": 24, "type": "small"},
+            ],
+        }
+    ],
+
+    tags.div(
+        tags.blockquote(
+            tags.span(
+                "The ",
+                tags.span(
+                    tags.a(
+                        tags.b(
+                            tags.s(
+                                tags.i(
+                                    tags.small(
+                                        "hypersonic brown fox",
+                                        cls="inline-small"
+                                    ),
+                                    cls="inline-italics"
+                                ),
+                                cls="inline-strikethrough"
+                            ),
+                            cls="inline-bold"
+                        ),
+                        href="https://www.youtube.com/watch?v=jofNR_WkoCE",
+                        cls="inline-link"
+                    ),
+                    cls="inline-color",
+                    style="color: #964B00;"
+                ),
+                " jumped over the sleeping dog",
+                cls="inline-formatted-content"
+            ),
+            cls="text-block indented inline-formatted-block"
+        ),
+        cls="post"
+    )
+)
+
