@@ -21,10 +21,9 @@ class Operations(helpers.CursorIterator):
 
 class InlineFormatter(helpers.CursorIterator):
     """Produces an HTML output from NPF's inline formatting and a string"""
-    def __init__(self, parent_tag :dominate.tags.dom_tag,
-                 string: str, inline_formats: List[objects.inline.INLINE_FMT_TYPES]):
+    def __init__(self, string: str, inline_formats: List[objects.inline.INLINE_FMT_TYPES]):
         super().__init__(string)
-        self.parent_tag = parent_tag
+        self.parent_tag = dominate.tags.span(cls="inline-formatted-content")
         self.string = string
 
         # Sorting just in case although the tumblr API should already return

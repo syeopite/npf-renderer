@@ -9,6 +9,7 @@ import dominate.tags
 import dominate.util
 
 from .. import objects
+from . import inline
 
 
 class TextFormatter:
@@ -32,6 +33,12 @@ class TextFormatter:
         self.create_list_element = create_list_element
         self.tag = self.create_tag()
 
+        if self.text_block.inline_formatting:
+            formatter = inline.InlineFormatter(self.text_block.text, self.text_block.inline_formatting)
+            self.text_tag = formatter.format()
+        else:
+            self.text_tag = dominate.util.text(self.text_block.text)
+
     def create_tag(self):
         """Create an HTML tag to use as the base for the current TextBlock
 
@@ -44,7 +51,7 @@ class TextFormatter:
         """
         additional_classes = ""
         if self.text_block.inline_formatting:
-            additional_classes += " inline-formatted"
+            additional_classes += " inline-formatted-block"
 
         if not self.text_block.subtype:
             return dominate.tags.p(cls="text-block")
@@ -80,13 +87,13 @@ class TextFormatter:
         # If we created a list element we are going to now create a list item for our text
         if self.text_block.subtype in objects.text_block.ListsSubtype and self.create_list_element:
             if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                working_tag = dominate.tags.li(self.text_block.text, cls="ordered-list-item")
+                working_tag = dominate.tags.li(self.text_tag, cls="ordered-list-item")
             elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                working_tag = dominate.tags.li(self.text_block.text, cls="unordered-list-item")
+                working_tag = dominate.tags.li(self.text_tag, cls="unordered-list-item")
             else:  # Unreachable
                 raise RuntimeError
         else:
-            working_tag = dominate.util.text(self.text_block.text)
+            working_tag = self.text_tag
 
         self.tag.add(working_tag)
 
