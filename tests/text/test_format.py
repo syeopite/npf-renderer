@@ -58,9 +58,14 @@ def test_overlapping_inline_render():
 
 # Exclusive formatting tests below:
 
-def test_overlapping_back_to_back_render():
+def test_back_to_back_render():
     helper_function({"content": back_to_back_inline_format_test[0]}, back_to_back_inline_format_test[1])
+
+
+def test_connected_back_to_back_inline():
+    helper_function({"content": connected_back_to_back_inline_format_test[0]}, connected_back_to_back_inline_format_test[1])
 
 
 def test_long_space_inbetween_render():
     helper_function({"content": long_space_in_between_format_test[0]}, long_space_in_between_format_test[1])
+
