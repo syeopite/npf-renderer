@@ -107,3 +107,85 @@ long_space_in_between_format_test = (
         cls="post",
     ),
 )
+
+second_has_lower_end_index_test = (
+    [
+        {
+            "type": "text",
+            "text": "The brown fox jumped over the lazy dog",
+            "subtype": "indented",
+            "formatting": [
+                {"start": 4, "end": 25, "type": "color", "hex": "#964B00"},
+                {"start": 10, "end": 13, "type": "bold"},
+            ],
+        }
+    ],
+        tags.div(
+            tags.blockquote(
+            tags.span(
+                "The ",
+                tags.span(
+                    "brown ",
+                    tags.b(
+                        "fox",
+                        cls="inline-bold"
+                    ),
+                    " jumped over",
+                    cls="inline-color",
+                    style="color: #964B00;",
+                ),
+                " the lazy dog",
+
+                cls="inline-formatted-content"
+            ),
+
+            cls="text-block indented inline-formatted-block",
+        ),
+
+        cls="post"
+    )
+)
+
+second_has_lower_end_index_test_2 = (
+    [
+        {
+            "type": "text",
+            "text": "The brown fox jumped over the lazy dog",
+            "subtype": "indented",
+            "formatting": [
+                {"start": 4, "end": 25, "type": "color", "hex": "#964B00"},
+                {"start": 6, "end": 14, "type": "small"},
+                {"start": 10, "end": 13, "type": "bold"},
+            ],
+        }
+    ],
+    tags.div(
+        tags.blockquote(
+            tags.span(
+                "The ",
+                tags.span(
+                    "br",
+                    tags.small(
+                        "own ",
+                        tags.b(
+                            "fox",
+                            cls="inline-bold"
+                        ),
+                        " ",
+                        cls="inline-small",
+                    ),
+                    "jumped over",
+                    cls="inline-color",
+                    style="color: #964B00;",
+                ),
+                " the lazy dog",
+
+                cls="inline-formatted-content"
+            ),
+
+            cls="text-block indented inline-formatted-block",
+        ),
+
+        cls="post"
+    )
+)

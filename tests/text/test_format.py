@@ -69,3 +69,11 @@ def test_connected_back_to_back_inline():
 def test_long_space_inbetween_render():
     helper_function({"content": long_space_in_between_format_test[0]}, long_space_in_between_format_test[1])
 
+
+def test_second_has_lower_end_index():
+    helper_function({"content": second_has_lower_end_index_test[0]}, second_has_lower_end_index_test[1])
+
+
+def test_second_has_lower_end_index_2():
+    helper_function({"content": second_has_lower_end_index_test_2[0]}, second_has_lower_end_index_test_2[1])
+

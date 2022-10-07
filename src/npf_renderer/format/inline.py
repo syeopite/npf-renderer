@@ -1,3 +1,4 @@
+import itertools
 from typing import List
 
 import dominate.tags, dominate.util
@@ -86,11 +87,35 @@ class InlineFormatter(helpers.CursorIterator):
             # If so we'll take care of the current operation first, and any subsequent operations that are still
             # overlapping with us.
             if till > self.ops.current.end:
-                while till > self.ops.current.end:
+                while till > self.ops.current.end and not self.ops._at_end:
                     self.route_operations(self.ops.current.end, parent_tag=current_tag)
 
-                # Finally we can finish the remaining
-                self.route_operations(till, parent_tag=current_tag)
+                # As the above function breaks as soon as we reach the end of the operations list
+                # there's a few considerations we need to take
+                if self.ops._at_end:
+                    # First we need to finish up the current operation if we aren't there yet
+                    if self.cursor < self.ops.current.end:
+                        self.route_operations(self.ops.current.end, parent_tag=current_tag)
+
+                        # Since there's no more new operations to consume, the only operations left are our parents (if
+                        # we're here it definitely means we have parents because otherwise till == self.ops.current.end,
+                        # and so we wouldn't even be in this if-else chain in the first place)
+
+                        # Anyway, this means that all that's left to do is to consume letters till we've reached till
+                        # and append it to the current tag (aka our parent)
+                        while self.cursor < till:
+                            self.next()
+
+                        current_tag.add(dominate.util.text("".join(self.accumulator_string)))
+                        self.accumulator_string = []
+                    else:
+                        # We've gone past the end of the last operation which means all that's left is our parent.
+                        while self.cursor < till:
+                            self.next()
+
+                        current_tag.add(dominate.util.text("".join(self.accumulator_string)))
+                        self.accumulator_string = []
+
             else:
                 self.route_operations(till, parent_tag=current_tag)
 
