@@ -11,6 +11,7 @@ def helper_function(raw, answer):
     parser = Parser(raw["content"])
     parsed_results = parser.parse()
     logging.info(f"Parsed: {parsed_results}")
+    logging.info(f"Answer: {answer}")
 
     assert parsed_results == answer
 

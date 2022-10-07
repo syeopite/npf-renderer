@@ -11,6 +11,8 @@ def helper_function(content, answer):
     formatted_result = format.format_content(parsed_results)
 
     logging.info(f"Formatted: \n{formatted_result}\n")
+    logging.info(f"Answer: \n{answer}\n")
+
     assert str(formatted_result) == str(answer)
 
 
