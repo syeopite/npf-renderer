@@ -150,7 +150,7 @@ class InlineFormatter(helpers.CursorIterator):
                 self.route_operations(till)
 
                 # Check for remaining operations in the current cursor position
-                while self.cursor < (till := self.ops.current.end):
+                while self.ops.current.start <= self.cursor < (till := self.ops.current.end):
                     self.next()
                     self.route_operations(till)
 
