@@ -1,42 +1,15 @@
 import dominate.tags
 
 from . import text_formatter
-from .. import objects
+from .. import objects, helpers
 
 
-class Formatter:
+class Formatter(helpers.CursorIterator):
     def __init__(self, content, layout=None, trails=None):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
-        self.content_list = content
-        self.content_iter = iter(content)
+        super().__init__(content)
 
         self.post = dominate.tags.div(cls="post")
-
-        self.cursor = 0
-        self.current = None
-        self.content_length = len(content)  # Prevents calculating len(self.content_list) over and over again
-
-    @property
-    def _at_end(self):
-        """Checks if we have reached the end of the content list"""
-        return self.content_length <= self.cursor
-
-    def __next(self):
-        """Go to the next element in the iterator and returns True if successful"""
-        try:
-            self.current = next(self.content_iter)
-            self.cursor += 1
-        except StopIteration:
-            return False
-
-        return True
-
-    def _peek(self):
-        """Takes a peek at the next element"""
-        if self._at_end:
-            return False
-
-        return self.content_list[self.cursor]
 
     def __format_text(self):
         """Formats TextBlock(s) into usable HTML code"""
@@ -53,7 +26,7 @@ class Formatter:
 
                 if peekaboo.subtype == self.current.subtype:
                     # Formatted block should be a list element such as ul, ol here
-                    self.__next()
+                    self._next()
                     formatted_block.add(text_formatter.TextFormatter(self.current, create_list_element=False).format())
 
         return formatted_block
@@ -70,7 +43,7 @@ class Formatter:
 
     def format(self):
         """Begins the parsing chain and returns the final list of parsed objects"""
-        while self.__next():
+        while self._next():
             self.__format_block()
 
         return self.post

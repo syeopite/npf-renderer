@@ -6,49 +6,23 @@ results = parser.parse()
 """
 
 from ..objects import inline, text_block
+from .. import helpers
 
 
-class Parser:
+class Parser(helpers.CursorIterator):
     """All-in-one parser to process NPF content types
 
     TODO Make base class with all of these properties for the formatter and parser
     """
     def __init__(self, content):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
-        self.content_list = content
+        super().__init__(content)
         self.parsed_result = []
-
-        self.cursor = 0
-        self.current = self.content_list[self.cursor]
-        self.content_length = len(content)  # Prevents calculating len(self.content_list) over and over again
-
-    @property
-    def _at_end(self):
-        """Checks if we have reached the end of the content list"""
-        return self.content_length - 1 == self.cursor
-
-    def __next(self):
-        """Moves cursor forward by one and returns the (now) selected element"""
-        self.cursor += 1
-        self.current = self.content_list[self.cursor]
-        return self.current
-
-    def _peek(self):
-        """Takes a peek at the next element"""
-        if self._at_end:
-            return False
-        return self.content_list[self.cursor + 1]
-
-    def __prev(self):
-        """Moves cursor back by one and returns the (now) selected element"""
-        self.cursor -= 1
-        self.current = self.content_list[self.cursor]
-        return self.current
 
     def _parse_text(self, nest_level=0):
         """Parses a NPF text content block into a TextBlock
 
-        Takes the selected JSON text content block from self.current and parses it into a TextObject.
+        Takes the selected JSON text content block from `self.current` and parses it into a TextObject.
         Accepts a nest_level argument to handle any nesting.
 
         Args:
@@ -93,7 +67,7 @@ class Parser:
             # If the next element's indent level is higher than ours (stored as nest_level), they are our children.
             # Thus, we'll store them under us.
             if indent_level > nest_level:
-                self.__next()
+                self._next()
                 nest_array.append(self._parse_text(nest_level=nest_level + 1))
             else:
                 # If not however, then they are either our siblings,  in the same level as our parent,
@@ -160,12 +134,7 @@ class Parser:
 
     def parse(self):
         """Begins the parsing chain and returns the final list of parsed objects"""
-        while not self._at_end:
+        while self._next():
             self.__parse_block()
-            self.__next()
-
-        # at_end declares that everything ended as soon as the cursor reached the last value
-        # which means that the last element gets skipped. So we'll do it here: TODO fix this logic
-        self.__parse_block()
 
         return self.parsed_result
