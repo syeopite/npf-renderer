@@ -3,6 +3,7 @@ import logging
 from npf_renderer import parse, format
 
 from example_data import *
+from exclusive_formatting_test_data import *
 
 
 def helper_function(content, answer):
@@ -32,6 +33,7 @@ def test_subtype_string_render_2():
 def test_subtype_and_indent_level_render():
     helper_function(subtype_and_indent_level_test[0], subtype_and_indent_level_test[2])
 
+
 def test_inline_formatting_render():
     helper_function(inline_formatting_test[0], inline_formatting_test[2])
 
@@ -50,3 +52,10 @@ def test_inline_color_formatting_render():
 
 def test_overlapping_inline_render():
     helper_function(test_inline_overlapping[0], test_inline_overlapping[2])
+
+
+# Exclusive formatting tests below:
+
+def test_overlapping_back_to_back_render():
+    helper_function({"content": back_to_back_inline_format_test[0]}, back_to_back_inline_format_test[1])
+

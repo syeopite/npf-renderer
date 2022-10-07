@@ -60,7 +60,7 @@ class InlineFormatter(helpers.CursorIterator):
             self.next()
 
         # Have we reached the end of our own formatting section?
-        if (self.cursor == till) or self._at_end:
+        if (self.cursor >= till) or self._at_end:
             current_tag.add(dominate.util.text("".join(self.accumulator_string)))
             self.accumulator_string = []
 
@@ -150,7 +150,7 @@ class InlineFormatter(helpers.CursorIterator):
                 self.route_operations(till)
 
                 # Check for remaining operations in the current cursor position
-                if self.cursor < (till := self.ops.current.end):
+                while self.cursor < (till := self.ops.current.end):
                     self.next()
                     self.route_operations(till)
 
