@@ -12,34 +12,39 @@ class TextFormatter:
         self.tag = self.create_tag()
 
     def create_tag(self):
+
+        additional_classes = ""
+        if self.text_block.inline_formatting:
+            additional_classes += " inline-formatted"
+
         if not self.text_block.subtype:
-            return dominate.tags.p(cls="text")
+            return dominate.tags.p(cls="text-block")
 
         match self.text_block.subtype:
             case objects.text_block.Subtypes.HEADING1:
-                return dominate.tags.h1(cls="heading1")
+                return dominate.tags.h1(cls="text-block heading1" + additional_classes)
             case objects.text_block.Subtypes.HEADING2:
-                return dominate.tags.h2(cls="heading2")
+                return dominate.tags.h2(cls="text-block heading2" + additional_classes)
             case objects.text_block.Subtypes.QUIRKY:
-                return dominate.tags.p(cls="quirky")
+                return dominate.tags.p(cls="text-block quirky" + additional_classes)
             case objects.text_block.Subtypes.QUOTE:
-                return dominate.tags.blockquote(cls="quote")
+                return dominate.tags.blockquote(cls="text-block quote" + additional_classes)
             case objects.text_block.Subtypes.INDENTED:
-                return dominate.tags.blockquote(cls="indented")
+                return dominate.tags.blockquote(cls="text-block indented" + additional_classes)
             case objects.text_block.Subtypes.CHAT:
-                return dominate.tags.p(cls="chat")
+                return dominate.tags.p(cls="text-block chat" + additional_classes)
 
             case _:
                 if self.create_list_element:
                     if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                        return dominate.tags.ol(cls="ordered-list")
+                        return dominate.tags.ol(cls="ordered-list" + additional_classes)
                     elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                        return dominate.tags.ul(cls="unordered-list")
+                        return dominate.tags.ul(cls="unordered-list" + additional_classes)
                 else:
                     if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                        return dominate.tags.li(cls="ordered-list-item")
+                        return dominate.tags.li(cls="ordered-list-item" + additional_classes)
                     elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                        return dominate.tags.li(cls="unordered-list-item")
+                        return dominate.tags.li(cls="unordered-list-item" + additional_classes)
 
     def format(self):
 
