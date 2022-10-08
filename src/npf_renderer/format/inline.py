@@ -32,8 +32,9 @@ class InlineFormatter(helpers.CursorIterator):
         #
         # Each inline format is going to be called an "operation"
 
-        self.operations = sorted(inline_formats, key=lambda obj: obj.start)
-        self.ops = Operations(self.operations)
+        # Returns a list of operations sorted by the start and end of each
+        operations = sorted(inline_formats, key=lambda format_op: (format_op.start, format_op.end))
+        self.ops = Operations(operations)
 
         self.accumulator_string = []
 
