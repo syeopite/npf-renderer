@@ -78,5 +78,6 @@ def test_second_has_lower_end_index_2():
     helper_function({"content": second_has_lower_end_index_test_2[0]}, second_has_lower_end_index_test_2[1])
 
 
-def test_hyper_overlap():
-    helper_function({"content": hyper_overlap_test[0]}, hyper_overlap_test[1])
+def test_overlapping_same_area():
+    helper_function({"content": overlapping_same_area_test_data[0]}, overlapping_same_area_test_data[1])
+

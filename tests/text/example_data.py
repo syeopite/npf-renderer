@@ -220,7 +220,7 @@ inline_formatting_test = (
     ],
     tags.div(
         tags.p(
-            tags.span("some ", tags.small("small", cls="inline-small"), " text", cls="inline-formatted-content"),
+            tags.div("some ", tags.small("small", cls="inline-small"), " text", cls="inline-formatted-content"),
             cls="text-block",
         ),
         cls="post",
@@ -261,7 +261,7 @@ inline_formatting_link_test = (
     ],
     tags.div(
         tags.p(
-            tags.span(
+            tags.div(
                 "Found ",
                 tags.a("this", href="https://www.nasa.gov", cls="inline-link"),
                 " link for you",
@@ -310,7 +310,7 @@ inline_formatting_mention_test = (
     ],
     tags.div(
         tags.p(
-            tags.span(
+            tags.div(
                 "Shout out to ",
                 tags.a("@david", cls="inline-mention", href="https://davidslog.com/"),
                 cls="inline-formatted-content",
@@ -341,7 +341,7 @@ inline_formatting_color_test = (
     ],
     tags.div(
         tags.p(
-            tags.span(
+            tags.div(
                 "Celebrate ",
                 tags.span("Pride", cls="inline-color", style="color: #ff492f;"),
                 " Month",
@@ -385,7 +385,7 @@ test_inline_overlapping = (
     ],
     tags.div(
         tags.p(
-            tags.span(
+            tags.div(
                 tags.b(
                     "supercali",
                     tags.i("fragilistic", cls="inline-italics"),

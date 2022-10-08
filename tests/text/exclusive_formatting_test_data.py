@@ -1,6 +1,5 @@
 from dominate import tags
 
-
 connected_back_to_back_inline_format_test = (
     [
         {
@@ -18,7 +17,7 @@ connected_back_to_back_inline_format_test = (
     ],
     tags.div(
         tags.blockquote(
-            tags.span(
+            tags.div(
                 "The ",
                 tags.span(
                     "brown ",
@@ -54,7 +53,7 @@ back_to_back_inline_format_test = (
     ],
     tags.div(
         tags.blockquote(
-            tags.span(
+            tags.div(
                 "The ",
                 tags.span(
                     "brown",
@@ -91,7 +90,7 @@ long_space_in_between_format_test = (
     ],
     tags.div(
         tags.blockquote(
-            tags.span(
+            tags.div(
                 "The ",
                 tags.span(
                     "brown ",
@@ -120,9 +119,9 @@ second_has_lower_end_index_test = (
             ],
         }
     ],
-        tags.div(
-            tags.blockquote(
-            tags.span(
+    tags.div(
+        tags.blockquote(
+            tags.div(
                 "The ",
                 tags.span(
                     "brown ",
@@ -138,7 +137,6 @@ second_has_lower_end_index_test = (
 
                 cls="inline-formatted-content"
             ),
-
             cls="text-block indented inline-formatted-block",
         ),
 
@@ -161,7 +159,7 @@ second_has_lower_end_index_test_2 = (
     ],
     tags.div(
         tags.blockquote(
-            tags.span(
+            tags.div(
                 "The ",
                 tags.span(
                     "br",
@@ -190,7 +188,7 @@ second_has_lower_end_index_test_2 = (
     )
 )
 
-hyper_overlap_test = (
+overlapping_same_area_test_data = (
     [
         {
             "type": "text",
@@ -209,7 +207,7 @@ hyper_overlap_test = (
 
     tags.div(
         tags.blockquote(
-            tags.span(
+            tags.div(
                 "The ",
                 tags.span(
                     tags.a(
@@ -240,4 +238,3 @@ hyper_overlap_test = (
         cls="post"
     )
 )
-
