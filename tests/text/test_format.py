@@ -81,3 +81,7 @@ def test_second_has_lower_end_index_2():
 def test_overlapping_same_area():
     helper_function({"content": overlapping_same_area_test_data[0]}, overlapping_same_area_test_data[1])
 
+
+def test_overlapping_same_start_different_end_data():
+    helper_function({"content": overlapping_same_start_different_end_data[0]}, overlapping_same_start_different_end_data[1])
+

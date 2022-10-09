@@ -66,6 +66,21 @@ class InlineFormatter(helpers.CursorIterator):
         # aka an overlapping region) or we've reached the end of the string, or the end of the current formatting
         # section (the till argument).
         while not self.new_format_section and not self._at_end and (self.cursor < till):
+
+            # Handle overlapping regions that starts at the same location as us but end differently.
+            #
+            # We don't have to check for peek() having the same end as us as that case has already been handled
+            # in the route_operations method.
+            if self.ops.current.start == self.ops.next_start:
+                # While we still last longer than the next operation's ending,
+                while till > self.ops.next_end:
+                    self.ops.next()
+                    # The next operation (or current operation now) is going to be included under us.
+                    self.route_operations(self.ops.current.end, current_tag)
+
+                    if (self.ops.current.start != self.ops.next_start) or self.ops._at_end:
+                        break
+
             self.next()
 
         # Have we reached the end of our own formatting section?

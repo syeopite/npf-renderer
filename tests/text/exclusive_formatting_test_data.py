@@ -238,3 +238,46 @@ overlapping_same_area_test_data = (
         cls="post"
     )
 )
+
+overlapping_same_start_different_end_data = (
+    [
+        {
+            "type": "text",
+            "text": "The brown fox jumped over the lazy dog",
+            "subtype": "indented",
+            "formatting": [
+                {"start": 4, "end": 10, "type": "color", "hex": "#964B00"},
+                {"start": 4, "end": 20, "type": "link", "url": "https://www.youtube.com/watch?v=jofNR_WkoCE"},
+                {"start": 4, "end": 30, "type": "bold"},
+            ],
+        }
+    ],
+
+    tags.div(
+        tags.blockquote(
+            tags.div(
+                "The ",
+                tags.b(
+                    tags.a(
+                        tags.span(
+                            "brown ",
+                            style="color: #964B00;",
+                            cls="inline-color"
+
+                        ),
+                        "fox jumped",
+                        href="https://www.youtube.com/watch?v=jofNR_WkoCE",
+                        cls="inline-link"
+                    ),
+                    " over the ",
+                    cls="inline-bold"
+                ),
+                "lazy dog",
+                cls="inline-formatted-content"
+            ),
+            cls="text-block indented inline-formatted-block"
+        ),
+        cls="post"
+    )
+)
+
