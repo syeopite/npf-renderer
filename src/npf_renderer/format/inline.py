@@ -10,18 +10,25 @@ class Operations(helpers.CursorIterator):
     def __init__(self, operations):
         super().__init__(operations)
         self.next_start = None
+        self.next_end = None
 
     def next(self):
         status = super().next()
         if status:  # Save a bit of performance.
             if peek := self.peek():
                 self.next_start = peek.start
+                self.next_end = peek.end
+
+        if not status:
+            self.next_start = None
+            self.next_end = None
 
         return status
 
 
 class InlineFormatter(helpers.CursorIterator):
     """Produces an HTML output from NPF's inline formatting and a string"""
+
     def __init__(self, string: str, inline_formats: List[objects.inline.INLINE_FMT_TYPES]):
         super().__init__(string)
         self.parent_tag = dominate.tags.div(cls="inline-formatted-content")
@@ -161,11 +168,10 @@ class InlineFormatter(helpers.CursorIterator):
 
         # Check and handle for same overlaps
         nested_child_tags = []
-        while ((peek := self.ops.peek())
-               and (peek.start == self.ops.current.start)
-               and (peek.end == self.ops.current.end)):
-            child_tag = self.get_tag_of_operation(peek)
+        while not self.ops._at_end and ((self.ops.next_start == self.ops.current.start)
+                                        and (self.ops.next_end == self.ops.current.end)):
             self.ops.next()
+            child_tag = self.get_tag_of_operation(self.ops.current)
 
             nested_child_tags.append(child_tag)
 
@@ -215,4 +221,3 @@ class InlineFormatter(helpers.CursorIterator):
             self.accumulator_string = []
 
         return self.parent_tag
-
