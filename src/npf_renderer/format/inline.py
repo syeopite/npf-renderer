@@ -1,7 +1,10 @@
 import itertools
+import collections
+import queue
 from typing import List
 
-import dominate.tags, dominate.util
+import dominate.tags
+import dominate.util
 
 from .. import objects, helpers
 
@@ -45,6 +48,12 @@ class InlineFormatter(helpers.CursorIterator):
 
         self.accumulator_string = []
 
+        # TODO document this import variable
+        # [[(indice), tag, [nested tag]]
+        self.stored_tag_trees = []
+        self.priority_operator_queue = queue.Queue()
+        self.format_missing = False
+
     @property
     def new_format_section(self):
         if self.cursor in (self.ops.current.start, self.ops.next_start):
@@ -60,7 +69,13 @@ class InlineFormatter(helpers.CursorIterator):
         return status
 
     def perform_operation(self, current_tag, till):
-        """Performs a formatting option till the specified ending index"""
+        """Performs a formatting option till the specified ending index
+
+        Arguments:
+            current_tag: The tag in which further nested tags and texts gets applied to
+            till: An index at which the perform_operation method should break and stop.
+
+        """
 
         # If this stops then that means either a new formatting section begun (likely while in the midst of ours,
         # aka an overlapping region) or we've reached the end of the string, or the end of the current formatting
@@ -103,6 +118,13 @@ class InlineFormatter(helpers.CursorIterator):
 
         try:
             self.next()
+
+            # Remember the current operation if we don't get to perform it before the op iterator advances
+            operation_latch = None
+            # Only for when the till's operation is supposed to finish before the end of the current one
+            if till < self.ops.current.end:
+                operation_latch = self.ops.current
+
             self.ops.next()
 
             # Do we go on for longer than the current operation?
@@ -138,12 +160,17 @@ class InlineFormatter(helpers.CursorIterator):
 
                         current_tag.add(dominate.util.text("".join(self.accumulator_string)))
                         self.accumulator_string = []
-
             else:
                 self.route_operations(till, parent_tag=current_tag)
+                # Put on priority and fulfilled as soon as it can
+                if operation_latch:
+                    self.priority_operator_queue.put(operation_latch)
 
         except StopIteration:
             pass
+
+    def handle_priority_operation(self):
+        pass
 
     def get_tag_of_operation(self, operation):
         match operation.type:
@@ -179,16 +206,78 @@ class InlineFormatter(helpers.CursorIterator):
         if not parent_tag:
             parent_tag = self.parent_tag
 
-        tag = self.get_tag_of_operation(self.ops.current)
+        # First things first we handle the prioity queue if any
+        while not self.priority_operator_queue.empty():
+            operation = self.priority_operator_queue.get()
+            operation_tag = self.get_tag_of_operation(operation)
+            # If we're within the new current operation (which we likely are)
+
+            if operation.start <= self.ops.current.end and self.ops.current.start <= operation.end:
+                # We'll either run to our ending if we're within the operation
+                # or to their ending if they finish first
+                if operation.end <= self.ops.current.end:
+                    # Either run until the till value or the end of the operation depending on which ends first
+                    if till < operation.end:
+                        self.route_operations(till, parent_tag=operation_tag)
+                        self.priority_operator_queue.put(operation)
+
+                    else:
+                        self.route_operations(operation.end, parent_tag=operation_tag)
+
+                    # Sometimes gets terminated early when the child of our child ends before we do. Therefore we'll
+                    # finish the remaining if applicable:
+                    if self.cursor < operation.end and self.cursor < till:
+                        # Of course we might actually have to just run until the till value if it ends before we do
+                        if till < operation.end:
+                            # Which in that case then it's just a repeat of the logic in self.perform_operation
+                            # in which we add the remaining stuff to do to the priority queue
+                            self.route_operations(till, parent_tag=operation_tag)
+                            self.priority_operator_queue.put(operation)
+                        else:
+                            self.route_operations(operation.end, parent_tag=operation_tag)
+                    elif self.cursor < till == self.ops.current.end:
+                        # If we have ended, but we still haven't reached the till value then obviously it goes on for
+                        # longer than us. So, in the current context, if we need to finish the operation of the till
+                        # value (current op end == till) then we do it. Otherwise, we'll let the outer caller handle it
+                        parent_tag.add(operation_tag)
+
+                        return self.route_operations(self.ops.current.end, parent_tag=parent_tag)
+
+                else:
+                    self.route_operations(self.ops.current.end, parent_tag=operation_tag)
+            else:
+                # Not Possible
+                raise RuntimeError
+
+            if self._at_end:
+                return
+
+            return parent_tag.add(operation_tag)
+
+            # Return if at end
+
+        tag = None  # Jank solution to register tag variable as always available.
+        # If reconstruct_nest_tree, tag will always be made right before we run perform_operations
+
+        reconstruct_at = None
+        reconstruct_nest_tree = False
+        if self.stored_tag_trees and (reconstruct_at := self._match_nest_tree()) is not None:
+            reconstruct_nest_tree = True
+        else:
+            tag = self.get_tag_of_operation(self.ops.current)
 
         # Check and handle for same overlaps
         nested_child_tags = []
+        nested_child_operations = []  # Used to reconstruct this nested china if needed
+        first_operation = self.ops.current
+
         while not self.ops._at_end and ((self.ops.next_start == self.ops.current.start)
                                         and (self.ops.next_end == self.ops.current.end)):
             self.ops.next()
             child_tag = self.get_tag_of_operation(self.ops.current)
 
             nested_child_tags.append(child_tag)
+            nested_child_operations.append(self.ops.current)
 
         for child_tag_one, child_tag_two in itertools.pairwise(nested_child_tags):
             child_tag_one.add(child_tag_two)
@@ -199,11 +288,81 @@ class InlineFormatter(helpers.CursorIterator):
         if nested_child_tags:
             tag.add(nested_child_tags[0])
 
+            self.stored_tag_trees.append(
+                ((first_operation.start, first_operation.end), first_operation, nested_child_operations)
+            )
+
             self.perform_operation(current_tag=nested_child_tags[-1], till=till)
+        elif reconstruct_nest_tree:
+            nested_child_operations = self.stored_tag_trees.pop(reconstruct_at)
+            nested_child_tags = []
+
+            # Repeat of the handling code above
+            for ops in nested_child_operations[2]:
+                nested_child_tags.append(self.get_tag_of_operation(ops))
+
+            for child_tag_one, child_tag_two in itertools.pairwise(nested_child_tags):
+                child_tag_one.add(child_tag_two)
+
+            tag = self.get_tag_of_operation(nested_child_operations[1])
+            tag.add(nested_child_tags[0])
+            self.perform_operation(current_tag=nested_child_tags[-1], till=till)
+
+            # Add back operations tree in case of further interruptions
+            self.stored_tag_trees.append(nested_child_operations)
         else:
             self.perform_operation(current_tag=tag, till=till)
 
+        # Do till, and index check and it should be alright
+        if self.format_missing:
+            # if not self.priority_operator_queue.empty():
+            #     operation = self.priority_operator_queue.get()
+            #     operation_tag = self.get_tag_of_operation(operation)
+            #     # If we're within the new current operation (which we likely are)
+            #
+            #     if operation.start <= self.ops.current.end and self.ops.current.start <= operation.end:
+            #         # We'll either run to our ending if we're within the operation
+            #         # or to their ending if they finish first
+            #         if operation.end <= self.ops.current.end:
+            #             if self.stored_tag_trees and (index := self._match_nest_tree()) is not None:
+            #                 self.route_operations(operation.end, parent_tag=operation_tag,
+            #                                       reconstruct_nest_tree=True, reconstruct_at=index)
+            #                 continue
+            #             else:
+            #                 self.route_operations(operation.end, parent_tag=operation_tag)
+            #         else:
+            #             if self.stored_tag_trees and (index := self._match_nest_tree()) is not None:
+            #                 self.route_operations(self.ops.current.end, parent_tag=operation_tag,
+            #                                       reconstruct_nest_tree=True, reconstruct_at=index)
+            #                 continue
+            #             else:
+            #                 self.route_operations(self.ops.current.end, parent_tag=operation_tag)
+            #     else:
+            #         # We are not overlapping with the current selected operation. Therefore we can just
+            #         # complete ours right away
+            #         self.perform_operation(operation_tag, operation.end)
+            #
+            #     parent_tag.add(tag)
+            #     parent_tag.add(operation_tag)
+            #
+            #     return
+            pass
+
         parent_tag.add(tag)
+
+        return parent_tag
+
+    def _match_nest_tree(self):
+        # Attempt to find a match
+        matched_index = None
+        for index, package in enumerate(self.stored_tag_trees):
+            indices = package[0]
+
+            if (self.ops.current.start, self.ops.current.end) == indices:
+                matched_index = index
+                break
+
+        return matched_index
 
     def format(self):
         # Begin operations iteration
@@ -220,7 +379,6 @@ class InlineFormatter(helpers.CursorIterator):
                 # Consumes the next character, so we don't trigger
                 # new_format_section again
                 self.next()
-
                 self.route_operations(till)
 
                 # Check for remaining operations in the current cursor position

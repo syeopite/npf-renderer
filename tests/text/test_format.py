@@ -85,3 +85,26 @@ def test_overlapping_same_area():
 def test_overlapping_same_start_different_end_data():
     helper_function({"content": overlapping_same_start_different_end_data[0]}, overlapping_same_start_different_end_data[1])
 
+
+def test_interrupted_same_indices_overlapping():
+    helper_function({"content": interrupted_same_indices_overlapping[0]}, interrupted_same_indices_overlapping[1])
+
+
+def test_interrupted_overlap():
+    helper_function({"content": interrupted_overlap_test[0]}, interrupted_overlap_test[1])
+
+
+def test_interrupted_overlap_2():
+    helper_function({"content": interrupted_overlap_test_2[0]}, interrupted_overlap_test_2[1])
+
+
+def test_interrupted_overlap_3():
+    helper_function({"content": interrupted_overlap_test_3[0]}, interrupted_overlap_test_3[1])
+
+
+def test_interrupted_overlap_4():
+    helper_function({"content": interrupted_overlap_test_4[0]}, interrupted_overlap_test_4[1])
+
+
+def test_same_index_with_other_overlap():
+    helper_function({"content": same_index_with_other_overlap_test[0]}, same_index_with_other_overlap_test[1])
