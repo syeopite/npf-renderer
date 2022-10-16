@@ -313,41 +313,6 @@ class InlineFormatter(helpers.CursorIterator):
         else:
             self.perform_operation(current_tag=tag, till=till)
 
-        # Do till, and index check and it should be alright
-        if self.format_missing:
-            # if not self.priority_operator_queue.empty():
-            #     operation = self.priority_operator_queue.get()
-            #     operation_tag = self.get_tag_of_operation(operation)
-            #     # If we're within the new current operation (which we likely are)
-            #
-            #     if operation.start <= self.ops.current.end and self.ops.current.start <= operation.end:
-            #         # We'll either run to our ending if we're within the operation
-            #         # or to their ending if they finish first
-            #         if operation.end <= self.ops.current.end:
-            #             if self.stored_tag_trees and (index := self._match_nest_tree()) is not None:
-            #                 self.route_operations(operation.end, parent_tag=operation_tag,
-            #                                       reconstruct_nest_tree=True, reconstruct_at=index)
-            #                 continue
-            #             else:
-            #                 self.route_operations(operation.end, parent_tag=operation_tag)
-            #         else:
-            #             if self.stored_tag_trees and (index := self._match_nest_tree()) is not None:
-            #                 self.route_operations(self.ops.current.end, parent_tag=operation_tag,
-            #                                       reconstruct_nest_tree=True, reconstruct_at=index)
-            #                 continue
-            #             else:
-            #                 self.route_operations(self.ops.current.end, parent_tag=operation_tag)
-            #     else:
-            #         # We are not overlapping with the current selected operation. Therefore we can just
-            #         # complete ours right away
-            #         self.perform_operation(operation_tag, operation.end)
-            #
-            #     parent_tag.add(tag)
-            #     parent_tag.add(operation_tag)
-            #
-            #     return
-            pass
-
         parent_tag.add(tag)
 
         return parent_tag
