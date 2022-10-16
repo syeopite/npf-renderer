@@ -49,8 +49,6 @@ class InlineFormatter(helpers.CursorIterator):
         self.accumulator_string = []
 
         # TODO document this import variable
-        # [[(indice), tag, [nested tag]]
-        self.stored_tag_trees = []
         self.priority_operator_queue = queue.Queue()
         self.format_missing = False
 
@@ -256,78 +254,28 @@ class InlineFormatter(helpers.CursorIterator):
 
             # Return if at end
 
-        tag = None  # Jank solution to register tag variable as always available.
-        # If reconstruct_nest_tree, tag will always be made right before we run perform_operations
-
-        reconstruct_at = None
-        reconstruct_nest_tree = False
-        if self.stored_tag_trees and (reconstruct_at := self._match_nest_tree()) is not None:
-            reconstruct_nest_tree = True
-        else:
-            tag = self.get_tag_of_operation(self.ops.current)
-
-        # Check and handle for same overlaps
         nested_child_tags = []
-        nested_child_operations = []  # Used to reconstruct this nested china if needed
-        first_operation = self.ops.current
-
-        while not self.ops._at_end and ((self.ops.next_start == self.ops.current.start)
-                                        and (self.ops.next_end == self.ops.current.end)):
-            self.ops.next()
-            child_tag = self.get_tag_of_operation(self.ops.current)
-
-            nested_child_tags.append(child_tag)
-            nested_child_operations.append(self.ops.current)
-
-        for child_tag_one, child_tag_two in itertools.pairwise(nested_child_tags):
-            child_tag_one.add(child_tag_two)
-
-        # Add first child tag in the list to our main tag, which should have all the others nested within
-        # and to save some code we also run perform_operation in here with either the last of the nested_child_tags list
-        # as it's the innermost tag, or we just run perform_operation with our normal main tag
-        if nested_child_tags:
-            tag.add(nested_child_tags[0])
-
-            self.stored_tag_trees.append(
-                ((first_operation.start, first_operation.end), first_operation, nested_child_operations)
-            )
-
-            self.perform_operation(current_tag=nested_child_tags[-1], till=till)
-        elif reconstruct_nest_tree:
-            nested_child_operations = self.stored_tag_trees.pop(reconstruct_at)
-            nested_child_tags = []
-
-            # Repeat of the handling code above
-            for ops in nested_child_operations[2]:
+        if not isinstance(self.ops.current.type, list):
+            tag = self.get_tag_of_operation(self.ops.current)
+        else:
+            for ops in self.ops.current.type:
                 nested_child_tags.append(self.get_tag_of_operation(ops))
 
             for child_tag_one, child_tag_two in itertools.pairwise(nested_child_tags):
                 child_tag_one.add(child_tag_two)
 
-            tag = self.get_tag_of_operation(nested_child_operations[1])
-            tag.add(nested_child_tags[0])
-            self.perform_operation(current_tag=nested_child_tags[-1], till=till)
+            # Operations will be conducted on the innermost tag
+            tag = nested_child_tags.pop()
 
-            # Add back operations tree in case of further interruptions
-            self.stored_tag_trees.append(nested_child_operations)
+        self.perform_operation(current_tag=tag, till=till)
+
+        # If we have nested tags then the one that need to be added to the parent is the root one
+        if nested_child_tags:
+            parent_tag.add(nested_child_tags[0])
         else:
-            self.perform_operation(current_tag=tag, till=till)
-
-        parent_tag.add(tag)
+            parent_tag.add(tag)
 
         return parent_tag
-
-    def _match_nest_tree(self):
-        # Attempt to find a match
-        matched_index = None
-        for index, package in enumerate(self.stored_tag_trees):
-            indices = package[0]
-
-            if (self.ops.current.start, self.ops.current.end) == indices:
-                matched_index = index
-                break
-
-        return matched_index
 
     def format(self):
         # Begin operations iteration

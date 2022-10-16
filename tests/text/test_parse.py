@@ -53,3 +53,6 @@ def test_inline_color_formatting_parse():
 
 def test_overlapping_inline_parse():
     helper_function(test_inline_overlapping[0], test_inline_overlapping[1])
+
+def test_inline_total_overlapping_parse():
+    helper_function(test_inline_total_overlapping[0], test_inline_total_overlapping[1])

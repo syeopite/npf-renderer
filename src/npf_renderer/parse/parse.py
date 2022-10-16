@@ -78,47 +78,78 @@ class Parser(helpers.CursorIterator):
         return create_text_block(text, subtype, inline_formats, nest_=nest_array)
 
     @staticmethod
-    def _parse_inline_text(inline_formatting):
+    def route_inline_format(inline_format, start, end):
+        inline_type = getattr(inline.FMTTypes, inline_format["type"].upper())
+
+        match inline_type:
+            case (inline.FMTTypes.BOLD | inline.FMTTypes.ITALIC |
+                  inline.FMTTypes.STRIKETHROUGH | inline.FMTTypes.SMALL):
+                return inline.Standard(
+                    start=start,
+                    end=end,
+                    type=inline_type
+                )
+            case inline.FMTTypes.LINK:
+                return inline.Link(
+                    start=start,
+                    end=end,
+                    type=inline_type,
+                    url=inline_format["url"]
+                )
+            case inline.FMTTypes.MENTION:
+                blog = inline_format["blog"]
+                return inline.Mention(
+                    start=start,
+                    end=end,
+                    type=inline_type,
+
+                    blog_name=blog["name"],
+                    blog_uuid=blog["uuid"],
+                    blog_url=blog["url"]
+                )
+            case inline.FMTTypes.COLOR:
+                return inline.Color(
+                    start=start,
+                    end=end,
+                    type=inline_type,
+
+                    hex=inline_format["hex"],
+                )
+
+    def _parse_inline_text(self, inline_formatting):
         """Parses the inline formatting of a content block into an array of inline fmt objects"""
         inline_formats = []
-        for inline_format in inline_formatting:
+        inline_formatting_iter = helpers.CursorIterator(inline_formatting)
+        while not inline_formatting_iter._at_end:
+            inline_formatting_iter.next()
+
+            inline_format = inline_formatting_iter.current
             start, end = inline_format["start"], inline_format["end"]
-            inline_type = getattr(inline.FMTTypes, inline_format["type"].upper())
+            current_parsed_inline_fmt = self.route_inline_format(inline_format, start, end)
 
-            match inline_type:
-                case (inline.FMTTypes.BOLD | inline.FMTTypes.ITALIC |
-                      inline.FMTTypes.STRIKETHROUGH | inline.FMTTypes.SMALL):
-                    inline_formats.append(inline.Standard(
-                        start=start,
-                        end=end,
-                        type=inline_type
-                    ))
-                case inline.FMTTypes.LINK:
-                    inline_formats.append(inline.Link(
-                        start=start,
-                        end=end,
-                        type=inline_type,
-                        url=inline_format["url"]
-                    ))
-                case inline.FMTTypes.MENTION:
-                    blog = inline_format["blog"]
-                    inline_formats.append(inline.Mention(
-                        start=start,
-                        end=end,
-                        type=inline_type,
+            overlapping_formats = []
+            while peek := inline_formatting_iter.peek():
+                p_start, p_end = peek["start"], peek["end"]
 
-                        blog_name=blog["name"],
-                        blog_uuid=blog["uuid"],
-                        blog_url=blog["url"]
-                    ))
-                case inline.FMTTypes.COLOR:
-                    inline_formats.append(inline.Color(
-                        start=start,
-                        end=end,
-                        type=inline_type,
+                if start == p_start and end == p_end:
+                    overlapping_formats.append(self.route_inline_format(peek, p_start, p_end))
+                    inline_formatting_iter.next()
 
-                        hex=inline_format["hex"],
-                    ))
+                else:
+                    # Tumblr's API should return the list of inline fmts sorted. So if even one doesn't match then
+                    # we shouldn't have any overlapping ranges with same start and end
+                    break
+
+            if overlapping_formats:
+                inline_formats.append(
+                    inline.TotalOverlaps(
+                        type=[current_parsed_inline_fmt] + overlapping_formats,
+                        start=start,
+                        end=end
+                    )
+                )
+            else:
+                inline_formats.append(current_parsed_inline_fmt)
 
         return inline_formats
 

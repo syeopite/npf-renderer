@@ -13,6 +13,8 @@ class FMTTypes(enum.Enum):
     MENTION = 5
     COLOR = 6
 
+    TOTAL_OVERLAP_PACKAGE = 7
+
 
 class Standard(NamedTuple):
     """A tuple storing data on various inline formatting options"""
@@ -48,4 +50,14 @@ class Color(NamedTuple):
     hex: str
 
 
-INLINE_FMT_TYPES = Union[Standard, Link, Mention, Color]
+class TotalOverlaps(NamedTuple):
+    """A tuple storing data on formatting operations that overlaps from start to finish
+
+    This allows for easily constructing the nested HTML tags that comes out of this.
+    """
+    type: list[Union[Standard, Link, Mention, Color]]
+    start: int
+    end: int
+
+
+INLINE_FMT_TYPES = Union[Standard, Link, Mention, Color, TotalOverlaps]

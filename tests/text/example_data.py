@@ -2,7 +2,6 @@ from dominate import tags
 
 from npf_renderer import objects
 
-
 simple_test = (  # Basic Example
     {"content": [{"type": "text", "text": "Hello world!"}]},
     [
@@ -12,7 +11,6 @@ simple_test = (  # Basic Example
     ],
     tags.div(tags.p("Hello world!", cls="text-block"), cls="post"),
 )
-
 
 longer_and_with_empty_string_test = (  # Empty Space Test
     {
@@ -392,6 +390,93 @@ test_inline_overlapping = (
                     cls="inline-bold",
                 ),
                 tags.i("expialidocious", cls="inline-italics"),
+                cls="inline-formatted-content",
+            ),
+            cls="text-block",
+        ),
+        cls="post",
+    ),
+)
+
+test_inline_total_overlapping = (
+    {
+        "content": [
+            {
+                "type": "text",
+                "text": "supercalifragilisticexpialidocious",
+                "formatting": [
+                    {"start": 0, "end": 34, "type": "bold"},
+                    {"start": 0, "end": 34, "type": "italic"},
+                    {"start": 0, "end": 34, "type": "small"},
+                    {"start": 0, "end": 34, "type": "strikethrough"},
+                    {"start": 0, "end": 34, "type": "link",
+                     "url": "https://en.wiktionary.org/wiki/supercalifragilisticexpialidocious"},
+                ],
+            }
+        ]
+    },
+    [
+        objects.text_block.TextBlock(
+            text="supercalifragilisticexpialidocious",
+            inline_formatting=[
+                objects.inline.TotalOverlaps(
+                    type=[
+                        objects.inline.Standard(
+                            type=objects.inline.FMTTypes.BOLD,
+                            start=0,
+                            end=34,
+                        ),
+                        objects.inline.Standard(
+                            type=objects.inline.FMTTypes.ITALIC,
+                            start=0,
+                            end=34,
+                        ),
+                        objects.inline.Standard(
+                            type=objects.inline.FMTTypes.SMALL,
+                            start=0,
+                            end=34,
+                        ),
+                        objects.inline.Standard(
+                            type=objects.inline.FMTTypes.STRIKETHROUGH,
+                            start=0,
+                            end=34,
+                        ),
+                        objects.inline.Link(
+                            type=objects.inline.FMTTypes.LINK,
+                            start=0,
+                            end=34,
+                            url="https://en.wiktionary.org/wiki/supercalifragilisticexpialidocious",
+                        )
+                    ],
+
+                    start=0,
+                    end=34
+                )
+
+            ],
+        ),
+    ],
+    tags.div(
+        tags.p(
+            tags.div(
+                tags.b(
+                    tags.i(
+                        tags.small(
+                            tags.s(
+                                tags.a(
+                                    "supercalifragilisticexpialidocious",
+                                    href="https://en.wiktionary.org/wiki/supercalifragilisticexpialidocious",
+                                    cls="inline-link"
+                                ),
+                                cls="inline-strikethrough",
+                            ),
+                            cls="inline-small",
+                        ),
+                        cls="inline-italics"
+                    ),
+
+                    cls="inline-bold",
+                ),
                 cls="inline-formatted-content",
             ),
             cls="text-block",
