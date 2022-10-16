@@ -10,10 +10,7 @@ from .. import helpers
 
 
 class Parser(helpers.CursorIterator):
-    """All-in-one parser to process NPF content types
-
-    TODO Make base class with all of these properties for the formatter and parser
-    """
+    """All-in-one parser to process NPF content types"""
     def __init__(self, content):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
