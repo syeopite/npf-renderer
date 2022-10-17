@@ -645,6 +645,154 @@ interrupted_overlap_test_4 = (
     )
 )
 
+interrupted_overlap_test_5 = (
+    [
+        {
+            "type": "text",
+            "text": "The brown fox jumped over the lazy dog",
+            "subtype": "heading1",
+            "formatting": [
+                {"start": 10, "end": 25, "type": "italic"},  # 'fox jumped over'
+                {"start": 5, "end": 13, "type": "small"},  # 'rown fox'
+                {"start": 8, "end": 20, "type": "strikethrough"},  # 'n fox jumped'
+                {"start": 12, "end": 22, "type": "bold"},  # 'x jumped o'
+
+            ],
+        }
+    ], tags.div(
+        tags.h1(
+            tags.div(
+                "The b",
+                tags.small(
+                    "row",
+                    tags.s(
+                        "n ",
+                        tags.i(
+                            "fo",
+                            tags.b(
+                                "x",
+                                cls="inline-bold"
+                            ),
+                            cls="inline-italics"
+                        ),
+                        cls="inline-strikethrough"
+                    ),
+                    cls="inline-small"
+                ),
+
+                tags.i(
+                    tags.s(
+                        tags.b(
+                            " jumped",
+                            cls="inline-bold"
+                        ),
+                        cls="inline-strikethrough"
+                    ),
+
+                    tags.b(
+                        " o",
+                        cls="inline-bold"
+                    ),
+
+                    "ver",
+
+                    cls="inline-italics",
+                ),
+
+                " the lazy dog",
+
+                cls="inline-formatted-content"
+            ),
+            cls="text-block heading1 inline-formatted-block"
+        ),
+        cls="post"
+    )
+)
+
+interrupted_overlap_test_6 = (
+    [
+        {
+            "type": "text",
+            "text": "The brown fox jumped over the lazy dog",
+            "subtype": "heading1",
+            "formatting": [
+                {"start": 10, "end": 25, "type": "italic"},  # 'fox jumped over'
+                {"start": 10, "end": 25, "type": "link", "url": "example.com"},
+                {"start": 10, "end": 25, "type": "color", "hex": "#FFFFFF"},
+
+                {"start": 5, "end": 13, "type": "small"},  # 'rown fox'
+                {"start": 8, "end": 20, "type": "strikethrough"},  # 'n fox jumped'
+                {"start": 12, "end": 22, "type": "bold"},  # 'x jumped o'
+
+            ],
+        }
+    ], tags.div(
+        tags.h1(
+            tags.div(
+                "The b",
+                tags.small(
+                    "row",
+                    tags.s(
+                        "n ",
+                        tags.i(
+                            tags.a(
+                                tags.span(
+                                    "fo",
+                                    tags.b(
+                                        "x",
+                                        cls="inline-bold"
+                                    ),
+                                    style="color: #FFFFFF;",
+                                    cls="inline-color"
+                                ),
+                                href="example.com",
+                                cls="inline-link",
+                            ),
+                            cls="inline-italics"
+                        ),
+                        cls="inline-strikethrough"
+                    ),
+                    cls="inline-small"
+                ),
+
+                tags.i(
+                    tags.a(
+                        tags.span(
+                            tags.s(
+                                tags.b(
+                                    " jumped",
+                                    cls="inline-bold"
+                                ),
+                                cls="inline-strikethrough"
+                            ),
+
+                            tags.b(
+                                " o",
+                                cls="inline-bold"
+                            ),
+
+                            "ver",
+
+                            style="color: #FFFFFF;",
+                            cls="inline-color"
+                        ),
+                        href="example.com",
+                        cls="inline-link",
+                    ),
+
+                    cls="inline-italics"
+                ),
+
+                " the lazy dog",
+
+                cls="inline-formatted-content"
+            ),
+            cls="text-block heading1 inline-formatted-block"
+        ),
+        cls="post"
+    )
+)
+
 same_index_with_other_overlap_test = (
     [
         {

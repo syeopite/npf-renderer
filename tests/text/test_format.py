@@ -106,5 +106,13 @@ def test_interrupted_overlap_4():
     helper_function({"content": interrupted_overlap_test_4[0]}, interrupted_overlap_test_4[1])
 
 
+def test_interrupted_overlap_5():
+    helper_function({"content": interrupted_overlap_test_5[0]}, interrupted_overlap_test_5[1])
+
+
+def test_interrupted_overlap_6():
+    helper_function({"content": interrupted_overlap_test_6[0]}, interrupted_overlap_test_6[1])
+
+
 def test_same_index_with_other_overlap():
     helper_function({"content": same_index_with_other_overlap_test[0]}, same_index_with_other_overlap_test[1])
