@@ -1,3 +1,4 @@
+import urllib.parse
 import logging
 
 from npf_renderer import parse, format
@@ -116,3 +117,37 @@ def test_interrupted_overlap_6():
 
 def test_same_index_with_other_overlap():
     helper_function({"content": same_index_with_other_overlap_test[0]}, same_index_with_other_overlap_test[1])
+
+
+def test_inline_link_url_handler_normal():
+    helper_function({"content": inline_link_url_handler_test_data[0]}, inline_link_url_handler_test_data[1])
+
+
+def test_inline_link_url_handler_replaced():
+    def url_handler(url):
+        url = urllib.parse.urlparse(url)
+
+        if url.hostname.endswith("youtube.com"):
+            return url._replace(netloc="redirect.invidious.io").geturl()
+        elif url.hostname.endswith("twitter.com"):
+            return url._replace(netloc="nitter.net").geturl()
+        elif url.hostname.endswith("reddit.com"):
+            return url._replace(netloc="libredd.it").geturl()
+
+    # Basically just helper_function
+
+    # Basically helper_function with a couple more additions
+
+    parsed_results = parse.Parser(inline_link_url_handler_test_data[0]).parse()
+    formatted_result = format.format_content(parsed_results, url_handler=url_handler)
+
+    answer = inline_link_url_handler_test_data[2]
+
+    logging.info(f"Formatted: \n{formatted_result}\n")
+    logging.info(f"Answer: \n{answer}\n")
+
+    assert str(formatted_result) == str(answer)
+
+
+
+

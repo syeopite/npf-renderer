@@ -1,6 +1,6 @@
 import itertools
 import queue
-from typing import List
+from typing import List, Callable
 
 import dominate.tags
 import dominate.util
@@ -42,7 +42,7 @@ class _OperationsIterator(helpers.CursorIterator):
 class InlineFormatter(helpers.CursorIterator):
     """Formatter for NPF's TextBlock's inline formatting"""
 
-    def __init__(self, string: str, inline_formats: List[objects.inline.INLINE_FMT_TYPES]):
+    def __init__(self, string: str, inline_formats: List[objects.inline.INLINE_FMT_TYPES], url_handler: Callable):
         """Initializes InlineFormatter with some string and the formats to apply to it """
         super().__init__(string)
         self.parent_tag = dominate.tags.div(cls="inline-formatted-content")
@@ -55,6 +55,8 @@ class InlineFormatter(helpers.CursorIterator):
         # Returns a list of operations sorted by the start (ascending) and end (descending) of each
         operations = sorted(inline_formats, key=lambda format_op: (format_op.start, -format_op.end))
         self._ops = _OperationsIterator(operations)
+
+        self.url_handler = url_handler
 
         self._accumulator = []
 
@@ -185,8 +187,7 @@ class InlineFormatter(helpers.CursorIterator):
         except StopIteration:
             pass
 
-    @staticmethod
-    def _get_tag_of_operation(operation):
+    def _get_tag_of_operation(self,  operation):
         """Maps an inline formatting operation to corresponding HTML tags
 
         This should probably not be used directly. Instead, use _calculate_operation_tags() which calls this method.
@@ -205,10 +206,10 @@ class InlineFormatter(helpers.CursorIterator):
                 return dominate.tags.small(cls="inline-small")
 
             case objects.inline.FMTTypes.LINK:
-                return dominate.tags.a(href=operation.url, cls="inline-link")
+                return dominate.tags.a(href=self.url_handler(operation.url), cls="inline-link")
 
             case objects.inline.FMTTypes.MENTION:
-                return dominate.tags.a(href=operation.blog_url, cls="inline-mention")
+                return dominate.tags.a(href=self.url_handler(operation.blog_url), cls="inline-mention")
 
             case objects.inline.FMTTypes.COLOR:
                 return dominate.tags.span(style=f"color: {operation.hex};", cls="inline-color")

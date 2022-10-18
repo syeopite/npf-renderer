@@ -5,6 +5,8 @@ formatter.parse()
 
 """
 
+from typing import Callable
+
 import dominate.tags
 import dominate.util
 
@@ -14,7 +16,7 @@ from . import inline
 
 class TextFormatter:
     """An HTML renderer for the TextBlock object"""
-    def __init__(self, text_block: objects.text_block.TextBlock,
+    def __init__(self, text_block: objects.text_block.TextBlock, url_handler: Callable,
                  layout=None, trails=None, create_list_element=True):
         """Renders a TextBlock object into HTML
 
@@ -23,7 +25,11 @@ class TextFormatter:
         Parameters:
             text_block:
                 The TextBlock object in question.
+            url_handler:
+                A callable in which all URLs processed (during inline-formatting) are sent into and retrieved.
+                Allows for the caller to alter URLs in the final formatted HTML.
             create_list_element:
+                Boolean denoting whether list elements should be enclosed in a <ul> or <ol> element.
                 Boolean denoting whether list elements should be enclosed in a <ul> or <ol> element.
                 Level zero list merging is delegated to the outer formatter but everything below is handled through
                 recursion within the logic of self.format(). See code for more information
@@ -33,8 +39,10 @@ class TextFormatter:
         self.create_list_element = create_list_element
         self.tag = self.create_tag()
 
+        self.url_handler = url_handler
+
         if self.text_block.inline_formatting:
-            formatter = inline.InlineFormatter(self.text_block.text, self.text_block.inline_formatting)
+            formatter = inline.InlineFormatter(self.text_block.text, self.text_block.inline_formatting, url_handler)
             self.text_tag = formatter.format()
         else:
             self.text_tag = dominate.util.text(self.text_block.text)
@@ -110,13 +118,21 @@ class TextFormatter:
                 if element.subtype in objects.text_block.ListsSubtype:
                     if first_time_trigger:
                         first_time_trigger = False
-                        list_to_use = TextFormatter(element).format()
+                        list_to_use = TextFormatter(
+                            element,
+                            url_handler=self.url_handler
+                        ).format()
                     else:
                         # If here then we've already created a list tag as the first_time_trigger option went off
                         # So subsequent list items at the same level are just going to use that one. We don't need to
                         # check if the list types are different because nested lists at the same level can only
                         # have the same type
-                        list_item_tag = TextFormatter(element, create_list_element=False).format()
+                        list_item_tag = TextFormatter(
+                            element,
+                            create_list_element=False,
+                            url_handler=self.url_handler
+                        ).format()
+
                         list_to_use.add(list_item_tag)
                 else:
                     working_tag.add(TextFormatter(element).format())

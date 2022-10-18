@@ -845,3 +845,141 @@ same_index_with_other_overlap_test = (
         cls="post"
     )
 )
+
+
+inline_link_url_handler_test_data = (
+    [
+        {
+            "type": "text",
+            "subtype": "heading1",
+            "text": "A bunch of links",
+        },
+
+        {
+            "type": "text",
+            "subtype": "unordered-list-item",
+            "indent_level": 0,
+            "text": "Twitter",
+            "formatting": [
+                {"start": 0, "end": 7, "type": "link", "url": "https://www.twitter.com/"}
+            ],
+        },
+
+        {
+            "type": "text",
+            "subtype": "unordered-list-item",
+            "indent_level": 0,
+            "text": "YouTube",
+            "formatting": [
+                {"start": 0, "end": 7, "type": "link", "url": "https://www.youtube.com/"}
+            ],
+        },
+
+        {
+            "type": "text",
+            "subtype": "unordered-list-item",
+            "indent_level": 0,
+            "text": "Reddit",
+            "formatting": [
+                {"start": 0, "end": 6, "type": "link", "url": "https://www.reddit.com/"}
+            ],
+        },
+    ],
+
+    tags.div(
+        tags.h1(
+            "A bunch of links",
+            cls="text-block heading1"
+        ),
+
+        tags.ul(
+            tags.li(
+                tags.div(
+                    tags.a(
+                        "Twitter",
+                        href="https://www.twitter.com/",
+                        cls="inline-link",
+                    ),
+                    cls="inline-formatted-content"
+                ),
+                cls="unordered-list-item"
+            ),
+
+            tags.li(
+                tags.div(
+                    tags.a(
+                        "YouTube",
+                        href="https://www.youtube.com/",
+                        cls="inline-link",
+                    ),
+                    cls="inline-formatted-content"
+                ),
+                cls="unordered-list-item inline-formatted-block"
+            ),
+
+            tags.li(
+                tags.div(
+                    tags.a(
+                        "Reddit",
+                        href="https://www.reddit.com/",
+                        cls="inline-link",
+                    ),
+                    cls="inline-formatted-content"
+                ),
+                cls="unordered-list-item inline-formatted-block"
+            ),
+
+            cls="text-block unordered-list inline-formatted-block"
+        ),
+        cls="post"
+    ),
+
+    # Replaced URL
+    tags.div(
+        tags.h1(
+            "A bunch of links",
+            cls="text-block heading1"
+        ),
+
+        tags.ul(
+            tags.li(
+                tags.div(
+                    tags.a(
+                        "Twitter",
+                        href="https://nitter.net/",
+                        cls="inline-link",
+                    ),
+                    cls="inline-formatted-content"
+                ),
+                cls="unordered-list-item"
+            ),
+
+            tags.li(
+                tags.div(
+                    tags.a(
+                        "YouTube",
+                        href="https://redirect.invidious.io/",
+                        cls="inline-link",
+                    ),
+                    cls="inline-formatted-content"
+                ),
+                cls="unordered-list-item inline-formatted-block"
+            ),
+
+            tags.li(
+                tags.div(
+                    tags.a(
+                        "Reddit",
+                        href="https://libredd.it/",
+                        cls="inline-link",
+                    ),
+                    cls="inline-formatted-content"
+                ),
+                cls="unordered-list-item inline-formatted-block"
+            ),
+
+            cls="text-block unordered-list inline-formatted-block"
+        ),
+        cls="post"
+    )
+)

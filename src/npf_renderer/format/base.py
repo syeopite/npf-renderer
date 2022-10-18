@@ -5,15 +5,20 @@ from .. import objects, helpers
 
 
 class Formatter(helpers.CursorIterator):
-    def __init__(self, content, layout=None, trails=None):
+    def __init__(self, content, layout=None, trails=None, url_handler=None):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
 
+        if not url_handler:
+            def url_handler(url):
+                return url
+
         self.post = dominate.tags.div(cls="post")
+        self.url_handler = url_handler
 
     def __format_text(self):
         """Formats TextBlock(s) into usable HTML code"""
-        formatted_block = text_formatter.TextFormatter(self.current).format()
+        formatted_block = text_formatter.TextFormatter(self.current, url_handler=self.url_handler).format()
 
         # We are currently at the zeroth level. And lists at the zeroth level
         # should be merged if they are next to each other and of the same type.
@@ -27,7 +32,13 @@ class Formatter(helpers.CursorIterator):
                 if peekaboo.subtype == self.current.subtype:
                     # Formatted block should be a list element such as ul, ol here
                     self.next()
-                    formatted_block.add(text_formatter.TextFormatter(self.current, create_list_element=False).format())
+                    formatted_block.add(
+                        text_formatter.TextFormatter(
+                            self.current,
+                            create_list_element=False,
+                            url_handler=self.url_handler
+                        ).format()
+                    )
 
         return formatted_block
 
@@ -49,6 +60,6 @@ class Formatter(helpers.CursorIterator):
         return self.post
 
 
-def format_content(parsed_contents, layouts=None, trails=None):
-    return Formatter(parsed_contents).format()
+def format_content(parsed_contents, layouts=None, trails=None, url_handler=None):
+    return Formatter(parsed_contents, url_handler=url_handler).format()
 
