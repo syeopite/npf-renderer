@@ -902,7 +902,7 @@ inline_link_url_handler_test_data = (
                     ),
                     cls="inline-formatted-content"
                 ),
-                cls="unordered-list-item"
+                cls="unordered-list-item inline-formatted-block"
             ),
 
             tags.li(
@@ -929,7 +929,7 @@ inline_link_url_handler_test_data = (
                 cls="unordered-list-item inline-formatted-block"
             ),
 
-            cls="text-block unordered-list inline-formatted-block"
+            cls="text-block unordered-list"
         ),
         cls="post"
     ),
@@ -951,7 +951,7 @@ inline_link_url_handler_test_data = (
                     ),
                     cls="inline-formatted-content"
                 ),
-                cls="unordered-list-item"
+                cls="unordered-list-item inline-formatted-block"
             ),
 
             tags.li(
@@ -978,7 +978,7 @@ inline_link_url_handler_test_data = (
                 cls="unordered-list-item inline-formatted-block"
             ),
 
-            cls="text-block unordered-list inline-formatted-block"
+            cls="text-block unordered-list"
         ),
         cls="post"
     )

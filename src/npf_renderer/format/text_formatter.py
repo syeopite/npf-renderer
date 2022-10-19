@@ -37,15 +37,20 @@ class TextFormatter:
         """
         self.text_block = text_block
         self.create_list_element = create_list_element
-        self.tag = self.create_tag()
-
-        self.url_handler = url_handler
+        self.additional_classes = ""
 
         if self.text_block.inline_formatting:
             formatter = inline.InlineFormatter(self.text_block.text, self.text_block.inline_formatting, url_handler)
             self.text_tag = formatter.format()
+
+            self.additional_classes += " inline-formatted-block"
         else:
             self.text_tag = dominate.util.text(self.text_block.text)
+
+        self.tag = self.create_tag()
+
+        self.url_handler = url_handler
+
 
     def create_tag(self):
         """Create an HTML tag to use as the base for the current TextBlock
@@ -57,38 +62,35 @@ class TextFormatter:
 
         If the text block has inline formatting then an additional inline-formatted class is added
         """
-        additional_classes = ""
-        if self.text_block.inline_formatting:
-            additional_classes += " inline-formatted-block"
-
         if not self.text_block.subtype:
             return dominate.tags.p(cls="text-block")
 
         match self.text_block.subtype:
             case objects.text_block.Subtypes.HEADING1:
-                return dominate.tags.h1(cls="text-block heading1" + additional_classes)
+                return dominate.tags.h1(cls="text-block heading1" + self.additional_classes)
             case objects.text_block.Subtypes.HEADING2:
-                return dominate.tags.h2(cls="text-block heading2" + additional_classes)
+                return dominate.tags.h2(cls="text-block heading2" + self.additional_classes)
             case objects.text_block.Subtypes.QUIRKY:
-                return dominate.tags.p(cls="text-block quirky" + additional_classes)
+                return dominate.tags.p(cls="text-block quirky" + self.additional_classes)
             case objects.text_block.Subtypes.QUOTE:
-                return dominate.tags.blockquote(cls="text-block quote" + additional_classes)
+                return dominate.tags.blockquote(cls="text-block quote" + self.additional_classes)
             case objects.text_block.Subtypes.INDENTED:
-                return dominate.tags.blockquote(cls="text-block indented" + additional_classes)
+                return dominate.tags.blockquote(cls="text-block indented" + self.additional_classes)
             case objects.text_block.Subtypes.CHAT:
-                return dominate.tags.p(cls="text-block chat" + additional_classes)
+                return dominate.tags.p(cls="text-block chat" + self.additional_classes)
 
             case _:
                 if self.create_list_element:
+                    # We skip adding additional_classes here for they'll be added on the li creation in self.format()
                     if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                        return dominate.tags.ol(cls="text-block ordered-list" + additional_classes)
+                        return dominate.tags.ol(cls="text-block ordered-list")
                     elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                        return dominate.tags.ul(cls="text-block unordered-list" + additional_classes)
+                        return dominate.tags.ul(cls="text-block unordered-list")
                 else:
                     if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                        return dominate.tags.li(cls="ordered-list-item" + additional_classes)
+                        return dominate.tags.li(cls="ordered-list-item" + self.additional_classes)
                     elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                        return dominate.tags.li(cls="unordered-list-item" + additional_classes)
+                        return dominate.tags.li(cls="unordered-list-item" + self.additional_classes)
 
     def format(self):
 
@@ -96,9 +98,9 @@ class TextFormatter:
         if self.text_block.subtype in objects.text_block.ListsSubtype:
             if self.create_list_element:
                 if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                    working_tag = dominate.tags.li(self.text_tag, cls="ordered-list-item")
+                    working_tag = dominate.tags.li(self.text_tag, cls="ordered-list-item" + self.additional_classes)
                 elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                    working_tag = dominate.tags.li(self.text_tag, cls="unordered-list-item")
+                    working_tag = dominate.tags.li(self.text_tag, cls="unordered-list-item" + self.additional_classes)
                 else:  # Unreachable
                     raise RuntimeError
             else:
