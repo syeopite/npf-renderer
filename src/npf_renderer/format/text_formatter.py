@@ -93,17 +93,29 @@ class TextFormatter:
     def format(self):
 
         # If we created a list element we are going to now create a list item for our text
-        if self.text_block.subtype in objects.text_block.ListsSubtype and self.create_list_element:
-            if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                working_tag = dominate.tags.li(self.text_tag, cls="ordered-list-item")
-            elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                working_tag = dominate.tags.li(self.text_tag, cls="unordered-list-item")
-            else:  # Unreachable
-                raise RuntimeError
+        if self.text_block.subtype in objects.text_block.ListsSubtype:
+            if self.create_list_element:
+                if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
+                    working_tag = dominate.tags.li(self.text_tag, cls="ordered-list-item")
+                elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
+                    working_tag = dominate.tags.li(self.text_tag, cls="unordered-list-item")
+                else:  # Unreachable
+                    raise RuntimeError
+            else:
+                # If we did not create a list element but we still have children that needs to be added to us,
+                # we can't just make the working tag the text contents and add to that. (Can't add to raw text and
+                # even if there is an inline-formatting div it still wouldn't be right) It needs to be directly added
+                # to self.tag's li. So:
+                if self.text_block.nest:
+                    working_tag = self.tag
+                    working_tag.add(self.text_tag)
+                else:
+                    working_tag = self.text_tag
         else:
             working_tag = self.text_tag
 
-        self.tag.add(working_tag)
+        if working_tag is not self.tag:
+            self.tag.add(working_tag)
 
         # Has nested elements. Also means our subtype is either indented or one of the list types
         if self.text_block.nest:

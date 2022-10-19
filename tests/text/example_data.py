@@ -484,3 +484,268 @@ test_inline_total_overlapping = (
         cls="post",
     ),
 )
+
+top_level_list_with_children_merging_test_data = (
+    {
+        "content": [
+            {
+                "type": "text",
+                "text": "I've got a bunch of links for you!",
+                "subtype": "heading1",
+                "formatting": [
+                    {"start": 0, "end": 34, "type": "bold"}
+                ],
+            },
+
+            {
+                "type": "text",
+                "subtype": "heading2",
+                "text": "Interesting stuff",
+            },
+
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "text": "Space",
+            },
+
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "indent_level": 1,
+                "text": "NASA",
+                "formatting": [
+                    {"start": 0, "end": 4, "type": "link", "url": "https://www.nasa.gov"}
+                ],
+            },
+
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "indent_level": 1,
+                "text": "ESA",
+                "formatting": [
+                    {"start": 0, "end": 3, "type": "link", "url": "https://www.esa.int/"}
+                ],
+            },
+
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "indent_level": 1,
+                "text": "SpaceX",
+                "formatting": [
+                    {"start": 0, "end": 6, "type": "link", "url": "https://www.spacex.com/"}
+                ],
+            },
+
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "text": "Code",
+            },
+
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "indent_level": 1,
+                "text": "Github",
+                "formatting": [
+                    {"start": 0, "end": 6, "type": "link", "url": "https://www.github.com/"}
+                ],
+            },
+
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "indent_level": 1,
+                "text": "Gitlab",
+                "formatting": [
+                    {"start": 0, "end": 6, "type": "link", "url": "https://about.gitlab.com/"}
+                ],
+            },
+        ]
+    },
+    [
+        objects.text_block.TextBlock(
+            text="I've got a bunch of links for you!",
+            subtype=objects.text_block.Subtypes.HEADING1,
+            inline_formatting=[
+                objects.inline.Standard(start=0, end=34, type=objects.inline.FMTTypes.BOLD)
+            ]
+        ),
+        objects.text_block.TextBlock(text="Interesting stuff",
+                                     subtype=objects.text_block.Subtypes.HEADING2),
+
+        objects.text_block.TextBlock(
+            text="Space",
+            subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+            nest=[
+                objects.text_block.TextBlock(
+                    text="NASA",
+                    inline_formatting=[
+                        objects.inline.Link(
+                            start=0,
+                            end=4,
+                            type=objects.inline.FMTTypes.LINK,
+                            url="https://www.nasa.gov",
+                        ),
+                    ],
+                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                ),
+                objects.text_block.TextBlock(
+                    text="ESA",
+                    inline_formatting=[
+                        objects.inline.Link(
+                            start=0,
+                            end=3,
+                            type=objects.inline.FMTTypes.LINK,
+                            url="https://www.esa.int/",
+                        ),
+                    ],
+                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                ),
+                objects.text_block.TextBlock(
+                    text="SpaceX",
+                    inline_formatting=[
+                        objects.inline.Link(
+                            start=0,
+                            end=6,
+                            type=objects.inline.FMTTypes.LINK,
+                            url="https://www.spacex.com/",
+                        ),
+                    ],
+                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                ),
+            ],
+        ),
+        objects.text_block.TextBlock(
+            text="Code",
+            subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+            nest=[
+                objects.text_block.TextBlock(
+                    text="Github",
+                    inline_formatting=[
+                        objects.inline.Link(
+                            start=0,
+                            end=6,
+                            type=objects.inline.FMTTypes.LINK,
+                            url="https://www.github.com/",
+                        ),
+                    ],
+                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                ),
+                objects.text_block.TextBlock(
+                    text="Gitlab",
+                    inline_formatting=[
+                        objects.inline.Link(
+                            start=0,
+                            end=6,
+                            type=objects.inline.FMTTypes.LINK,
+                            url="https://about.gitlab.com/",
+                        ),
+                    ],
+                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                ),
+            ],
+        ),
+    ],
+    tags.div(
+        tags.h1(
+            tags.div(
+                tags.b(
+                    "I've got a bunch of links for you!",
+                    cls="inline-bold"
+                ),
+                cls="inline-formatted-content"
+            ),
+            cls="text-block heading1 inline-formatted-block"
+        ),
+
+        tags.h2(
+            "Interesting stuff",
+            cls="text-block heading2"
+        ),
+
+        tags.ul(
+            tags.li(
+                "Space",
+                tags.ul(
+                    tags.li(
+                        tags.div(
+                            tags.a(
+                                "NASA",
+                                href="https://www.nasa.gov",
+                                cls="inline-link",
+                            ),
+                            cls="inline-formatted-content"
+                        ),
+                        cls="unordered-list-item"
+                    ),
+
+                    tags.li(
+                        tags.div(
+                            tags.a(
+                                "ESA",
+                                href="https://www.esa.int/",
+                                cls="inline-link",
+                            ),
+                            cls="inline-formatted-content"
+                        ),
+                        cls="unordered-list-item inline-formatted-block"
+                    ),
+
+                    tags.li(
+                        tags.div(
+                            tags.a(
+                                "SpaceX",
+                                href="https://www.spacex.com/",
+                                cls="inline-link",
+                            ),
+                            cls="inline-formatted-content"
+                        ),
+                        cls="unordered-list-item inline-formatted-block"
+                    ),
+
+                    cls="text-block unordered-list inline-formatted-block"
+                ),
+                cls="unordered-list-item"
+            ),
+
+            tags.li(
+                "Code",
+                tags.ul(
+                    tags.li(
+                        tags.div(
+                            tags.a(
+                                "Github",
+                                href="https://www.github.com/",
+                                cls="inline-link",
+                            ),
+                            cls="inline-formatted-content"
+                        ),
+                        cls="unordered-list-item"
+                    ),
+
+                    tags.li(
+                        tags.div(
+                            tags.a(
+                                "Gitlab",
+                                href="https://about.gitlab.com/",
+                                cls="inline-link",
+                            ),
+                            cls="inline-formatted-content"
+                        ),
+                        cls="unordered-list-item inline-formatted-block"
+                    ),
+                    cls="text-block unordered-list inline-formatted-block"
+                ),
+                cls="unordered-list-item"
+            ),
+
+            cls="text-block unordered-list"
+        ),
+        cls="post"
+    ),
+
+)

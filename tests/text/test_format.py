@@ -149,5 +149,7 @@ def test_inline_link_url_handler_replaced():
     assert str(formatted_result) == str(answer)
 
 
-
+def test_top_level_list_with_children_merging():
+    helper_function(top_level_list_with_children_merging_test_data[0],
+                    top_level_list_with_children_merging_test_data[2])
 
