@@ -902,7 +902,7 @@ inline_link_url_handler_test_data = (
                     ),
                     cls="inline-formatted-content"
                 ),
-                cls="unordered-list-item inline-formatted-block"
+                cls="text-block unordered-list-item inline-formatted-block"
             ),
 
             tags.li(
@@ -914,7 +914,7 @@ inline_link_url_handler_test_data = (
                     ),
                     cls="inline-formatted-content"
                 ),
-                cls="unordered-list-item inline-formatted-block"
+                cls="text-block unordered-list-item inline-formatted-block"
             ),
 
             tags.li(
@@ -926,10 +926,10 @@ inline_link_url_handler_test_data = (
                     ),
                     cls="inline-formatted-content"
                 ),
-                cls="unordered-list-item inline-formatted-block"
+                cls="text-block unordered-list-item inline-formatted-block"
             ),
 
-            cls="text-block unordered-list"
+            cls="unordered-list"
         ),
         cls="post"
     ),
@@ -951,7 +951,7 @@ inline_link_url_handler_test_data = (
                     ),
                     cls="inline-formatted-content"
                 ),
-                cls="unordered-list-item inline-formatted-block"
+                cls="text-block unordered-list-item inline-formatted-block"
             ),
 
             tags.li(
@@ -963,7 +963,7 @@ inline_link_url_handler_test_data = (
                     ),
                     cls="inline-formatted-content"
                 ),
-                cls="unordered-list-item inline-formatted-block"
+                cls="text-block unordered-list-item inline-formatted-block"
             ),
 
             tags.li(
@@ -975,10 +975,10 @@ inline_link_url_handler_test_data = (
                     ),
                     cls="inline-formatted-content"
                 ),
-                cls="unordered-list-item inline-formatted-block"
+                cls="text-block unordered-list-item inline-formatted-block"
             ),
 
-            cls="text-block unordered-list"
+            cls="unordered-list"
         ),
         cls="post"
     )

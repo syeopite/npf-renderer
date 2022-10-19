@@ -100,14 +100,14 @@ subtype_string_test_2 = (
     tags.div(
         tags.h1("Sward's Shopping List", cls="text-block heading1"),
         tags.ol(
-            tags.li("Sword", cls="ordered-list-item"),
-            tags.li("Candy", cls="ordered-list-item"),
-            cls="text-block ordered-list",
+            tags.li("Sword", cls="text-block ordered-list-item"),
+            tags.li("Candy", cls="text-block ordered-list-item"),
+            cls="ordered-list",
         ),
         tags.p("But especially don't forget:", cls="text-block"),
         tags.ul(
-            tags.li("Death, which is uncountable on this list.", cls="unordered-list-item"),
-            cls="text-block unordered-list",
+            tags.li("Death, which is uncountable on this list.", cls="text-block unordered-list-item"),
+            cls="unordered-list",
         ),
         cls="post",
     ),
@@ -183,18 +183,18 @@ subtype_and_indent_level_test = (
                     tags.li(
                         "Second level: Apples",
                         tags.ol(
-                            tags.li("Third Level: Green", cls="ordered-list-item"),
-                            cls="text-block ordered-list",
+                            tags.li("Third Level: Green", cls="text-block ordered-list-item"),
+                            cls="ordered-list",
                         ),
-                        cls="unordered-list-item",
+                        cls="text-block unordered-list-item",
                     ),
-                    tags.li("Second level: Pears", cls="unordered-list-item"),
-                    cls="text-block unordered-list",
+                    tags.li("Second level: Pears", cls="text-block unordered-list-item"),
+                    cls="unordered-list",
                 ),
-                cls="ordered-list-item",
+                cls="text-block ordered-list-item",
             ),
-            tags.li("First level: Pears", cls="ordered-list-item"),
-            cls="text-block ordered-list",
+            tags.li("First level: Pears", cls="text-block ordered-list-item"),
+            cls="ordered-list",
         ),
         cls="post",
     ),
@@ -680,7 +680,7 @@ top_level_list_with_children_merging_test_data = (
                             ),
                             cls="inline-formatted-content"
                         ),
-                        cls="unordered-list-item inline-formatted-block"
+                        cls="text-block unordered-list-item inline-formatted-block"
                     ),
 
                     tags.li(
@@ -692,7 +692,7 @@ top_level_list_with_children_merging_test_data = (
                             ),
                             cls="inline-formatted-content"
                         ),
-                        cls="unordered-list-item inline-formatted-block"
+                        cls="text-block unordered-list-item inline-formatted-block"
                     ),
 
                     tags.li(
@@ -704,12 +704,12 @@ top_level_list_with_children_merging_test_data = (
                             ),
                             cls="inline-formatted-content"
                         ),
-                        cls="unordered-list-item inline-formatted-block"
+                        cls="text-block unordered-list-item inline-formatted-block"
                     ),
 
-                    cls="text-block unordered-list"
+                    cls="unordered-list"
                 ),
-                cls="unordered-list-item"
+                cls="text-block unordered-list-item"
             ),
 
             tags.li(
@@ -724,7 +724,7 @@ top_level_list_with_children_merging_test_data = (
                             ),
                             cls="inline-formatted-content"
                         ),
-                        cls="unordered-list-item inline-formatted-block"
+                        cls="text-block unordered-list-item inline-formatted-block"
                     ),
 
                     tags.li(
@@ -736,14 +736,14 @@ top_level_list_with_children_merging_test_data = (
                             ),
                             cls="inline-formatted-content"
                         ),
-                        cls="unordered-list-item inline-formatted-block"
+                        cls="text-block unordered-list-item inline-formatted-block"
                     ),
-                    cls="text-block unordered-list"
+                    cls="unordered-list"
                 ),
-                cls="unordered-list-item"
+                cls="text-block unordered-list-item"
             ),
 
-            cls="text-block unordered-list"
+            cls="unordered-list"
         ),
         cls="post"
     ),

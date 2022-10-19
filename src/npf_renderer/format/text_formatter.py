@@ -83,14 +83,14 @@ class TextFormatter:
                 if self.create_list_element:
                     # We skip adding additional_classes here for they'll be added on the li creation in self.format()
                     if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                        return dominate.tags.ol(cls="text-block ordered-list")
+                        return dominate.tags.ol(cls="ordered-list")
                     elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                        return dominate.tags.ul(cls="text-block unordered-list")
+                        return dominate.tags.ul(cls="unordered-list")
                 else:
                     if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                        return dominate.tags.li(cls="ordered-list-item" + self.additional_classes)
+                        return dominate.tags.li(cls="text-block ordered-list-item" + self.additional_classes)
                     elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                        return dominate.tags.li(cls="unordered-list-item" + self.additional_classes)
+                        return dominate.tags.li(cls="text-block unordered-list-item" + self.additional_classes)
 
     def format(self):
 
@@ -98,9 +98,15 @@ class TextFormatter:
         if self.text_block.subtype in objects.text_block.ListsSubtype:
             if self.create_list_element:
                 if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                    working_tag = dominate.tags.li(self.text_tag, cls="ordered-list-item" + self.additional_classes)
+                    working_tag = dominate.tags.li(
+                        self.text_tag,
+                        cls="text-block ordered-list-item" + self.additional_classes
+                    )
                 elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                    working_tag = dominate.tags.li(self.text_tag, cls="unordered-list-item" + self.additional_classes)
+                    working_tag = dominate.tags.li(
+                        self.text_tag,
+                        cls="text-block unordered-list-item" + self.additional_classes
+                    )
                 else:  # Unreachable
                     raise RuntimeError
             else:
