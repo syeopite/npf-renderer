@@ -218,7 +218,7 @@ inline_formatting_test = (
     ],
     tags.div(
         tags.p(
-            tags.div("some ", tags.small("small", cls="inline-small"), " text", cls="inline-formatted-content"),
+            tags.span("some ", tags.small("small", cls="inline-small"), " text", cls="inline-formatted-content"),
             cls="text-block",
         ),
         cls="post",
@@ -259,7 +259,7 @@ inline_formatting_link_test = (
     ],
     tags.div(
         tags.p(
-            tags.div(
+            tags.span(
                 "Found ",
                 tags.a("this", href="https://www.nasa.gov", cls="inline-link"),
                 " link for you",
@@ -308,7 +308,7 @@ inline_formatting_mention_test = (
     ],
     tags.div(
         tags.p(
-            tags.div(
+            tags.span(
                 "Shout out to ",
                 tags.a("@david", cls="inline-mention", href="https://davidslog.com/"),
                 cls="inline-formatted-content",
@@ -339,7 +339,7 @@ inline_formatting_color_test = (
     ],
     tags.div(
         tags.p(
-            tags.div(
+            tags.span(
                 "Celebrate ",
                 tags.span("Pride", cls="inline-color", style="color: #ff492f;"),
                 " Month",
@@ -383,7 +383,7 @@ test_inline_overlapping = (
     ],
     tags.div(
         tags.p(
-            tags.div(
+            tags.span(
                 tags.b(
                     "supercali",
                     tags.i("fragilistic", cls="inline-italics"),
@@ -458,7 +458,7 @@ test_inline_total_overlapping = (
     ],
     tags.div(
         tags.p(
-            tags.div(
+            tags.span(
                 tags.b(
                     tags.i(
                         tags.small(
@@ -652,7 +652,7 @@ top_level_list_with_children_merging_test_data = (
     ],
     tags.div(
         tags.h1(
-            tags.div(
+            tags.span(
                 tags.b(
                     "I've got a bunch of links for you!",
                     cls="inline-bold"
@@ -672,7 +672,7 @@ top_level_list_with_children_merging_test_data = (
                 "Space",
                 tags.ul(
                     tags.li(
-                        tags.div(
+                        tags.span(
                             tags.a(
                                 "NASA",
                                 href="https://www.nasa.gov",
@@ -684,7 +684,7 @@ top_level_list_with_children_merging_test_data = (
                     ),
 
                     tags.li(
-                        tags.div(
+                        tags.span(
                             tags.a(
                                 "ESA",
                                 href="https://www.esa.int/",
@@ -696,7 +696,7 @@ top_level_list_with_children_merging_test_data = (
                     ),
 
                     tags.li(
-                        tags.div(
+                        tags.span(
                             tags.a(
                                 "SpaceX",
                                 href="https://www.spacex.com/",
@@ -716,7 +716,7 @@ top_level_list_with_children_merging_test_data = (
                 "Code",
                 tags.ul(
                     tags.li(
-                        tags.div(
+                        tags.span(
                             tags.a(
                                 "Github",
                                 href="https://www.github.com/",
@@ -728,7 +728,7 @@ top_level_list_with_children_merging_test_data = (
                     ),
 
                     tags.li(
-                        tags.div(
+                        tags.span(
                             tags.a(
                                 "Gitlab",
                                 href="https://about.gitlab.com/",

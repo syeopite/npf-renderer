@@ -17,7 +17,7 @@ connected_back_to_back_inline_format_test = (
     ],
     tags.div(
         tags.blockquote(
-            tags.div(
+            tags.span(
                 "The ",
                 tags.span(
                     "brown ",
@@ -53,7 +53,7 @@ back_to_back_inline_format_test = (
     ],
     tags.div(
         tags.blockquote(
-            tags.div(
+            tags.span(
                 "The ",
                 tags.span(
                     "brown",
@@ -90,7 +90,7 @@ long_space_in_between_format_test = (
     ],
     tags.div(
         tags.blockquote(
-            tags.div(
+            tags.span(
                 "The ",
                 tags.span(
                     "brown ",
@@ -121,7 +121,7 @@ second_has_lower_end_index_test = (
     ],
     tags.div(
         tags.blockquote(
-            tags.div(
+            tags.span(
                 "The ",
                 tags.span(
                     "brown ",
@@ -159,7 +159,7 @@ second_has_lower_end_index_test_2 = (
     ],
     tags.div(
         tags.blockquote(
-            tags.div(
+            tags.span(
                 "The ",
                 tags.span(
                     "br",
@@ -207,7 +207,7 @@ overlapping_same_area_test_data = (
 
     tags.div(
         tags.blockquote(
-            tags.div(
+            tags.span(
                 "The ",
                 tags.span(
                     tags.a(
@@ -255,7 +255,7 @@ overlapping_same_start_different_end_data = (
 
     tags.div(
         tags.blockquote(
-            tags.div(
+            tags.span(
                 "The ",
                 tags.b(
                     tags.a(
@@ -298,7 +298,7 @@ interrupted_same_indices_overlapping = (
     ],
     tags.div(
         tags.blockquote(
-            tags.div(
+            tags.span(
                 "Th",
                 tags.a(
                     "e ",
@@ -355,7 +355,7 @@ interrupted_overlap_test = (
     ],
     tags.div(
         tags.h1(
-            tags.div(
+            tags.span(
                 "The b",
                 tags.small(
                     "row",
@@ -412,7 +412,7 @@ interrupted_overlap_test_2 = (
         }
     ], tags.div(
         tags.h1(
-            tags.div(
+            tags.span(
                 tags.span(
                     tags.b(
                         "The b",
@@ -479,7 +479,7 @@ interrupted_overlap_test_3 = (
         }
     ], tags.div(
         tags.h1(
-            tags.div(
+            tags.span(
                 "The b",
                 tags.small(
                     "row",
@@ -567,7 +567,7 @@ interrupted_overlap_test_4 = (
         }
     ], tags.div(
         tags.h1(
-            tags.div(
+            tags.span(
                 "The b",
                 tags.small(
                     "row",
@@ -661,7 +661,7 @@ interrupted_overlap_test_5 = (
         }
     ], tags.div(
         tags.h1(
-            tags.div(
+            tags.span(
                 "The b",
                 tags.small(
                     "row",
@@ -728,7 +728,7 @@ interrupted_overlap_test_6 = (
         }
     ], tags.div(
         tags.h1(
-            tags.div(
+            tags.span(
                 "The b",
                 tags.small(
                     "row",
@@ -811,7 +811,7 @@ same_index_with_other_overlap_test = (
     ],
     tags.div(
         tags.h1(
-            tags.div(
+            tags.span(
                 tags.span(
                     tags.b(
                         "The brown",
@@ -894,7 +894,7 @@ inline_link_url_handler_test_data = (
 
         tags.ul(
             tags.li(
-                tags.div(
+                tags.span(
                     tags.a(
                         "Twitter",
                         href="https://www.twitter.com/",
@@ -906,7 +906,7 @@ inline_link_url_handler_test_data = (
             ),
 
             tags.li(
-                tags.div(
+                tags.span(
                     tags.a(
                         "YouTube",
                         href="https://www.youtube.com/",
@@ -918,7 +918,7 @@ inline_link_url_handler_test_data = (
             ),
 
             tags.li(
-                tags.div(
+                tags.span(
                     tags.a(
                         "Reddit",
                         href="https://www.reddit.com/",
@@ -943,7 +943,7 @@ inline_link_url_handler_test_data = (
 
         tags.ul(
             tags.li(
-                tags.div(
+                tags.span(
                     tags.a(
                         "Twitter",
                         href="https://nitter.net/",
@@ -955,7 +955,7 @@ inline_link_url_handler_test_data = (
             ),
 
             tags.li(
-                tags.div(
+                tags.span(
                     tags.a(
                         "YouTube",
                         href="https://redirect.invidious.io/",
@@ -967,7 +967,7 @@ inline_link_url_handler_test_data = (
             ),
 
             tags.li(
-                tags.div(
+                tags.span(
                     tags.a(
                         "Reddit",
                         href="https://libredd.it/",

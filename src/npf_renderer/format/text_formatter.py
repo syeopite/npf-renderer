@@ -51,7 +51,6 @@ class TextFormatter:
 
         self.url_handler = url_handler
 
-
     def create_tag(self):
         """Create an HTML tag to use as the base for the current TextBlock
 
