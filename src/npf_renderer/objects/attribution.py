@@ -5,9 +5,11 @@ from .media_objects import MediaObject
 
 
 class BlogAttribution(NamedTuple):
-    url: str
-    name: str
+    # Only UUID is required. The rest are optional but should be present in most cases.
     uuid: str
+
+    url: Optional[str] = None
+    name: Optional[str] = None
 
     avatar: Optional[List[MediaObject]] = None
 

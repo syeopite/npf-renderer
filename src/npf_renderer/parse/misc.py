@@ -45,3 +45,35 @@ def parse_media_block(media_block):
         poster=poster,
         video=video
     )
+
+
+def parse_attribution(attribution_block):
+    """Parses a NPF attribution object into corresponding Attribution NamedTuple objects"""
+    type_ = attribution_block["type"]
+
+    match type_:
+        case "post":
+            blog = attribution_block["blog"]
+            return attribution.PostAttribution(
+                url=attribution_block["url"],
+                post=attribution_block["post"]["id"],
+                blog=attribution.BlogAttribution(
+                        uuid=blog["uuid"],
+                        url=blog.get("url"),
+                        name=blog.get("name")
+                     )
+            )
+
+        case "link":
+            return attribution.LinkAttribution(
+                url=attribution_block["url"],
+            )
+        case "blog":
+            blog = attribution_block["blog"]
+            return attribution.BlogAttribution(
+                uuid=blog["uuid"],
+                url=attribution_block.get("url"),
+                name=blog.get("name"),
+
+                avatar=[parse_media_block(avatar) for avatar in blog.get("avatar")]
+            )
