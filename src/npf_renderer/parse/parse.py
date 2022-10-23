@@ -5,12 +5,13 @@ results = parser.parse()
 
 """
 
-from ..objects import inline, text_block
+from ..objects import inline, text_block, image
 from .. import helpers
 
 
 class Parser(helpers.CursorIterator):
     """All-in-one parser to process NPF content types"""
+
     def __init__(self, content):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
@@ -30,6 +31,7 @@ class Parser(helpers.CursorIterator):
         Returns:
             'TextBlock' See documentation for that object for more information
         """
+
         def create_text_block(text_, subtype_, inline_formatting_, nest_=None):
             """Create a TextBlock object based on the data we have parsed"""
             if not nest_:
@@ -149,6 +151,44 @@ class Parser(helpers.CursorIterator):
                 inline_formats.append(current_parsed_inline_fmt)
 
         return inline_formats
+
+    def _parse_media_block(self, media_block):
+        """Parses a NPF media object json into a MediaObject NamedTuple"""
+        url = media_block["url"]
+        mime = media_block["type"]
+
+        # Defaults to 540x405
+        width = media_block.get("width", 540)
+        height = media_block.get("height", 405)
+
+        original_dimensions_missing = media_block.get("original_dimensions_missing")
+        cropped = media_block.get("cropped")
+        has_original_dimensions = media_block.get("has_original_dimensions")
+
+        poster = None
+        video = None
+
+        # For some reason they can sometimes be packed into a list with it being the only element.
+        if poster_block := media_block.get("poster"):
+            poster_block = poster_block[0] if isinstance(poster_block, list) else poster_block
+            poster = self._parse_media_block(poster_block)
+        if video_block := media_block.get("video"):
+            video_block = video_block[0] if isinstance(video_block, list) else video_block
+            video = self._parse_media_block(video_block)
+
+        return image.MediaObject(
+            url=url,
+            type=mime,
+            width=width,
+            height=height,
+
+            original_dimensions_missing=original_dimensions_missing,
+            cropped=cropped,
+            has_original_dimensions=has_original_dimensions,
+
+            poster=poster,
+            video=video
+        )
 
     def __parse_block(self):
         """Parses a content block and appends the result to self.parsed_result
