@@ -66,3 +66,35 @@ link_attribution = (
         url="https://example.com",
     )
 )
+
+
+app_attribution = (
+    {
+        "type": "app",
+        "appName": "SoundCloud",
+        "url": "https://soundcloud.com/example/example-track",
+        "logo": {
+            "url": "https://static.tumblr.com/f92f127280909cfd34d802e241dfef3f/iebsmgz"
+                   "/lIVnsx8an/tumblr_static_soundcloud_logo.png",
+            "type": "image/png",
+            "width": 128,
+            "height": 128
+        },
+
+        "displayText": "Listen on"
+    },
+
+    attribution.AppAttribution(
+        url="https://soundcloud.com/example/example-track",
+        app_name="SoundCloud",
+        display_text="Listen on",
+
+        logo=attribution.MediaObject(
+            url="https://static.tumblr.com/f92f127280909cfd34d802e241dfef3f/iebsmgz"
+                "/lIVnsx8an/tumblr_static_soundcloud_logo.png",
+            type="image/png",
+            width=128,
+            height=128
+        )
+    )
+)

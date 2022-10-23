@@ -24,4 +24,12 @@ class LinkAttribution(NamedTuple):
     url: str
 
 
-AttributionTypes = Union[BlogAttribution, PostAttribution, LinkAttribution]
+class AppAttribution(NamedTuple):
+    url: str
+
+    app_name: Optional[str] = None
+    display_text: Optional[str] = None
+    logo: Optional[MediaObject] = None
+
+
+AttributionTypes = Union[BlogAttribution, PostAttribution, LinkAttribution, AppAttribution]

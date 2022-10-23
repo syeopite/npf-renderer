@@ -77,3 +77,26 @@ def parse_attribution(attribution_block):
 
                 avatar=[parse_media_block(avatar) for avatar in blog.get("avatar")]
             )
+        case "app":
+            if logo := attribution_block.get("logo"):
+                logo = parse_media_block(logo)
+
+            url = attribution_block["url"]
+            name = attribution_block.get("app_name")
+            display_text = attribution_block.get("display_text")
+
+            # Camel case variant checks
+            if not name:
+                name = attribution_block.get("appName")
+            if not display_text:
+                display_text = attribution_block.get("displayText")
+
+            return attribution.AppAttribution(
+                url=url,
+                app_name=name,
+                display_text=display_text,
+                logo=logo
+            )
+
+
+

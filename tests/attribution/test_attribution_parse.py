@@ -24,3 +24,7 @@ def test_post_attribution():
 
 def test_link_attribution():
     helper_function(attribution_test_data.link_attribution[0], attribution_test_data.link_attribution[1])
+
+
+def test_app_attribution():
+    helper_function(attribution_test_data.app_attribution[0], attribution_test_data.app_attribution[1])
