@@ -1,2 +1,1 @@
-from . import inline, text_block
-from .media_objects import MediaObject
+from . import inline, text_block, media_objects, image
