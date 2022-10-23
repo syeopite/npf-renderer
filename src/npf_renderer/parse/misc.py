@@ -1,10 +1,10 @@
-from ..objects import image
+from ..objects import image, attribution
 
 
 def parse_media_block(media_block):
     """Parses a NPF media object json into a MediaObject NamedTuple"""
     url = media_block["url"]
-    mime = media_block["type"]
+    mime = media_block.get("type")
 
     # Defaults to 540x405
     width = media_block.get("width", 540)
