@@ -1,3 +1,8 @@
+"""Additional test data for the formatter.
+
+As the formatter is far more complex than the parser, it needs more tests.
+"""
+
 from dominate import tags
 
 connected_back_to_back_inline_format_test = (

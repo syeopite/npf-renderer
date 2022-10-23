@@ -3,8 +3,8 @@ import logging
 
 from npf_renderer import parse, format
 
-from example_data import *
-from exclusive_formatting_test_data import *
+from example_text_block_data import *
+from additional_text_block_formatting_data import *
 
 
 def helper_function(content, answer):

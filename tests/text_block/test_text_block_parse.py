@@ -1,4 +1,4 @@
-from example_data import *
+from example_text_block_data import *
 from npf_renderer.parse.parse import Parser
 
 import logging

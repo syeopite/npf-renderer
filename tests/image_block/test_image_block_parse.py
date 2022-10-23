@@ -2,7 +2,7 @@ import logging
 
 from npf_renderer.parse.parse import Parser
 
-import test_data
+import image_block_test_data as test_data
 
 
 def helper_function(raw, answer):
