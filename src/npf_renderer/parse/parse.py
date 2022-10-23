@@ -152,6 +152,37 @@ class Parser(helpers.CursorIterator):
 
         return inline_formats
 
+    def _parse_image_block(self):
+        """Parses a NPF Image Content Block into a ImageBlock NamedTuple"""
+        if not isinstance(self.current["media"], list):
+            raw_media_list = [self.current["media"]]
+        else:
+            raw_media_list = self.current["media"]
+
+        media_list = []
+        for img in raw_media_list:
+            media_list.append(self._parse_media_block(img))
+
+        alt_text = self.current.get("alt_text")
+        if not alt_text:  # Try Camal Case Variant
+            alt_text = self.current.get("altText")
+        caption = self.current.get("caption")
+        if not alt_text:
+            caption = self.current.get("caption")
+
+        if color_block := self.current.get("colors"):
+            colors = [color_hex for color_hex in color_block.values()]
+        else:
+            colors = None
+
+        return image.ImageBlock(
+            media=media_list,
+
+            alt_text=alt_text,
+            caption=caption,
+            colors=colors
+        )
+
     def _parse_media_block(self, media_block):
         """Parses a NPF media object json into a MediaObject NamedTuple"""
         url = media_block["url"]
@@ -198,6 +229,9 @@ class Parser(helpers.CursorIterator):
         match self.current["type"]:
             case "text":
                 block = self._parse_text()
+                self.parsed_result.append(block)
+            case "image":
+                block = self._parse_image_block()
                 self.parsed_result.append(block)
 
     def parse(self):
