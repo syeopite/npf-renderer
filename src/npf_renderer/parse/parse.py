@@ -60,7 +60,8 @@ class Parser(helpers.CursorIterator):
             #
             # When an indent_level attr is set, we should also probably either be one of the list subtypes or a indented
             # block quote subtype. This check shouldn't be needed, however.
-            if peekaboo["type"] != "text" or not (indent_level := peekaboo.get("indent_level")):
+            if peekaboo["type"] != "text" or not (indent_level := (peekaboo.get("indent_level") or
+                                                                   peekaboo.get("indentLevel"))):
                 return create_text_block(text, subtype, inline_formats, nest_array)
 
             # If the next element's indent level is higher than ours (stored as nest_level), they are our children.
@@ -164,11 +165,10 @@ class Parser(helpers.CursorIterator):
             media_list.append(self._parse_media_block(img))
 
         alt_text = self.current.get("alt_text")
-        if not alt_text:  # Try Camal Case Variant
+        if not alt_text:  # Try Camel Case Variant
             alt_text = self.current.get("altText")
+
         caption = self.current.get("caption")
-        if not alt_text:
-            caption = self.current.get("caption")
 
         if color_block := self.current.get("colors"):
             colors = [color_hex for color_hex in color_block.values()]
@@ -192,9 +192,16 @@ class Parser(helpers.CursorIterator):
         width = media_block.get("width", 540)
         height = media_block.get("height", 405)
 
-        original_dimensions_missing = media_block.get("original_dimensions_missing")
         cropped = media_block.get("cropped")
+
+        original_dimensions_missing = media_block.get("original_dimensions_missing")
         has_original_dimensions = media_block.get("has_original_dimensions")
+
+        # Additional checks for the camel case variants
+        if not original_dimensions_missing:
+            original_dimensions_missing = media_block.get("originalDimensionsMissing")
+        if not has_original_dimensions:
+            has_original_dimensions = media_block.get("hasOriginalDimensions")
 
         poster = None
         video = None
