@@ -1,6 +1,6 @@
 import dominate.tags
 
-from . import text_formatter
+from . import text_formatter, image_formatter
 from .. import objects, helpers
 
 
@@ -51,6 +51,8 @@ class Formatter(helpers.CursorIterator):
             case objects.text_block.TextBlock():
                 block = self.__format_text()
                 self.post.add(block)
+            case objects.image.ImageBlock():
+                self.post.add(image_formatter.format_image(self.current))
 
     def format(self):
         """Begins the parsing chain and returns the final list of parsed objects"""

@@ -1,6 +1,13 @@
-from dominate import tags
+import dominate.tags
 
 from npf_renderer import objects
+
+
+def format_constructor(*children):
+    return dominate.tags.div(
+        dominate.tags.figure(dominate.tags.div(*children, cls="image-container"), cls="image-block"), cls="post"
+    )
+
 
 basic_image_block = (
     [
@@ -61,7 +68,23 @@ basic_image_block = (
             alt_text='Sonic the Hedgehog and friends',
             caption="I'm living my best life on earth.",
         )
-    ]
+    ],
+
+    format_constructor(
+        dominate.tags.img(
+            srcset="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg "
+                   "1280w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_540"
+                   ".jpg 540w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
+                   "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg 250w",
+            alt="Sonic the Hedgehog and friends",
+            cls="image"
+        ),
+
+        dominate.tags.figcaption(
+            "I'm living my best life on earth.",
+            cls="image-caption"
+        )
+    )
 )
 
 basic_gif_image_block = (
@@ -91,7 +114,17 @@ basic_gif_image_block = (
                 )
             ],
         )
-    ]
+    ],
+
+    format_constructor(
+        dominate.tags.img(
+            srcset="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/"
+                   "tumblr_nshp8oVOnV1rg0s9xo1_250.gif 250w",
+            cls="image",
+            alt="image",
+        ),
+    )
+
 )
 
 image_block_with_color_attr = (
@@ -125,7 +158,16 @@ image_block_with_color_attr = (
             ],
             colors=['a24615', 'ff7c00']
         )
-    ]
+    ],
+
+    format_constructor(
+        dominate.tags.img(
+            srcset="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/"
+                   "tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg 1280w",
+            cls="image",
+            alt="image",
+        ),
+    )
 )
 
 gif_image_block_with_poster = (
@@ -169,7 +211,16 @@ gif_image_block_with_poster = (
                 )
             ],
         )
-    ]
+    ],
+
+    format_constructor(
+        dominate.tags.img(
+            srcset="https://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/"
+                   "tumblr_nshp8oVOnV1rg0s9xo1_500.gif 500w",
+            cls="image",
+            alt="image",
+        ),
+    )
 )
 
 gif_image_block_with_post_attribution = (
