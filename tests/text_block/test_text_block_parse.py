@@ -3,10 +3,20 @@ from npf_renderer.parse.parse import Parser
 
 import logging
 
+try:
+    import prettyprinter
+    pprinter = prettyprinter.PrettyPrinter()
+except ImportError:
+    pprinter = None
+
 
 def helper_function(raw, answer):
     parser = Parser(raw["content"])
     parsed_results = parser.parse()
+
+    if pprinter:
+        parsed_results = prettyprinter.pformat(parsed_results)
+        answer = prettyprinter.pformat(answer)
 
     logging.info(f"Parsed: {parsed_results}")
     logging.info(f"Answer: {answer}")
