@@ -172,4 +172,95 @@ gif_image_block_with_poster = (
     ]
 )
 
+gif_image_block_with_post_attribution = (
+    [
+        {
+            "type": "image",
+            "media": [
+                {"width": 357, "height": 174, "url": "https://64.media.tumblr.com/s400x600/blahblahblah.gifv"},
+                {"width": 250, "height": 122, "url": "https://64.media.tumblr.com/s250x400/blahblahblah.gifv"},
+            ],
+            "attribution": {
+                "type": "post",
+                "url": "https://example-blog.tumblr.com/post/1234567890/example-gif-post",
+                "post": {"id": "1234567890"},
+                "blog": {
+                    "name": "example-blog",
+                    "url": "https://example-blog.tumblr.com",
+                    "uuid": "t:SX31hFaWHA_312_df"
+                },
+            },
+            "colors": {"c0": "000000", "c1": "2a1300", "c2": "ffe41a", "c3": "6b4108", "c4": "d74301"}
+        }
+    ],
+
+    [objects.image.ImageBlock(
+        media=[
+            objects.media_objects.MediaObject(url="https://64.media.tumblr.com/s400x600/blahblahblah.gifv", width=357,
+                                              height=174),
+            objects.media_objects.MediaObject(url="https://64.media.tumblr.com/s250x400/blahblahblah.gifv", width=250,
+                                              height=122)
+        ],
+
+        colors=["000000", "2a1300", "ffe41a", "6b4108", "d74301"],
+        attribution=objects.attribution.PostAttribution(
+            url="https://example-blog.tumblr.com/post/1234567890/example-gif-post",
+            post="1234567890",
+            blog=objects.attribution.BlogAttribution(
+                name="example-blog",
+                url="https://example-blog.tumblr.com",
+                uuid="t:SX31hFaWHA_312_df"
+            )
+        )
+    )]
+)
+
+
+# Taken from the JSON data for https://davidragifs.com/post/671497799018381312/big-cat-little-cat
+# Slightly edited
+gif_image_block_with_link_attribution = (
+    [
+        {
+            "type": "image",
+            "media": [
+                {
+                    "mediaKey": "0655920c23ca997bf6145c32bda00cc5:14ab5a4c91df05c8-c8",
+                    "type": "image/webp",
+                    "width": 500,
+                    "height": 700,
+                    "url": "https://64.media.tumblr.com/0655920c23ca997bf6145c32bda00cc5/14ab5a4c91df05c8-c8/s500x750"
+                           "/23f1c831d79fb51b56bbd52ae7d8c03336fd6f25.gifv",
+                    "colors": {
+                        "c0": "15120b",
+                        "c1": "2d3e47"
+                    },
+                    "hasOriginalDimensions": True
+                },
+            ],
+            "attribution": {
+                "type": "link",
+                "url": "https://davidragifs.com",
+                "urlRedirect": "https://href.li/?https://davidragifs.com"
+            },
+            "colors": {
+                "c0": "15120b",
+                "c1": "2d3e47"
+            }
+        },
+    ],
+
+    [objects.image.ImageBlock(
+        media=[objects.media_objects.MediaObject(
+            url="https://64.media.tumblr.com/0655920c23ca997bf6145c32bda00cc5/14ab5a4c91df05c8-c8/s500x750"
+                "/23f1c831d79fb51b56bbd52ae7d8c03336fd6f25.gifv",
+            width=500,
+            height=700,
+            type="image/webp",
+
+            has_original_dimensions=True
+        )],
+        colors=["15120b", "2d3e47"],
+        attribution=objects.attribution.LinkAttribution(url="https://davidragifs.com")
+    )]
+)
 

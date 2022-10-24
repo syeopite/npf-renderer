@@ -29,3 +29,14 @@ def test_image_block_with_color_attr_parse():
 
 def test_gif_image_block_with_poster_parse():
     helper_function(test_data.gif_image_block_with_poster[0], test_data.gif_image_block_with_poster[1])
+
+
+def test_gif_image_block_with_link_attribution():
+    helper_function(test_data.gif_image_block_with_link_attribution[0],
+                    test_data.gif_image_block_with_link_attribution[1])
+
+
+def test_gif_image_block_with_post_attribution():
+    helper_function(test_data.gif_image_block_with_post_attribution[0],
+                    test_data.gif_image_block_with_post_attribution[1])
+

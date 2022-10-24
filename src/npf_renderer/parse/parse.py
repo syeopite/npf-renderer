@@ -176,12 +176,17 @@ class Parser(helpers.CursorIterator):
         else:
             colors = None
 
+        if attribution := self.current.get("attribution"):
+            attribution = misc.parse_attribution(attribution)
+
         return image.ImageBlock(
             media=media_list,
 
             alt_text=alt_text,
             caption=caption,
-            colors=colors
+            colors=colors,
+
+            attribution=attribution
         )
 
     def __parse_block(self):
