@@ -52,7 +52,10 @@ class Formatter(helpers.CursorIterator):
                 block = self.__format_text()
                 self.post.add(block)
             case objects.image.ImageBlock():
-                self.post.add(image_formatter.format_image(self.current))
+                figure = dominate.tags.figure(cls="image-block")
+                figure.add(image_formatter.format_image(self.current))
+
+                self.post.add(figure)
 
     def format(self):
         """Begins the parsing chain and returns the final list of parsed objects"""

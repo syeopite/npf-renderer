@@ -17,9 +17,6 @@ def create_srcset(media_blocks):
 
 def format_image(image_block):
     """Renders a ImageBlock into HTML"""
-
-    figure = dominate.tags.figure(cls="image-block")
-
     container_attributes = {
         "cls": "image-container"
     }
@@ -32,7 +29,6 @@ def format_image(image_block):
     #     container_attributes["style"] = f"background: linear-gradient(to left bottom, {', '.join(colors)});"
 
     container = dominate.tags.div(**container_attributes)
-    figure.add(container)
 
     container.add(
         dominate.tags.img(
@@ -54,4 +50,4 @@ def format_image(image_block):
     if image_block.caption:
         container.add(dominate.tags.figcaption(image_block.caption, cls="image-caption"))
 
-    return figure
+    return container
