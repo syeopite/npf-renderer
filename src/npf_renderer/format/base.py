@@ -55,6 +55,9 @@ class Formatter(helpers.CursorIterator):
                 figure = dominate.tags.figure(cls="image-block")
                 figure.add(image_formatter.format_image(self.current))
 
+                if self.current.caption:
+                    figure.add(dominate.tags.figcaption(self.current.caption, cls="image-caption"))
+
                 self.post.add(figure)
 
     def format(self):

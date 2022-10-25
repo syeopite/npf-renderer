@@ -47,7 +47,4 @@ def format_image(image_block):
     #
     #     ))
 
-    if image_block.caption:
-        container.add(dominate.tags.figcaption(image_block.caption, cls="image-caption"))
-
     return container

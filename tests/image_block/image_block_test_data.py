@@ -70,20 +70,26 @@ basic_image_block = (
         )
     ],
 
-    format_constructor(
-        dominate.tags.img(
-            srcset="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg "
-                   "1280w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_540"
-                   ".jpg 540w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
-                   "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg 250w",
-            alt="Sonic the Hedgehog and friends",
-            cls="image"
+    dominate.tags.div(
+        dominate.tags.figure(dominate.tags.div(
+            dominate.tags.img(
+                srcset="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg "
+                       "1280w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_540"
+                       ".jpg 540w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
+                       "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg 250w",
+                alt="Sonic the Hedgehog and friends",
+                cls="image"
+            ), cls="image-container"),
+
+            dominate.tags.figcaption(
+                "I'm living my best life on earth.",
+                cls="image-caption"
+            ),
+
+            cls="image-block"
         ),
 
-        dominate.tags.figcaption(
-            "I'm living my best life on earth.",
-            cls="image-caption"
-        )
+        cls="post"
     )
 )
 
