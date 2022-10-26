@@ -70,12 +70,17 @@ def parse_attribution(attribution_block):
             )
         case "blog":
             blog = attribution_block["blog"]
+            if avatars := blog.get("avatar"):
+                avatars = [parse_media_block(avatar) for avatar in avatars]
+            else:
+                avatars = None
+
             return attribution.BlogAttribution(
                 uuid=blog["uuid"],
                 url=attribution_block.get("url"),
                 name=blog.get("name"),
 
-                avatar=[parse_media_block(avatar) for avatar in blog.get("avatar")]
+                avatar=avatars
             )
         case "app":
             if logo := attribution_block.get("logo"):
