@@ -1,6 +1,6 @@
 import itertools
 import queue
-from typing import List, Callable
+from typing import Sequence, Callable
 
 import dominate.tags
 import dominate.util
@@ -42,7 +42,7 @@ class _OperationsIterator(helpers.CursorIterator):
 class InlineFormatter(helpers.CursorIterator):
     """Formatter for NPF's TextBlock's inline formatting"""
 
-    def __init__(self, string: str, inline_formats: List[objects.inline.INLINE_FMT_TYPES], url_handler: Callable):
+    def __init__(self, string: str, inline_formats: Sequence[objects.inline.INLINE_FMT_TYPES], url_handler: Callable):
         """Initializes InlineFormatter with some string and the formats to apply to it """
         super().__init__(string)
         self.parent_tag = dominate.tags.span(cls="inline-formatted-content")
