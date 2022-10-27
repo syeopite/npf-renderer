@@ -78,7 +78,8 @@ basic_image_block = (
                        ".jpg 540w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
                        "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg 250w",
                 alt="Sonic the Hedgehog and friends",
-                cls="image"
+                cls="image",
+                sizes="(max-width: 540px) 100vh, 540px",
             ), cls="image-container"),
 
             dominate.tags.figcaption(
@@ -127,6 +128,7 @@ basic_gif_image_block = (
             srcset="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/"
                    "tumblr_nshp8oVOnV1rg0s9xo1_250.gif 250w",
             cls="image",
+            sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
     )
@@ -171,6 +173,7 @@ image_block_with_color_attr = (
             srcset="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/"
                    "tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg 1280w",
             cls="image",
+            sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
     )
@@ -224,6 +227,7 @@ gif_image_block_with_poster = (
             srcset="https://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/"
                    "tumblr_nshp8oVOnV1rg0s9xo1_500.gif 500w",
             cls="image",
+            sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
     )

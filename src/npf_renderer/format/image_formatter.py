@@ -15,7 +15,7 @@ def create_srcset(media_blocks):
     return main_srcset
 
 
-def format_image(image_block):
+def format_image(image_block, row_length=1):
     """Renders a ImageBlock into HTML"""
     container_attributes = {
         "cls": "image-container"
@@ -35,6 +35,7 @@ def format_image(image_block):
             srcset=", ".join(create_srcset(image_block.media)),
             cls="image",
             alt=image_block.alt_text or "image",
+            sizes=f"(max-width: 540px) {int(100/row_length)}vh, {int(540/row_length)}px"
         )
     )
 
