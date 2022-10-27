@@ -89,13 +89,24 @@ subtype_string_test_2 = (
     },
     [
         objects.text_block.TextBlock(text="Sward's Shopping List", subtype=objects.text_block.Subtypes.HEADING1),
-        objects.text_block.TextBlock(text="Sword", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM),
-        objects.text_block.TextBlock(text="Candy", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM),
-        objects.text_block.TextBlock(text="But especially don't forget:"),
-        objects.text_block.TextBlock(
-            text="Death, which is uncountable on this list.",
-            subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+        objects.text_block.ListGrouping(
+            type=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
+            group=[
+                objects.text_block.TextBlock(text="Sword", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM),
+                objects.text_block.TextBlock(text="Candy", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM),
+            ]
         ),
+        objects.text_block.TextBlock(text="But especially don't forget:"),
+        objects.text_block.ListGrouping(
+            type=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+            group=[
+                objects.text_block.TextBlock(
+                    text="Death, which is uncountable on this list.",
+                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                ),
+            ]
+        ),
+
     ],
     tags.div(
         tags.h1("Sward's Shopping List", cls="text-block heading1"),
@@ -149,30 +160,45 @@ subtype_and_indent_level_test = (
     },
     [
         objects.text_block.TextBlock(text="Sward's Shopping List", subtype=objects.text_block.Subtypes.HEADING1),
-        objects.text_block.TextBlock(
-            text="First level: Fruit",
-            subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
-            nest=[
+        objects.text_block.ListGrouping(
+            type=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
+            group=[
                 objects.text_block.TextBlock(
-                    text="Second level: Apples",
-                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                    text="First level: Fruit",
+                    subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
                     nest=[
-                        objects.text_block.TextBlock(
-                            text="Third Level: Green",
-                            subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
+                        objects.text_block.ListGrouping(
+                            type=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                            group=[
+                                objects.text_block.TextBlock(
+                                    text="Second level: Apples",
+                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                                    nest=[
+                                        objects.text_block.ListGrouping(
+                                            type=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
+                                            group=[
+                                                objects.text_block.TextBlock(
+                                                    text="Third Level: Green",
+                                                    subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
+                                                ),
+                                            ]
+                                        )
+                                    ],
+                                ),
+                                objects.text_block.TextBlock(
+                                    text="Second level: Pears",
+                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                                ),
+                            ]
                         ),
                     ],
                 ),
                 objects.text_block.TextBlock(
-                    text="Second level: Pears",
-                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                    text="First level: Pears",
+                    subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
                 ),
-            ],
-        ),
-        objects.text_block.TextBlock(
-            text="First level: Pears",
-            subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
-        ),
+            ]
+        )
     ],
     tags.div(
         tags.h1("Sward's Shopping List", cls="text-block heading1"),
@@ -577,78 +603,94 @@ top_level_list_with_children_merging_test_data = (
         objects.text_block.TextBlock(text="Interesting stuff",
                                      subtype=objects.text_block.Subtypes.HEADING2),
 
-        objects.text_block.TextBlock(
-            text="Space",
-            subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
-            nest=[
+        objects.text_block.ListGrouping(
+            type=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+            group=[
                 objects.text_block.TextBlock(
-                    text="NASA",
-                    inline_formatting=[
-                        objects.inline.Link(
-                            start=0,
-                            end=4,
-                            type=objects.inline.FMTTypes.LINK,
-                            url="https://www.nasa.gov",
-                        ),
-                    ],
+                    text="Space",
                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                    nest=[
+                        objects.text_block.ListGrouping(
+                            type=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                            group=[
+                                objects.text_block.TextBlock(
+                                    text="NASA",
+                                    inline_formatting=[
+                                        objects.inline.Link(
+                                            start=0,
+                                            end=4,
+                                            type=objects.inline.FMTTypes.LINK,
+                                            url="https://www.nasa.gov",
+                                        ),
+                                    ],
+                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                                ),
+                                objects.text_block.TextBlock(
+                                    text="ESA",
+                                    inline_formatting=[
+                                        objects.inline.Link(
+                                            start=0,
+                                            end=3,
+                                            type=objects.inline.FMTTypes.LINK,
+                                            url="https://www.esa.int/",
+                                        ),
+                                    ],
+                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                                ),
+                                objects.text_block.TextBlock(
+                                    text="SpaceX",
+                                    inline_formatting=[
+                                        objects.inline.Link(
+                                            start=0,
+                                            end=6,
+                                            type=objects.inline.FMTTypes.LINK,
+                                            url="https://www.spacex.com/",
+                                        ),
+                                    ],
+                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                                ),
+                            ]
+                        )
+                    ],
                 ),
                 objects.text_block.TextBlock(
-                    text="ESA",
-                    inline_formatting=[
-                        objects.inline.Link(
-                            start=0,
-                            end=3,
-                            type=objects.inline.FMTTypes.LINK,
-                            url="https://www.esa.int/",
-                        ),
-                    ],
+                    text="Code",
                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
-                ),
-                objects.text_block.TextBlock(
-                    text="SpaceX",
-                    inline_formatting=[
-                        objects.inline.Link(
-                            start=0,
-                            end=6,
-                            type=objects.inline.FMTTypes.LINK,
-                            url="https://www.spacex.com/",
-                        ),
+                    nest=[
+                        objects.text_block.ListGrouping(
+                            type=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                            group=[
+                                objects.text_block.TextBlock(
+                                    text="Github",
+                                    inline_formatting=[
+                                        objects.inline.Link(
+                                            start=0,
+                                            end=6,
+                                            type=objects.inline.FMTTypes.LINK,
+                                            url="https://www.github.com/",
+                                        ),
+                                    ],
+                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                                ),
+                                objects.text_block.TextBlock(
+                                    text="Gitlab",
+                                    inline_formatting=[
+                                        objects.inline.Link(
+                                            start=0,
+                                            end=6,
+                                            type=objects.inline.FMTTypes.LINK,
+                                            url="https://about.gitlab.com/",
+                                        ),
+                                    ],
+                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                                ),
+                            ]
+                        )
                     ],
-                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
                 ),
-            ],
-        ),
-        objects.text_block.TextBlock(
-            text="Code",
-            subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
-            nest=[
-                objects.text_block.TextBlock(
-                    text="Github",
-                    inline_formatting=[
-                        objects.inline.Link(
-                            start=0,
-                            end=6,
-                            type=objects.inline.FMTTypes.LINK,
-                            url="https://www.github.com/",
-                        ),
-                    ],
-                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
-                ),
-                objects.text_block.TextBlock(
-                    text="Gitlab",
-                    inline_formatting=[
-                        objects.inline.Link(
-                            start=0,
-                            end=6,
-                            type=objects.inline.FMTTypes.LINK,
-                            url="https://about.gitlab.com/",
-                        ),
-                    ],
-                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
-                ),
-            ],
-        ),
+            ]
+        )
+
     ],
     tags.div(
         tags.h1(

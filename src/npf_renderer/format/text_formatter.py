@@ -77,85 +77,37 @@ class TextFormatter:
                 return dominate.tags.blockquote(cls="text-block indented" + self.additional_classes)
             case objects.text_block.Subtypes.CHAT:
                 return dominate.tags.p(cls="text-block chat" + self.additional_classes)
-
-            case _:
-                if self.create_list_element:
-                    # We skip adding additional_classes here for they'll be added on the li creation in self.format()
-                    if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                        return dominate.tags.ol(cls="ordered-list")
-                    elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                        return dominate.tags.ul(cls="unordered-list")
-                else:
-                    if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                        return dominate.tags.li(cls="text-block ordered-list-item" + self.additional_classes)
-                    elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                        return dominate.tags.li(cls="text-block unordered-list-item" + self.additional_classes)
+            case objects.text_block.Subtypes.ORDERED_LIST_ITEM:
+                return dominate.tags.li(cls="text-block ordered-list-item" + self.additional_classes)
+            case objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
+                return dominate.tags.li(cls="text-block unordered-list-item" + self.additional_classes)
 
     def format(self):
 
-        # If we created a list element we are going to now create a list item for our text
-        if self.text_block.subtype in objects.text_block.ListsSubtype:
-            if self.create_list_element:
-                if self.text_block.subtype == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                    working_tag = dominate.tags.li(
-                        self.text_tag,
-                        cls="text-block ordered-list-item" + self.additional_classes
-                    )
-                elif self.text_block.subtype == objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                    working_tag = dominate.tags.li(
-                        self.text_tag,
-                        cls="text-block unordered-list-item" + self.additional_classes
-                    )
-                else:  # Unreachable
-                    raise RuntimeError
-            else:
-                # If we did not create a list element but we still have children that needs to be added to us,
-                # we can't just make the working tag the text contents and add to that. (Can't add to raw text and
-                # even if there is an inline-formatting div it still wouldn't be right) It needs to be directly added
-                # to self.tag's li. So:
-                if self.text_block.nest:
-                    working_tag = self.tag
-                    working_tag.add(self.text_tag)
-                else:
-                    working_tag = self.text_tag
+        # We have children that needs to be added to us, and we cannot just make the working tag the
+        # text contents and add to that. (Can't add to raw text and even if there is an inline-formatting div it still
+        # wouldn't be valid HTML in some cases) It needs to be directly added to self.tag. So:
+        if self.text_block.nest:
+            working_tag = self.tag
+            working_tag.add(self.text_tag)
         else:
             working_tag = self.text_tag
-
-        if working_tag is not self.tag:
             self.tag.add(working_tag)
 
         # Has nested elements. Also means our subtype is either indented or one of the list types
         if self.text_block.nest:
-            list_to_use = None
-            first_time_trigger = True
-
-            # These can be mixed... but note that **there can only be one subtype and it will be that of the closest
-            # tag***...
-            #
-            # https://www.tumblr.com/docs/npf#text-block-subtype-list-item
             for element in self.text_block.nest:
-                if element.subtype in objects.text_block.ListsSubtype:
-                    if first_time_trigger:
-                        first_time_trigger = False
-                        list_to_use = TextFormatter(
-                            element,
-                            url_handler=self.url_handler
-                        ).format()
+                if isinstance(element, objects.text_block.ListGrouping):
+                    if element.type == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
+                        list_tag = dominate.tags.ol(cls="ordered-list")
                     else:
-                        # If here then we've already created a list tag as the first_time_trigger option went off
-                        # So subsequent list items at the same level are just going to use that one. We don't need to
-                        # check if the list types are different because nested lists at the same level can only
-                        # have the same type
-                        list_item_tag = TextFormatter(
-                            element,
-                            create_list_element=False,
-                            url_handler=self.url_handler
-                        ).format()
+                        list_tag = dominate.tags.ul(cls="unordered-list")
 
-                        list_to_use.add(list_item_tag)
+                    for block in element.group:
+                        list_tag.add(TextFormatter(block, url_handler=self.url_handler).format())
+
+                    working_tag.add(list_tag)
                 else:
-                    working_tag.add(TextFormatter(element).format())
-
-            working_tag.add(list_to_use)
+                    working_tag.add(TextFormatter(element, url_handler=self.url_handler).format())
 
         return self.tag

@@ -31,6 +31,7 @@ def test_simple_text_parse():
 def test_empty_string_parse():
     helper_function(longer_and_with_empty_string_test[0], longer_and_with_empty_string_test[1])
 
+
 def test_subtype_string_parse():
     helper_function(subtype_string_test[0], subtype_string_test[1])
 

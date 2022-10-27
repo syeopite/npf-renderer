@@ -16,30 +16,9 @@ class Formatter(helpers.CursorIterator):
         self.post = dominate.tags.div(cls="post")
         self.url_handler = url_handler
 
-    def __format_text(self):
+    def __format_text(self, block):
         """Formats TextBlock(s) into usable HTML code"""
-        formatted_block = text_formatter.TextFormatter(self.current, url_handler=self.url_handler).format()
-
-        # We are currently at the zeroth level. And lists at the zeroth level
-        # should be merged if they are next to each other and of the same type.
-        if self.current.subtype in objects.text_block.ListsSubtype:
-            while peekaboo := self.peek():
-                if (not isinstance(peekaboo, objects.text_block.TextBlock)
-                        or (peekaboo.subtype not in objects.text_block.ListsSubtype)):
-
-                    return formatted_block
-
-                if peekaboo.subtype == self.current.subtype:
-                    # Formatted block should be a list element such as ul, ol here
-                    self.next()
-                    formatted_block.add(
-                        text_formatter.TextFormatter(
-                            self.current,
-                            create_list_element=False,
-                            url_handler=self.url_handler
-                        ).format()
-                    )
-
+        formatted_block = text_formatter.TextFormatter(block, url_handler=self.url_handler).format()
         return formatted_block
 
     def __format_block(self):
@@ -49,8 +28,19 @@ class Formatter(helpers.CursorIterator):
         """
         match self.current:
             case objects.text_block.TextBlock():
-                block = self.__format_text()
+                block = self.__format_text(self.current)
                 self.post.add(block)
+            case objects.text_block.ListGrouping():
+                if self.current.type == objects.text_block.Subtypes.ORDERED_LIST_ITEM:
+                    list_tag = dominate.tags.ol(cls="ordered-list")
+                else:
+                    list_tag = dominate.tags.ul(cls="unordered-list")
+
+                for block in self.current.group:
+                    list_tag.add(self.__format_text(block))
+
+                self.post.add(list_tag)
+
             case objects.image.ImageBlock():
                 figure = dominate.tags.figure(cls="image-block")
                 figure.add(image_formatter.format_image(self.current))

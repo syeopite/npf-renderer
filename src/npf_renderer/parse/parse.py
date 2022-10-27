@@ -18,7 +18,7 @@ class Parser(helpers.CursorIterator):
         super().__init__(content)
         self.parsed_result = []
 
-    def _parse_text(self, nest_level=0):
+    def _parse_text(self, nest_level=0, in_list_grouping=False):
         """Parses a NPF text content block into a TextBlock
 
         Takes the selected JSON text content block from `self.current` and parses it into a TextObject.
@@ -55,26 +55,51 @@ class Parser(helpers.CursorIterator):
 
         # Begins the check to see if we have any children in the next element(s)
         nest_array = []
-        while peekaboo := self.peek():
+        while peek := self.peek():
             # Our children can only be TextBlock and ones with a set indent_level attr (which implies that they are
             # related to us)
             #
             # When an indent_level attr is set, we should also probably either be one of the list subtypes or a indented
             # block quote subtype. This check shouldn't be needed, however.
-            if peekaboo["type"] != "text" or not (indent_level := (peekaboo.get("indent_level") or
-                                                                   peekaboo.get("indentLevel"))):
-                return create_text_block(text, subtype, inline_formats, nest_array)
+            if peek["type"] != "text" or not (indent_level := (peek.get("indent_level") or peek.get("indentLevel"))):
+                break
 
             # If the next element's indent level is higher than ours (stored as nest_level), they are our children.
             # Thus, we'll store them under us.
             if indent_level > nest_level:
                 self.next()
-                nest_array.append(self._parse_text(nest_level=nest_level + 1))
+                nested_block = self._parse_text(nest_level=nest_level + 1)
+                nest_array.append(nested_block)
+
             else:
                 # If not however, then they are either our siblings,  in the same level as our parent,
-                # or an even "higher" (or lower with regard to indent_level) level; so we'll return and let whoever
-                # called us process them (or delegate to higher levels)
-                return create_text_block(text, subtype, inline_formats, nest_=nest_array)
+                # or an even "higher" (or lower with regard to indent_level) level. Therefore, there is nothing else
+                # we need to do here
+                break
+
+        # Lists of the same type after to us should be merged into a ListGrouping, provided we aren't already in the
+        # process of constructing one at our level.
+        if not in_list_grouping and subtype in text_block.ListsSubtype:
+            list_grouping = [create_text_block(text, subtype, inline_formats, nest_=nest_array)]
+            while peek := self.peek():
+                if peek_subtype := peek.get("subtype"):
+                    peek_subtype = getattr(text_block.Subtypes, peek_subtype.upper().replace("-", "_"))
+
+                # Make sure we are at the same nest level and that we are the same list type
+                indent_level = (peek.get("indent_level") or peek.get("indentLevel"))
+                indent_level = indent_level or 0
+
+                if peek_subtype != subtype or indent_level != nest_level:
+                    break
+
+                self.next()
+
+                list_grouping.append(self._parse_text(in_list_grouping=True, nest_level=nest_level))
+
+            # If we're at the end then we don't have a peek() to compare to. Thus, we'll compare the
+            # currently selected text block and the one that we have in the current context
+            if list_grouping:
+                return text_block.ListGrouping(type=subtype, group=list_grouping)
 
         return create_text_block(text, subtype, inline_formats, nest_=nest_array)
 
