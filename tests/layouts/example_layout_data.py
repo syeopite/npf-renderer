@@ -1,3 +1,5 @@
+import dominate.tags
+
 from npf_renderer.objects import layouts, attribution
 
 content_list = [
@@ -32,7 +34,58 @@ basic_rows_layout_example = (
                 )
             ]
         )
-    ]
+    ],
+    (
+        dominate.tags.div(
+            dominate.tags.div(
+                dominate.tags.figure(
+                    dominate.tags.div(
+                        dominate.tags.img(
+                            srcset="https://example.com/example-image-1.png 540w",
+                            cls="image",
+                            sizes="(max-width: 540px) 50vh, 270px",
+                            alt="image",
+                        ),
+                        cls="image-container"
+                    ),
+                    cls="image-block"
+                ),
+
+                dominate.tags.figure(
+                    dominate.tags.div(
+                        dominate.tags.img(
+                            srcset="https://example.com/example-image-2.png 540w",
+                            cls="image",
+                            sizes="(max-width: 540px) 50vh, 270px",
+                            alt="image",
+                        ),
+                        cls="image-container"
+                    ),
+                    cls="image-block"
+                ),
+
+                cls="layout-row"
+            ),
+
+            dominate.tags.div(
+                dominate.tags.figure(
+                    dominate.tags.div(
+                        dominate.tags.img(
+                            srcset="https://example.com/example-image-3.png 540w",
+                            cls="image",
+                            sizes="(max-width: 540px) 100vh, 540px",
+                            alt="image",
+                        ),
+                        cls="image-container"
+                    ),
+                    cls="image-block"
+                ),
+
+                cls="layout-row"
+            ),
+
+            cls="post")
+    )
 )
 
 basic_rows_layout_with_truncate_example = (
