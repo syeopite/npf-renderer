@@ -1,3 +1,4 @@
+import urllib.parse
 import logging
 
 from npf_renderer.parse.parse import Parser
@@ -34,6 +35,25 @@ def test_image_block_with_color_attr_format():
 # Ditto except with poster data
 def test_gif_image_block_with_poster_format():
     helper_function(test_data.gif_image_block_with_poster[0], test_data.gif_image_block_with_poster[2])
+
+
+# Link replacing test
+def test_image_block_url_replacement_format():
+    def url_handler(url):
+        url = urllib.parse.urlparse(url)
+
+        if url.hostname.endswith("69.media.tumblr.com"):
+            return url._replace(netloc="example.com").geturl()
+
+    parser = Parser(test_data.image_block_with_replaced_link_attribution[0])
+    parsed_results = parser.parse()
+
+    formatted_result = format.format_content(parsed_results, url_handler=url_handler)
+
+    logging.info(f"Formatted: {formatted_result}")
+    logging.info(f"Answer: {test_data.image_block_with_replaced_link_attribution[2]}")
+
+    assert str(formatted_result) == str(test_data.image_block_with_replaced_link_attribution[2])
 
 # TODO
 #

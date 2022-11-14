@@ -1,7 +1,7 @@
 import dominate.tags
 
 
-def create_srcset(media_blocks):
+def create_srcset(media_blocks, url_handler):
     """Renders an array of media blocks into a usable srcset data. Contains the content's srcset and also poster's
 
     Returns:
@@ -10,12 +10,12 @@ def create_srcset(media_blocks):
     main_srcset = []
 
     for image in media_blocks:
-        main_srcset.append(f"{image.url} {image.width}w")
+        main_srcset.append(f"{url_handler(image.url)} {image.width}w")
 
     return main_srcset
 
 
-def format_image(image_block, row_length=1):
+def format_image(image_block, row_length=1, url_handler=None):
     """Renders a ImageBlock into HTML"""
     container_attributes = {
         "cls": "image-container"
@@ -30,9 +30,13 @@ def format_image(image_block, row_length=1):
 
     container = dominate.tags.div(**container_attributes)
 
+    if not url_handler:
+        def url_handler(url):
+            return url
+
     container.add(
         dominate.tags.img(
-            srcset=", ".join(create_srcset(image_block.media)),
+            srcset=", ".join(create_srcset(image_block.media, url_handler)),
             cls="image",
             alt=image_block.alt_text or "image",
             sizes=f"(max-width: 540px) {int(100/row_length)}vh, {int(540/row_length)}px"

@@ -325,3 +325,88 @@ gif_image_block_with_link_attribution = (
     )]
 )
 
+
+image_block_with_replaced_link_attribution = (
+    [
+        {
+            "type": "image",
+            "media": [
+                {
+                    "type": "image/jpeg",
+                    "url": "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
+                           "/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg",
+                    "width": 1280,
+                    "height": 1073
+                },
+                {
+                    "type": "image/jpeg",
+                    "url": "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
+                           "/tumblr_nshp8oVOnV1rg0s9xo1_540.jpg",
+                    "width": 540,
+                    "height": 400
+                },
+                {
+                    "type": "image/jpeg",
+                    "url": "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
+                           "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg",
+                    "width": 250,
+                    "height": 150
+                }
+            ],
+            "alt_text": "Sonic the Hedgehog and friends",
+            "caption": "I'm living my best life on earth."
+        }
+    ],
+    [
+        objects.image.ImageBlock(
+            media=[
+                objects.media_objects.MediaObject(
+                    url='http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/'
+                        'tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg',
+                    type='image/jpeg',
+                    width=1280,
+                    height=1073,
+                ),
+                objects.media_objects.MediaObject(
+                    url='http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/'
+                        'tumblr_nshp8oVOnV1rg0s9xo1_540.jpg',
+                    type='image/jpeg',
+                    width=540,
+                    height=400,
+                ),
+                objects.media_objects.MediaObject(
+                    url='http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/'
+                        'tumblr_nshp8oVOnV1rg0s9xo1_250.jpg',
+                    type='image/jpeg',
+                    width=250,
+                    height=150,
+                )
+            ],
+            alt_text='Sonic the Hedgehog and friends',
+            caption="I'm living my best life on earth.",
+        )
+    ],
+
+    dominate.tags.div(
+        dominate.tags.figure(dominate.tags.div(
+            dominate.tags.img(
+                srcset="http://example.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg "
+                       "1280w, http://example.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_540"
+                       ".jpg 540w, http://example.com/b06fe71cc4ab47e93749df060ff54a90"
+                       "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg 250w",
+                alt="Sonic the Hedgehog and friends",
+                cls="image",
+                sizes="(max-width: 540px) 100vh, 540px",
+            ), cls="image-container"),
+
+            dominate.tags.figcaption(
+                "I'm living my best life on earth.",
+                cls="image-caption"
+            ),
+
+            cls="image-block"
+        ),
+
+        cls="post"
+    )
+)

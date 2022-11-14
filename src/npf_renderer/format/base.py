@@ -50,11 +50,10 @@ class Formatter(helpers.CursorIterator):
 
         return list_tag
 
-    @staticmethod
-    def _format_image(block, row_length=1):
+    def _format_image(self, block, row_length=1):
         """Renders an ImageBlock into HTML"""
         figure = dominate.tags.figure(cls="image-block")
-        figure.add(image_formatter.format_image(block, row_length))
+        figure.add(image_formatter.format_image(block, row_length, url_handler=self.url_handler))
 
         if block.caption:
             figure.add(dominate.tags.figcaption(block.caption, cls="image-caption"))
