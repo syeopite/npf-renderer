@@ -1,6 +1,7 @@
 from typing import NamedTuple, List, Optional
-from .media_objects import MediaObject
+
 from .attribution import AttributionTypes
+from .media_objects import MediaObject
 
 
 class ImageBlock(NamedTuple):
@@ -11,6 +12,3 @@ class ImageBlock(NamedTuple):
     colors: Optional[List[str]] = None
 
     attribution: Optional[AttributionTypes] = None
-
-
-

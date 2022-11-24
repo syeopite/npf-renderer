@@ -1,6 +1,7 @@
 import dominate.tags
 
 from . import attribution
+from .. import objects
 
 
 def create_srcset(media_blocks, url_handler):
@@ -41,15 +42,15 @@ def format_image(image_block, row_length=1, url_handler=None):
             srcset=", ".join(create_srcset(image_block.media, url_handler)),
             cls="image",
             alt=image_block.alt_text or "image",
-            sizes=f"(max-width: 540px) {int(100/row_length)}vh, {int(540/row_length)}px"
+            sizes=f"(max-width: 540px) {int(100 / row_length)}vh, {int(540 / row_length)}px"
         )
     )
 
     # Add attribution HTML
     if attr := image_block.attribution:
-        if isinstance(attr, attribution.attribution.LinkAttribution):
+        if isinstance(attr, objects.attribution.LinkAttribution):
             container.add(attribution.format_link_attribution(attr, url_handler))
-        elif isinstance(attr, attribution.attribution.PostAttribution):
+        elif isinstance(attr, objects.attribution.PostAttribution):
             container.add(attribution.format_post_attribution(attr, url_handler))
         else:
             # TODO Add "Unsupported Attribution HTML"

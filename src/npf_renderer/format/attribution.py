@@ -3,10 +3,10 @@ from typing import Callable
 
 import dominate.tags
 
-from ..objects import attribution
+from .. import objects
 
 
-def format_link_attribution(attr: attribution.LinkAttribution, url_handler: Callable):
+def format_link_attribution(attr: objects.attribution.LinkAttribution, url_handler: Callable):
     return dominate.tags.div(
         dominate.tags.a(
             urllib.parse.urlparse(attr.url).hostname,
@@ -16,7 +16,7 @@ def format_link_attribution(attr: attribution.LinkAttribution, url_handler: Call
     )
 
 
-def format_post_attribution(attr: attribution.PostAttribution, url_handler: Callable):
+def format_post_attribution(attr: objects.attribution.PostAttribution, url_handler: Callable):
     return dominate.tags.div(
         dominate.tags.a(
             f"From ",

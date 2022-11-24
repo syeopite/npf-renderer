@@ -5,9 +5,9 @@ results = parser.parse()
 
 """
 
-from ..objects import inline, text_block, image
-from .. import helpers
 from . import misc
+from .. import helpers
+from ..objects import inline, text_block, image
 
 
 class Parser(helpers.CursorIterator):

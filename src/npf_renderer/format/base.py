@@ -1,8 +1,6 @@
-import functools
-
 import dominate.tags
 
-from . import text_formatter, image_formatter
+from . import text, image
 from .. import objects, helpers
 
 
@@ -35,7 +33,7 @@ class Formatter(helpers.CursorIterator):
 
     def _format_text(self, block):
         """Formats TextBlock(s) into usable HTML code"""
-        formatted_block = text_formatter.TextFormatter(block, url_handler=self.url_handler).format()
+        formatted_block = text.TextFormatter(block, url_handler=self.url_handler).format()
         return formatted_block
 
     def _format_list(self, block):
@@ -53,7 +51,7 @@ class Formatter(helpers.CursorIterator):
     def _format_image(self, block, row_length=1):
         """Renders an ImageBlock into HTML"""
         figure = dominate.tags.figure(cls="image-block")
-        figure.add(image_formatter.format_image(block, row_length, url_handler=self.url_handler))
+        figure.add(image.format_image(block, row_length, url_handler=self.url_handler))
 
         if block.caption:
             figure.add(dominate.tags.figcaption(block.caption, cls="image-caption"))
@@ -125,4 +123,3 @@ class Formatter(helpers.CursorIterator):
 
 def format_content(parsed_contents, layouts=None, trails=None, url_handler=None):
     return Formatter(parsed_contents, layouts, url_handler=url_handler).format()
-

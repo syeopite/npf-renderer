@@ -19,6 +19,7 @@ class _OperationsIterator(helpers.CursorIterator):
         next_end: Ending index of next operation
 
     """
+
     def __init__(self, operations):
         super().__init__(operations)
         self.next_start = None
@@ -187,7 +188,7 @@ class InlineFormatter(helpers.CursorIterator):
         except StopIteration:
             pass
 
-    def _get_tag_of_operation(self,  operation):
+    def _get_tag_of_operation(self, operation):
         """Maps an inline formatting operation to corresponding HTML tags
 
         This should probably not be used directly. Instead, use _calculate_operation_tags() which calls this method.

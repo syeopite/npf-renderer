@@ -1,9 +1,9 @@
 """Miscellaneous helper functions and objects"""
-import abc
 
 
 class CursorIterator:
     """Allows iterating through some iterable one-by-one with an extra peek() method """
+
     def __init__(self, iterable):
         self.__iterable = iterable
         self.__iterable_iter = iter(iterable)

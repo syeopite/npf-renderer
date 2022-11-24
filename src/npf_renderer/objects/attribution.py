@@ -1,4 +1,3 @@
-import enum
 from typing import NamedTuple, List, Optional, Union
 
 from .media_objects import MediaObject

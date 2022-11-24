@@ -58,10 +58,10 @@ def parse_attribution(attribution_block):
                 url=attribution_block["url"],
                 post=attribution_block["post"]["id"],
                 blog=attribution.BlogAttribution(
-                        uuid=blog["uuid"],
-                        url=blog.get("url"),
-                        name=blog.get("name")
-                     )
+                    uuid=blog["uuid"],
+                    url=blog.get("url"),
+                    name=blog.get("name")
+                )
             )
 
         case "link":
@@ -102,6 +102,3 @@ def parse_attribution(attribution_block):
                 display_text=display_text,
                 logo=logo
             )
-
-
-

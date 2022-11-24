@@ -23,4 +23,3 @@ class RowLayout(NamedTuple):
 class Rows(NamedTuple):
     rows: Sequence[RowLayout]
     truncate_after: Optional[int] = None
-

@@ -1,4 +1,4 @@
-from . format import format_content
+from .format import format_content
 from .parse import Parser
 
 
