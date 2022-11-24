@@ -70,6 +70,7 @@ link_attribution = (
 
     dominate.tags.div(
         dominate.tags.a(
+            "example.com",
             href="https://example.com",
         ),
         cls="link-attribution"
