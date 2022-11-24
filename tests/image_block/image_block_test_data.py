@@ -322,7 +322,25 @@ gif_image_block_with_link_attribution = (
         )],
         colors=["15120b", "2d3e47"],
         attribution=objects.attribution.LinkAttribution(url="https://davidragifs.com")
-    )]
+    )],
+
+    format_constructor(
+        dominate.tags.img(
+            srcset="https://64.media.tumblr.com/0655920c23ca997bf6145c32bda00cc5/14ab5a4c91df05c8-c8/s500x750"
+                   "/23f1c831d79fb51b56bbd52ae7d8c03336fd6f25.gifv 500w",
+            cls="image",
+            sizes="(max-width: 540px) 100vh, 540px",
+            alt="image",
+        ),
+
+        dominate.tags.div(
+            dominate.tags.a(
+                "davidragifs.com",
+                href="https://davidragifs.com",
+            ),
+            cls="link-attribution"
+        )
+    ),
 )
 
 

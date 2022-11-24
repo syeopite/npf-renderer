@@ -1,5 +1,7 @@
 import dominate.tags
 
+from . import attribution
+
 
 def create_srcset(media_blocks, url_handler):
     """Renders an array of media blocks into a usable srcset data. Contains the content's srcset and also poster's
@@ -42,6 +44,16 @@ def format_image(image_block, row_length=1, url_handler=None):
             sizes=f"(max-width: 540px) {int(100/row_length)}vh, {int(540/row_length)}px"
         )
     )
+
+    # Add attribution HTML
+    if attr := image_block.attribution:
+        if isinstance(attr, attribution.attribution.LinkAttribution):
+            container.add(attribution.format_link_attribution(attr, url_handler))
+        elif isinstance(attr, attribution.attribution.PostAttribution):
+            pass
+        else:
+            # TODO Add "Unsupported Attribution HTML"
+            raise RuntimeError
 
     # Similar to the reason above, we won't be able to hide the poster image once the main content loads.
     # if poster_srcset:
