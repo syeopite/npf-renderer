@@ -45,15 +45,15 @@ def test_image_block_url_replacement_format():
         if url.hostname.endswith("69.media.tumblr.com"):
             return url._replace(netloc="example.com").geturl()
 
-    parser = Parser(test_data.image_block_with_replaced_link_attribution[0])
+    parser = Parser(test_data.image_block_with_replaced_link[0])
     parsed_results = parser.parse()
 
     formatted_result = format.format_content(parsed_results, url_handler=url_handler)
 
     logging.info(f"Formatted: {formatted_result}")
-    logging.info(f"Answer: {test_data.image_block_with_replaced_link_attribution[2]}")
+    logging.info(f"Answer: {test_data.image_block_with_replaced_link[2]}")
 
-    assert str(formatted_result) == str(test_data.image_block_with_replaced_link_attribution[2])
+    assert str(formatted_result) == str(test_data.image_block_with_replaced_link[2])
 
 # TODO
 #

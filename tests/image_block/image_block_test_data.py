@@ -326,7 +326,7 @@ gif_image_block_with_link_attribution = (
 )
 
 
-image_block_with_replaced_link_attribution = (
+image_block_with_replaced_link = (
     [
         {
             "type": "image",
