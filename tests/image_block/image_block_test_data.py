@@ -273,7 +273,28 @@ gif_image_block_with_post_attribution = (
                 uuid="t:SX31hFaWHA_312_df"
             )
         )
-    )]
+    )],
+
+    format_constructor(
+        dominate.tags.img(
+            srcset="https://64.media.tumblr.com/s400x600/blahblahblah.gifv 357w, "
+                   "https://64.media.tumblr.com/s250x400/blahblahblah.gifv 250w",
+            cls="image",
+            sizes="(max-width: 540px) 100vh, 540px",
+            alt="image",
+        ),
+
+        dominate.tags.div(
+            dominate.tags.a(
+                "From ",
+                dominate.tags.b(
+                    "example-blog",
+                ),
+                href="https://example-blog.tumblr.com/post/1234567890/example-gif-post",
+            ),
+            cls="post-attribution"
+        )
+    ),
 )
 
 

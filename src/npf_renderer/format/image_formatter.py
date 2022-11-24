@@ -50,7 +50,7 @@ def format_image(image_block, row_length=1, url_handler=None):
         if isinstance(attr, attribution.attribution.LinkAttribution):
             container.add(attribution.format_link_attribution(attr, url_handler))
         elif isinstance(attr, attribution.attribution.PostAttribution):
-            pass
+            container.add(attribution.format_post_attribution(attr, url_handler))
         else:
             # TODO Add "Unsupported Attribution HTML"
             raise RuntimeError

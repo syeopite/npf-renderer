@@ -60,10 +60,8 @@ def test_gif_image_block_with_link_attribution_format():
     helper_function(test_data.gif_image_block_with_link_attribution[0],
                     test_data.gif_image_block_with_link_attribution[2])
 
-# TODO
-#
-#
-# def test_gif_image_block_with_post_attribution_format():
-#     helper_function(test_data.gif_image_block_with_post_attribution[0],
-#                     test_data.gif_image_block_with_post_attribution[1])
-#
+
+def test_gif_image_block_with_post_attribution_format():
+    helper_function(test_data.gif_image_block_with_post_attribution[0],
+                    test_data.gif_image_block_with_post_attribution[2])
+
