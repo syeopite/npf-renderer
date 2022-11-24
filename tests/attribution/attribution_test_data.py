@@ -1,3 +1,5 @@
+import dominate.tags
+
 from npf_renderer.objects import attribution
 
 
@@ -64,6 +66,13 @@ link_attribution = (
 
     attribution.LinkAttribution(
         url="https://example.com",
+    ),
+
+    dominate.tags.div(
+        dominate.tags.a(
+            href="https://example.com",
+        ),
+        cls="link-attribution"
     )
 )
 
