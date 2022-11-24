@@ -54,6 +54,17 @@ post_attribution = (
             url="https://example.tumblr.com",
             uuid="t:SN32hxaWHi312_32_df"
         )
+    ),
+
+    dominate.tags.div(
+        dominate.tags.a(
+            "From ",
+            dominate.tags.b(
+                "example"
+            ),
+            href="https://example.tumblr.com/post/123456789123/example-post-slug-here",
+        ),
+        cls="post-attribution"
     )
 )
 

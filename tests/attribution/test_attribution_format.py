@@ -33,3 +33,7 @@ def helper_function(raw, answer, url_handler=None):
 
 def test_link_attribution_format():
     helper_function(attribution_test_data.link_attribution[0], attribution_test_data.link_attribution[2])
+
+
+def test_post_attribution_format():
+    helper_function(attribution_test_data.post_attribution[0], attribution_test_data.post_attribution[2])
