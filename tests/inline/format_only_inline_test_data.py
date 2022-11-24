@@ -5,7 +5,7 @@ As the formatter is far more complex than the parser, it needs more tests.
 
 from dominate import tags
 
-connected_back_to_back_inline_format_test = (
+connected_back_to_back_format_test = (
     [
         {
             "type": "text",
@@ -41,7 +41,7 @@ connected_back_to_back_inline_format_test = (
     ),
 )
 
-back_to_back_inline_format_test = (
+back_to_back_format_test = (
     [
         {
             "type": "text",
@@ -852,7 +852,7 @@ same_index_with_other_overlap_test = (
 )
 
 
-inline_link_url_handler_test_data = (
+link_url_handler_test_data = (
     [
         {
             "type": "text",
