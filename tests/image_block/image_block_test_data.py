@@ -78,7 +78,7 @@ basic_image_block = (
                        ".jpg 540w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
                        "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg 250w",
                 alt="Sonic the Hedgehog and friends",
-                cls="image",
+                cls="image", loading="lazy",
                 sizes="(max-width: 540px) 100vh, 540px",
             ), cls="image-container"),
 
@@ -127,7 +127,7 @@ basic_gif_image_block = (
         dominate.tags.img(
             srcset="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/"
                    "tumblr_nshp8oVOnV1rg0s9xo1_250.gif 250w",
-            cls="image",
+            cls="image", loading="lazy",
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
@@ -172,7 +172,7 @@ image_block_with_color_attr = (
         dominate.tags.img(
             srcset="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/"
                    "tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg 1280w",
-            cls="image",
+            cls="image", loading="lazy",
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
@@ -226,7 +226,7 @@ gif_image_block_with_poster = (
         dominate.tags.img(
             srcset="https://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/"
                    "tumblr_nshp8oVOnV1rg0s9xo1_500.gif 500w",
-            cls="image",
+            cls="image", loading="lazy",
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
@@ -279,7 +279,7 @@ gif_image_block_with_post_attribution = (
         dominate.tags.img(
             srcset="https://64.media.tumblr.com/s400x600/blahblahblah.gifv 357w, "
                    "https://64.media.tumblr.com/s250x400/blahblahblah.gifv 250w",
-            cls="image",
+            cls="image", loading="lazy",
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
@@ -349,7 +349,7 @@ gif_image_block_with_link_attribution = (
         dominate.tags.img(
             srcset="https://64.media.tumblr.com/0655920c23ca997bf6145c32bda00cc5/14ab5a4c91df05c8-c8/s500x750"
                    "/23f1c831d79fb51b56bbd52ae7d8c03336fd6f25.gifv 500w",
-            cls="image",
+            cls="image", loading="lazy",
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
@@ -434,7 +434,7 @@ image_block_with_replaced_link = (
                        ".jpg 540w, http://example.com/b06fe71cc4ab47e93749df060ff54a90"
                        "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg 250w",
                 alt="Sonic the Hedgehog and friends",
-                cls="image",
+                cls="image", loading="lazy",
                 sizes="(max-width: 540px) 100vh, 540px",
             ), cls="image-container"),
 

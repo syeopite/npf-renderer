@@ -40,7 +40,7 @@ def format_image(image_block, row_length=1, url_handler=None):
     container.add(
         dominate.tags.img(
             srcset=", ".join(create_srcset(image_block.media, url_handler)),
-            cls="image",
+            cls="image", loading="lazy",
             alt=image_block.alt_text or "image",
             sizes=f"(max-width: 540px) {int(100 / row_length)}vh, {int(540 / row_length)}px"
         )

@@ -42,7 +42,7 @@ basic_rows_layout_example = (
                     dominate.tags.div(
                         dominate.tags.img(
                             srcset="https://example.com/example-image-1.png 540w",
-                            cls="image",
+                            cls="image", loading="lazy",
                             sizes="(max-width: 540px) 50vh, 270px",
                             alt="image",
                         ),
@@ -55,7 +55,7 @@ basic_rows_layout_example = (
                     dominate.tags.div(
                         dominate.tags.img(
                             srcset="https://example.com/example-image-2.png 540w",
-                            cls="image",
+                            cls="image", loading="lazy",
                             sizes="(max-width: 540px) 50vh, 270px",
                             alt="image",
                         ),
@@ -72,7 +72,7 @@ basic_rows_layout_example = (
                     dominate.tags.div(
                         dominate.tags.img(
                             srcset="https://example.com/example-image-3.png 540w",
-                            cls="image",
+                            cls="image", loading="lazy",
                             sizes="(max-width: 540px) 100vh, 540px",
                             alt="image",
                         ),
