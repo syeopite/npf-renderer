@@ -1,8 +1,13 @@
 BASIC_LAYOUT_CSS = """
-.post {
+.post-body {
   display: flex;
   flex-direction: column;
   max-width: 540px;
+  margin: 0;
+}
+
+.post-body * {
+  margin: 0
 }
 
 .layout-row {
@@ -10,10 +15,6 @@ BASIC_LAYOUT_CSS = """
   flex-direction: row;
   gap: 4px;
   margin: 5px;
-}
-
-.layout-row > * {
-  margin: 0;
 }
 
 img {
