@@ -24,7 +24,7 @@ standard_test = (
             tags.span("some ", tags.small("small", cls="inline-small"), " text", cls="inline-formatted-content"),
             cls="text-block",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -70,7 +70,7 @@ link_test = (
             ),
             cls="text-block",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 mention_test = (
@@ -118,7 +118,7 @@ mention_test = (
             ),
             cls="text-block",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -150,7 +150,7 @@ color_test = (
             ),
             cls="text-block",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -197,7 +197,7 @@ test_overlapping = (
             ),
             cls="text-block",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -284,6 +284,6 @@ test_total_overlapping = (
             ),
             cls="text-block",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )

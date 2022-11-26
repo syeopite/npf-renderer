@@ -5,7 +5,7 @@ from npf_renderer import objects
 
 def format_constructor(*children):
     return dominate.tags.div(
-        dominate.tags.figure(dominate.tags.div(*children, cls="image-container"), cls="image-block"), cls="post"
+        dominate.tags.figure(dominate.tags.div(*children, cls="image-container"), cls="image-block"), cls="post-body"
     )
 
 
@@ -90,7 +90,7 @@ basic_image_block = (
             cls="image-block"
         ),
 
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -446,6 +446,6 @@ image_block_with_replaced_link = (
             cls="image-block"
         ),
 
-        cls="post"
+        cls="post-body"
     )
 )

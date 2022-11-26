@@ -9,7 +9,7 @@ simple_test = (  # Basic Example
             text="Hello world!",
         )
     ],
-    tags.div(tags.p("Hello world!", cls="text-block"), cls="post"),
+    tags.div(tags.p("Hello world!", cls="text-block"), cls="post-body"),
 )
 
 longer_and_with_empty_string_test = (  # Empty Space Test
@@ -29,7 +29,7 @@ longer_and_with_empty_string_test = (  # Empty Space Test
         tags.p("ello!", cls="text-block"),
         tags.p("", cls="text-block"),
         tags.p("my name is cyle!", cls="text-block"),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -69,7 +69,7 @@ subtype_string_test = (
             "We can choose to embrace this moment courageously, or we may choose to cower in fear.",
             cls="text-block",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -120,7 +120,7 @@ subtype_string_test_2 = (
             tags.li("Death, which is uncountable on this list.", cls="text-block unordered-list-item"),
             cls="unordered-list",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -222,7 +222,7 @@ subtype_and_indent_level_test = (
             tags.li("First level: Pears", cls="text-block ordered-list-item"),
             cls="ordered-list",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -502,6 +502,6 @@ top_level_list_with_children_merging_test_data = (
 
             cls="unordered-list"
         ),
-        cls="post"
+        cls="post-body"
     ),
 )

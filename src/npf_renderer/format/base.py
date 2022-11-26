@@ -29,7 +29,7 @@ class Formatter(helpers.CursorIterator):
 
         self.url_handler = url_handler
 
-        self.post = dominate.tags.div(cls="post")
+        self.post = dominate.tags.div(cls="post-body")
 
     def _format_text(self, block):
         """Formats TextBlock(s) into usable HTML code"""

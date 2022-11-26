@@ -84,7 +84,7 @@ basic_rows_layout_example = (
                 cls="layout-row"
             ),
 
-            cls="post")
+            cls="post-body")
     )
 )
 

@@ -37,7 +37,7 @@ connected_back_to_back_format_test = (
             ),
             cls="text-block indented inline-formatted-block",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -77,7 +77,7 @@ back_to_back_format_test = (
             ),
             cls="text-block indented inline-formatted-block",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -108,7 +108,7 @@ long_space_in_between_format_test = (
             ),
             cls="text-block indented inline-formatted-block",
         ),
-        cls="post",
+        cls="post-body",
     ),
 )
 
@@ -145,7 +145,7 @@ second_has_lower_end_index_test = (
             cls="text-block indented inline-formatted-block",
         ),
 
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -189,7 +189,7 @@ second_has_lower_end_index_test_2 = (
             cls="text-block indented inline-formatted-block",
         ),
 
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -240,7 +240,7 @@ overlapping_same_area_test_data = (
             ),
             cls="text-block indented inline-formatted-block"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -282,7 +282,7 @@ overlapping_same_start_different_end_data = (
             ),
             cls="text-block indented inline-formatted-block"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -340,7 +340,7 @@ interrupted_same_indices_overlapping = (
             ),
             cls="text-block indented inline-formatted-block"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -396,7 +396,7 @@ interrupted_overlap_test = (
             ),
             cls="text-block heading1 inline-formatted-block"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -462,7 +462,7 @@ interrupted_overlap_test_2 = (
             ),
             cls="text-block heading1 inline-formatted-block"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -549,7 +549,7 @@ interrupted_overlap_test_3 = (
             ),
             cls="text-block heading1 inline-formatted-block"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -646,7 +646,7 @@ interrupted_overlap_test_4 = (
             ),
             cls="text-block heading1 inline-formatted-block"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -710,7 +710,7 @@ interrupted_overlap_test_5 = (
             ),
             cls="text-block heading1 inline-formatted-block"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -794,7 +794,7 @@ interrupted_overlap_test_6 = (
             ),
             cls="text-block heading1 inline-formatted-block"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -847,7 +847,7 @@ same_index_with_other_overlap_test = (
             ),
             cls="text-block heading1 inline-formatted-block"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
 
@@ -936,7 +936,7 @@ link_url_handler_test_data = (
 
             cls="unordered-list"
         ),
-        cls="post"
+        cls="post-body"
     ),
 
     # Replaced URL
@@ -985,6 +985,6 @@ link_url_handler_test_data = (
 
             cls="unordered-list"
         ),
-        cls="post"
+        cls="post-body"
     )
 )
