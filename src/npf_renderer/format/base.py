@@ -86,6 +86,7 @@ class Formatter(helpers.CursorIterator):
             self._pad()
 
         if self.layout:
+            blocks_in_layouts = []
             for layout in self.layout:
                 if isinstance(layout, objects.layouts.Rows):
                     for row in layout.rows:
@@ -103,6 +104,8 @@ class Formatter(helpers.CursorIterator):
                                 case _:
                                     row_items.append(render_method(*arguments))
 
+                            blocks_in_layouts.append(index)
+
                         if not row_items:
                             continue
 
@@ -110,6 +113,21 @@ class Formatter(helpers.CursorIterator):
                         self.post.add(row_tag)
 
                         [row_tag.add(i) for i in row_items]
+
+            # Edge case:
+            # Sometimes only an "ask" layout is specified. In those circumstances the only thing we'll have added to our
+            # HTML is the content blocks that makes up the ask. So we'll have some special handling here to handle
+            # the leftovers that comes immediately after the ask.
+            if len(self.layout) == 1 and isinstance(self.layout[0], objects.layouts.AskLayout):
+                for index, instruction in enumerate(self.render_instructions):
+                    if index in blocks_in_layouts:
+                        continue
+                    if not instruction:
+                        continue
+
+                    render_method, arguments = instruction
+                    self.post.add(render_method(*arguments))
+
         else:
             for render_instructions in self.render_instructions:
                 if not render_instructions:

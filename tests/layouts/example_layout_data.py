@@ -203,6 +203,52 @@ layouts_with_ask_section = (
     ]
 )
 
+layouts_with_only_ask_section = (
+    {
+        "layouts": [
+            {
+                "type": "ask",
+                "blocks": [0, 1, 2],
+                "attribution": {
+                    "type": "blog",
+                    "url": "https://example.tumblr.com",
+                    "blog": {
+                        "name": "example",
+                        "url": "https://example.tumblr.com",
+                        "uuid": "t:SN32hxaWHi312_32_df"
+                    }
+                }
+            },
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [0]},
+                    {"blocks": [1]},
+                    {"blocks": [2]},
+
+                    {"blocks": [3]},
+                    {"blocks": [4, 5]},
+                ],
+
+                "truncate_after": 3
+            }
+        ]
+    },
+
+    [
+        layouts.AskLayout(
+            ranges=[0, 1, 2],
+            attribution=attribution.BlogAttribution(
+                name="example",
+                url="https://example.tumblr.com",
+                uuid="t:SN32hxaWHi312_32_df"
+            )
+
+        ),
+    ]
+)
+
+
 layouts_with_anon_ask_section = (
     {
         "layouts": [
