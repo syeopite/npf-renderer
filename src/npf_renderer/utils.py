@@ -31,11 +31,15 @@ img {
 }
 
 .ask-header {
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 .ask-body {
   margin-right: 20px;
+}
+
+.ask-content * {
+  margin-bottom: 10px;
 }
 
 .asker-avatar {
