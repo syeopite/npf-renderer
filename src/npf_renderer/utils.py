@@ -4,10 +4,15 @@ BASIC_LAYOUT_CSS = """
   flex-direction: column;
   max-width: 540px;
   margin: 0;
+  font-size: 16px;
 }
 
-.post-body * {
-  margin: 0
+.post-body > * {
+  margin: 8px;
+}
+
+.post-body .image-block {
+  margin: 0;
 }
 
 .layout-row {
@@ -25,6 +30,34 @@ BASIC_LAYOUT_CSS = """
 
 img {
   max-width: 100%;
+}
+
+/* Text blocks */
+
+.indented {
+  margin: 10px;
+  border-left: 3px solid rgba(0, 0, 0, 0.07);
+  padding-left: 10px;
+}
+
+.heading1 {
+font-size: 1.6em
+}
+
+.heading2 {
+font-size: 1.3em
+}
+
+.quote {
+  font-size: 26px;
+}
+
+.inline-small {
+  font-size: 12px;
+}
+
+.text-block a {
+  color: inherit;
 }
 
 /* Ask */
