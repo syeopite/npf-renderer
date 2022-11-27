@@ -21,4 +21,26 @@ img {
   max-width: 100%;
 }
 
+/* Ask */
+
+.ask {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.ask-header {
+  margin-bottom: 5px;
+}
+
+.ask-body {
+  margin-right: 20px;
+}
+
+.asker-avatar {
+  width: 48px;
+  height: 48px;
+}
+
 """

@@ -27,3 +27,9 @@ def format_post_attribution(attr: objects.attribution.PostAttribution, url_handl
         ),
         cls="post-attribution"
     )
+
+
+# See misc.format_ask()
+# -------
+# def format_ask_attribution():
+#   pass

@@ -1,6 +1,6 @@
 import dominate.tags
 
-from . import text, image
+from . import text, image, misc
 from .. import objects, helpers
 
 
@@ -79,7 +79,6 @@ class Formatter(helpers.CursorIterator):
 
     def format(self):
         """Renders the list of content blocks into HTML"""
-
         while self.next():
             instruction = self.__prepare_instruction_for_current_block()
             self.render_instructions.append(instruction)
@@ -92,6 +91,8 @@ class Formatter(helpers.CursorIterator):
                     for row in layout.rows:
                         row_items = []
                         for index in row.ranges:
+                            blocks_in_layouts.append(index)
+
                             render_instructions = self.render_instructions[index]
                             if not render_instructions:
                                 continue
@@ -104,8 +105,6 @@ class Formatter(helpers.CursorIterator):
                                 case _:
                                     row_items.append(render_method(*arguments))
 
-                            blocks_in_layouts.append(index)
-
                         if not row_items:
                             continue
 
@@ -113,20 +112,40 @@ class Formatter(helpers.CursorIterator):
                         self.post.add(row_tag)
 
                         [row_tag.add(i) for i in row_items]
+                elif isinstance(layout, objects.layouts.AskLayout):
+                    layout_items = []
+                    for index in layout.ranges:
+                        blocks_in_layouts.append(index)
+
+                        render_instructions = self.render_instructions[index]
+                        if not render_instructions:
+                            continue
+
+                        render_method, arguments = render_instructions
+                        layout_items.append(render_method(*arguments))
+
+                    self.post.add(
+                        dominate.tags.div(
+                            misc.format_ask(self.url_handler, *layout_items, blog_attribution=layout.attribution),
+                            cls="layout-ask")
+                    )
+
+                else:
+                    continue  # TODO: Unsupported layout type error
 
             # Edge case:
             # Sometimes only an "ask" layout is specified. In those circumstances the only thing we'll have added to our
             # HTML is the content blocks that makes up the ask. So we'll have some special handling here to handle
             # the leftovers that comes immediately after the ask.
             if len(self.layout) == 1 and isinstance(self.layout[0], objects.layouts.AskLayout):
-                for index, instruction in enumerate(self.render_instructions):
+                for index, render_instructions in enumerate(self.render_instructions):
                     if index in blocks_in_layouts:
                         continue
-                    if not instruction:
+                    if not render_instructions:
                         continue
 
-                    render_method, arguments = instruction
-                    self.post.add(render_method(*arguments))
+                    func, args = render_instructions
+                    self.post.add(dominate.tags.div(func(*args), cls="layout-row"))
 
         else:
             for render_instructions in self.render_instructions:

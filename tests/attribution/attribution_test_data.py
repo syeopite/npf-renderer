@@ -29,6 +29,34 @@ blog_attribution = (
             attribution.MediaObject(width=256, height=256, url="https://example.com/256/example.png"),
             attribution.MediaObject(width=128, height=128, url="https://example.com/128/example.png"),
         ]
+    ),
+
+    dominate.tags.div(
+        dominate.tags.div(
+            dominate.tags.div(
+                dominate.tags.p(
+                    dominate.tags.a(
+                        dominate.tags.strong("example", cls="asker-name"),
+                        href="https://example.tumblr.com/",
+                        cls="asker-attribution"
+                    ),
+                    " asked:",
+                    cls="asker"
+                ),
+                cls="ask-header"
+            ),
+
+            dominate.tags.div(cls="ask-content"),
+
+            cls="ask-body"
+        ),
+
+        dominate.tags.img(
+            src="https://example.com/512/example.png",
+            cls="avatar asker-avatar image", loading="lazy"
+        ),
+
+        cls="ask"
     )
 )
 
