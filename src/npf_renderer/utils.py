@@ -17,6 +17,12 @@ BASIC_LAYOUT_CSS = """
   margin: 5px;
 }
 
+.image-container, img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 img {
   max-width: 100%;
 }
