@@ -86,4 +86,18 @@ font-size: 1.3em
   height: 48px;
 }
 
+/* Placeholders */
+.unsupported-content-block {
+  border: 3px solid rgba(0, 0, 0, 0.07);
+  padding: 0em 1em;
+}
+
+.unsupported-content-block-message * {
+  margin: 10px;
+}
+
+.unsupported-content-block h1 {
+  font-size: 1.6em
+}
+
 """

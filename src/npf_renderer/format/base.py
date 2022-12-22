@@ -1,7 +1,7 @@
 import dominate.tags
 
 from . import text, image, misc
-from .. import objects, helpers
+from .. import objects, helpers, exceptions
 
 
 def _count_nested(block):
@@ -29,6 +29,8 @@ class Formatter(helpers.CursorIterator):
 
         self.url_handler = url_handler
 
+        self.has_render_error = False
+
         self.post = dominate.tags.div(cls="post-body")
 
     def _format_text(self, block):
@@ -47,6 +49,18 @@ class Formatter(helpers.CursorIterator):
             list_tag.add(self._format_text(blk))
 
         return list_tag
+
+    def format_unsupported(self, block):
+        """Formats a placeholder for unsupported NPF types"""
+        self.has_render_error = True
+
+        with dominate.tags.div(cls="unsupported-content-block") as unsupported:
+            with dominate.tags.div(cls="unsupported-content-block-message"):
+                dominate.tags.h1("Unsupported content placeholder")
+                dominate.tags.p(f"Hello! I'm a placeholder for the unsupported \"{block.type}\" type NPF content block."
+                                f" Please report me!")
+
+        return unsupported
 
     def _format_image(self, block, row_length=1):
         """Renders an ImageBlock into HTML"""
@@ -70,6 +84,8 @@ class Formatter(helpers.CursorIterator):
                 return self._format_list, (self.current,)
             case objects.image.ImageBlock():
                 return self._format_image, (self.current,)
+            case objects.unsupported.Unsupported():
+                return self.format_unsupported, (self.current,)
             case _:  # Unreachable
                 raise RuntimeError
 
@@ -154,6 +170,9 @@ class Formatter(helpers.CursorIterator):
 
                 func, args = render_instructions
                 self.post.add(func(*args))
+
+        if self.has_render_error:
+            raise exceptions.RenderErrorDisclaimerError("Rendered post contains errors", rendered_result=self.post)
 
         return self.post
 

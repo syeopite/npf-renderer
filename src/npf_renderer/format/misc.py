@@ -57,5 +57,3 @@ def format_ask(url_handler: Callable, *args: dominate.tags.dom_tag,
     return ask
 
 
-
-

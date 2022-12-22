@@ -7,7 +7,7 @@ results = parser.parse()
 
 from . import misc
 from .. import helpers
-from ..objects import inline, text_block, image
+from ..objects import inline, text_block, image, unsupported
 
 
 class Parser(helpers.CursorIterator):
@@ -226,6 +226,8 @@ class Parser(helpers.CursorIterator):
             case "image":
                 block = self._parse_image_block()
                 self.parsed_result.append(block)
+            case _:
+                self.parsed_result.append(unsupported.Unsupported(self.current["type"]))
 
     def parse(self):
         """Begins the parsing chain and returns the final list of parsed objects"""

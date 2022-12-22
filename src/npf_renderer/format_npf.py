@@ -1,5 +1,6 @@
 from .format import format_content
 from .parse import Parser, LayoutParser
+from . import exceptions
 
 
 def format_npf(contents, layouts=None, trails=None, url_handler=None):
@@ -7,4 +8,12 @@ def format_npf(contents, layouts=None, trails=None, url_handler=None):
     if layouts:
         layouts = LayoutParser(layouts).parse()
 
-    return format_content(contents, layouts, trails, url_handler)
+    try:
+        contains_render_errors = False
+        formatted = format_content(contents, layouts, trails, url_handler)
+    except exceptions.RenderErrorDisclaimerError as e:
+        contains_render_errors = True
+        formatted = e.rendered_result
+        assert formatted is not None
+
+    return contains_render_errors, formatted
