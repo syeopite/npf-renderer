@@ -5,6 +5,7 @@ BASIC_LAYOUT_CSS = """
   max-width: 540px;
   margin: 0;
   font-size: 16px;
+  white-space: pre-wrap;
 }
 
 .post-body > * {
