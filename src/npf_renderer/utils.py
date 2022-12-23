@@ -6,6 +6,7 @@ BASIC_LAYOUT_CSS = """
   margin: 0;
   font-size: 16px;
   white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .post-body > * {
@@ -76,6 +77,7 @@ font-size: 1.3em
 
 .ask-body {
   margin-right: 20px;
+  width: 540px;
 }
 
 .ask-content * {
@@ -85,6 +87,7 @@ font-size: 1.3em
 .asker-avatar {
   width: 48px;
   height: 48px;
+  border-radius: 2px;
 }
 
 /* Placeholders */
