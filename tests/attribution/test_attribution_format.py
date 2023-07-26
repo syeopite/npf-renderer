@@ -17,8 +17,8 @@ def helper_function(raw, answer, url_handler=None):
     match parsed_results:
         case misc.attribution.BlogAttribution():
             formatted_results = format_ask(url_handler, blog_attribution=parsed_results)
-        # case misc.attribution.AppAttribution:
-        #     pass
+        case misc.attribution.AppAttribution():
+            formatted_results = formatter.format_app_attribution(parsed_results, url_handler)
         case misc.attribution.LinkAttribution():
             formatted_results = formatter.format_link_attribution(parsed_results, url_handler)
         case misc.attribution.PostAttribution():
@@ -43,3 +43,6 @@ def test_post_attribution_format():
 # More of an ask layouts test than blog attribution.
 def test_blog_attribution_format():
     helper_function(attribution_test_data.blog_attribution[0], attribution_test_data.blog_attribution[2])
+
+def test_app_attribution_format():
+    helper_function(attribution_test_data.app_attribution[0], attribution_test_data.app_attribution[2])

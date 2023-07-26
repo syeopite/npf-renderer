@@ -145,5 +145,16 @@ app_attribution = (
             width=128,
             height=128
         )
+    ),
+
+     dominate.tags.div(
+        dominate.tags.a(
+            f"View on ",
+            dominate.tags.b(
+                "SoundCloud"
+            ),
+            href="https://soundcloud.com/example/example-track",
+        ),
+        cls="post-attribution"
     )
 )

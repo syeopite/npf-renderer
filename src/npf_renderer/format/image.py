@@ -52,6 +52,8 @@ def format_image(image_block, row_length=1, url_handler=None):
             container.add(attribution.format_link_attribution(attr, url_handler))
         elif isinstance(attr, objects.attribution.PostAttribution):
             container.add(attribution.format_post_attribution(attr, url_handler))
+        elif isinstance(attr, objects.attribution.AppAttribution):
+            container.add(attribution.format_app_attribution(attr, url_handler))
         else:
             # TODO Add "Unsupported Attribution HTML"
             raise RuntimeError

@@ -50,3 +50,8 @@ def test_gif_image_block_with_post_attribution():
     helper_function(test_data.gif_image_block_with_post_attribution[0],
                     test_data.gif_image_block_with_post_attribution[1])
 
+def test_image_block_with_app_attribution():
+    helper_function(test_data.image_block_with_app_attribution[0],
+                    test_data.image_block_with_app_attribution[1])
+
+

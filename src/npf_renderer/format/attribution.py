@@ -28,6 +28,18 @@ def format_post_attribution(attr: objects.attribution.PostAttribution, url_handl
         cls="post-attribution"
     )
 
+def format_app_attribution(attr: objects.attribution.AppAttribution, url_handler: Callable):
+    return dominate.tags.div(
+        dominate.tags.a(
+            f"View on ",
+            dominate.tags.b(
+                attr.app_name
+            ),
+            href=url_handler(attr.url),
+        ),
+        cls="post-attribution"
+    )
+
 
 # See misc.format_ask()
 # -------

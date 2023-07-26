@@ -364,6 +364,174 @@ gif_image_block_with_link_attribution = (
     ),
 )
 
+image_block_with_app_attribution = (
+    [
+        {
+            "type": "image",
+            "media": [
+                {
+                    "mediaKey": "23ca9c69bda0020ca4c91df05c8-c8",
+                    "type": "image/jpeg",
+                    "width": 779,
+                    "height": 723,
+                    "url": "https://example.com/image/s1280x1920.jpg",
+                    "hasOriginalDimensions": True
+                },
+
+                {
+                    "mediaKey": "269bda0020ca4c91df05c8a00f5c8-c8",
+                    "type": "image/jpeg",
+                    "width": 640,
+                    "height": 594,
+                    "url": "https://example.com/image/s640x960.jpg",
+                },
+            ]
+        },
+
+        {
+            "type": "text",
+            "text": "Check out my commission from author! Please follow them here https://twitter.com/example",
+            "formatting": [
+                {
+                    "type": "link",
+                    "start": 61,
+                    "end": 88,
+                    "url": "https://twitter.com/example"
+                }
+            ]
+        },
+
+        {
+            "type": "image",
+            "media": [
+                {
+                    "mediaKey": "0655920c23ca997bf6145c32bda00cc5:14ab5a4c91df05c8-c8",
+                    "type": "image/jpeg",
+                    "width": 1096,
+                    "height": 1428,
+                    "url": "https://example.com/image/s1280x1920/2.jpg",
+                    "hasOriginalDimensions": True
+                },
+            ],
+            "attribution": {
+                "type": "app",
+                "appName": "Twitter",
+                "url": "https://twitter.com/example/status/1234567",
+                "displayText": "View on Twitter"
+
+            },
+            "colors": {
+                "c0": "ff2ffe",
+                "c1": "424242",
+                "c2": "083808",
+                "c3": "b5b6b7",
+            },
+        }
+    ],
+    [
+        objects.image.ImageBlock(
+            media=[
+                objects.media_objects.MediaObject(
+                    url='https://example.com/image/s1280x1920.jpg',
+                    type='image/jpeg',
+                    width=779,
+                    height=723,
+                    has_original_dimensions=True
+                ),
+                objects.media_objects.MediaObject(
+                    url='https://example.com/image/s640x960.jpg',
+                    type='image/jpeg',
+                    width=640,
+                    height=594,
+                ),
+            ],
+        ),
+
+        objects.text_block.TextBlock(
+            text="Check out my commission from author! Please follow them here https://twitter.com/example",
+            inline_formatting= [
+                objects.inline.Link(
+                    type=objects.inline.FMTTypes.LINK,
+                    start=61,
+                    end=88,
+                    url="https://twitter.com/example"
+                )
+            ]
+        ),
+
+        objects.image.ImageBlock(
+            media=[
+                objects.media_objects.MediaObject(
+                    url='https://example.com/image/s1280x1920/2.jpg',
+                    type='image/jpeg',
+                    width=1096,
+                    height=1428,
+                    has_original_dimensions=True,
+                ),
+            ],
+
+            colors=["ff2ffe", "424242", "083808", "b5b6b7"],
+
+            attribution=objects.attribution.AppAttribution(
+                url="https://twitter.com/example/status/1234567",
+                app_name="Twitter",
+                display_text="View on Twitter"
+            ),
+        ),
+    ],
+
+    dominate.tags.div(
+        dominate.tags.figure(dominate.tags.div(
+            dominate.tags.img(
+                srcset="https://example.com/image/s1280x1920.jpg "
+                       "779w, https://example.com/image/s640x960.jpg 640w",
+                cls="image", loading="lazy",
+                sizes="(max-width: 540px) 100vh, 540px",
+                alt="image",
+            ), cls="image-container"),
+            cls="image-block"
+        ),
+
+        dominate.tags.p(
+            dominate.tags.span(
+                "Check out my commission from author! Please follow them here ",
+                dominate.tags.a("https://twitter.com/example", href="https://twitter.com/example", cls="inline-link"),
+                cls="inline-formatted-content",
+            ),
+            cls="text-block",
+        ),
+
+        dominate.tags.figure(
+            dominate.tags.div(
+                dominate.tags.img(
+                    srcset="https://example.com/image/s1280x1920/2.jpg 1096w",
+                    cls="image", loading="lazy",
+                    sizes="(max-width: 540px) 100vh, 540px",
+                    alt="image"
+                ),
+
+                dominate.tags.div(
+                    dominate.tags.a(
+                        "View on ",
+                        dominate.tags.b(
+                            "Twitter"
+                        ),
+                        href="https://twitter.com/example/status/1234567"
+                    ),
+                    cls="post-attribution"
+                ),
+
+                cls="image-container"
+            ),
+            cls="image-block"
+        ),
+
+
+        cls="post-body"
+    )
+
+)
+
 
 image_block_with_replaced_link = (
     [
