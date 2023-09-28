@@ -9,6 +9,7 @@ dependencies = [
 [project.optional-dependencies]
 # A prettyprinter libary for debugging purposes
 debug = ["prettyprinter==0.18.0"]
+dev = ["pytest==7.4.2"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
