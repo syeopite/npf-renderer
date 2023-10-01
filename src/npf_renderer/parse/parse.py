@@ -7,7 +7,7 @@ results = parser.parse()
 
 from . import misc
 from .. import helpers
-from ..objects import inline, text_block, image, unsupported
+from ..objects import inline, text_block, image, link_block, unsupported
 
 
 class Parser(helpers.CursorIterator):
@@ -214,6 +214,46 @@ class Parser(helpers.CursorIterator):
             attribution=attribution
         )
 
+    def _parse_link_block(self):
+        """Parses a NPF Link Content Block into a LinkBlock NamedTuple"""
+        url = self.current["url"]
+
+        # Optional
+        title = self.current.get("title")
+        description = self.current.get("description")
+        author = self.current.get("author")
+        site_name = self.current.get("siteName")
+        if not site_name:  # Try snake case
+            site_name = self.current.get("site_name")
+
+
+        display_url = self.current.get("displayUrl")
+        if not display_url:  # Try snake case
+            display_url = self.current.get("display_url")
+        
+        if raw_poster := self.current.get("poster"):
+            if not isinstance(raw_poster, list):
+                raw_media_list = [raw_poster]
+            else:
+                raw_media_list = raw_poster
+
+            poster_media_object = []
+            for poster in raw_poster:
+                poster_media_object.append(misc.parse_media_block(poster))
+        else:
+            poster_media_object = None
+
+        return link_block.LinkBlock(
+            url=url,
+
+            title=title,
+            description=description,
+            author=author,
+            site_name=site_name,
+            display_url=display_url,
+            poster=poster_media_object
+        )
+
     def __parse_block(self):
         """Parses a content block and appends the result to self.parsed_result
 
@@ -225,6 +265,9 @@ class Parser(helpers.CursorIterator):
                 self.parsed_result.append(block)
             case "image":
                 block = self._parse_image_block()
+                self.parsed_result.append(block)
+            case "link":
+                block = self._parse_link_block()
                 self.parsed_result.append(block)
             case _:
                 self.parsed_result.append(unsupported.Unsupported(self.current["type"]))
