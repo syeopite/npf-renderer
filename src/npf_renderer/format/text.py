@@ -18,7 +18,7 @@ class TextFormatter:
     """An HTML renderer for the TextBlock object"""
 
     def __init__(self, text_block: objects.text_block.TextBlock, url_handler: Callable,
-                 layout=None, trails=None, create_list_element=True):
+                 layout=None, create_list_element=True):
         """Renders a TextBlock object into HTML
 
         You should probably not be using this class directly!

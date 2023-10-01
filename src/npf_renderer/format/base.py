@@ -15,7 +15,7 @@ def _count_nested(block):
 
 
 class Formatter(helpers.CursorIterator):
-    def __init__(self, content, layout=None, trails=None, url_handler=None):
+    def __init__(self, content, layout=None, url_handler=None):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
 
