@@ -259,6 +259,7 @@ class Parser(helpers.CursorIterator):
 
         Works by routing specific content types to corresponding parse methods
         """
+
         match self.current["type"]:
             case "text":
                 block = self._parse_text()

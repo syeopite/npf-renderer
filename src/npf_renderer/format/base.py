@@ -72,6 +72,66 @@ class Formatter(helpers.CursorIterator):
 
         return figure
 
+    def _format_link(self, block):
+        container = dominate.tags.div(cls="link-block")
+        anchor_content_wrapper = dominate.tags.a(href=self.url_handler(block.url), cls="link-block-link")
+        container.add(anchor_content_wrapper)
+
+        if block.poster:
+            poster_container = dominate.tags.div(cls="poster-container")
+            anchor_content_wrapper.add(poster_container)
+
+            srcset = ", ".join(image.create_srcset(block.poster, self.url_handler))
+
+            poster_container.add(
+                dominate.tags.img(
+                    srcset=srcset,
+                    alt=block.site_name or "Link block poster",
+                    sizes="(max-width: 540px) 100vh, 540px",
+                )
+            )
+
+            if block.title:
+                poster_container.add(
+                    dominate.tags.div(
+                        dominate.tags.span(dominate.util.text(block.title)), cls="link-block-title poster-overlay-text"
+                    )
+                )
+        elif block.title:
+            anchor_content_wrapper.add(
+                dominate.tags.div(
+                    dominate.tags.span(dominate.util.text(block.title)), cls="link-block-title"
+                )
+            )
+
+        link_block_description_container = dominate.tags.div(cls="link-block-description-container")
+        anchor_content_wrapper.add(link_block_description_container)
+
+        if block.description:
+            link_block_description_container.add(
+                dominate.tags.p(dominate.util.text(block.description), cls="link-block-description")
+            )
+
+        if block.site_name or block.author:
+            subtitles_div = dominate.tags.div(cls="link-block-subtitles")
+            link_block_description_container.add(subtitles_div)
+
+            subtitles = dominate.tags.span()
+            subtitles_div.add(subtitles)
+
+            if block.site_name:
+                subtitles.add(dominate.tags.span(dominate.util.text(block.site_name)))
+
+                # When an author name exists in addition to the site name then we add it both to the subtitles
+                # separated by a |
+                if block.author:
+                    subtitles.add(dominate.tags.span(dominate.util.text("|"), cls="site-name-author-separator"))
+                    subtitles.add(dominate.tags.span(dominate.util.text(block.author)))
+            else:
+                subtitles.add(dominate.tags.span(dominate.util.text(block.author)))
+
+        return container
+
     def __prepare_instruction_for_current_block(self):
         """Finds and returns the instruction (method) necessary to render a content block"""
         match self.current:
@@ -84,6 +144,8 @@ class Formatter(helpers.CursorIterator):
                 return self._format_list, (self.current,)
             case objects.image.ImageBlock():
                 return self._format_image, (self.current,)
+            case objects.link_block.LinkBlock():
+                return self._format_link, (self.current,)
             case objects.unsupported.Unsupported():
                 return self.format_unsupported, (self.current,)
             case _:  # Unreachable

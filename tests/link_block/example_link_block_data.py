@@ -1,5 +1,20 @@
+import dominate
+
 from npf_renderer import objects
 
+
+def format_constructor(url, *children):
+    return dominate.tags.div(
+        dominate.tags.div(
+            dominate.tags.a(
+                *children,
+                href=url,
+                cls="link-block-link"
+            ),
+            cls="link-block"
+        ),
+        cls="post-body"
+    )
 
 simple_link_block = (
     {"content": [{"type": "link", "url": "https://example.com"}]},
@@ -7,7 +22,11 @@ simple_link_block = (
         objects.link_block.LinkBlock(
             url="https://example.com"
         )
-    ]
+    ],
+
+    format_constructor("https://example.com",
+        dominate.tags.div(cls="link-block-description-container")
+    )
 )
 
 
@@ -18,7 +37,11 @@ link_block_with_title = (
             url="https://example.com",
             title="Example Domain"
         )
-    ]
+    ],
+    format_constructor("https://example.com",
+        dominate.tags.div(dominate.tags.span("Example Domain"), cls="link-block-title"),
+        dominate.tags.div(cls="link-block-description-container")
+    )
 )
 
 
@@ -29,7 +52,13 @@ link_block_with_description = (
             url="https://example.com",
             description="This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission."
         )
-    ]
+    ],
+    format_constructor("https://example.com", 
+        dominate.tags.div(
+            dominate.tags.p("This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.", cls="link-block-description"),
+            cls="link-block-description-container"
+        )
+    )
 )
 
 
@@ -41,7 +70,14 @@ link_block_with_title_and_description = (
             title="Example Domain",
             description="This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission."
         )
-    ]
+    ],
+    format_constructor("https://example.com",
+        dominate.tags.div(dominate.tags.span("Example Domain"), cls="link-block-title"),
+        dominate.tags.div(
+            dominate.tags.p("This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.", cls="link-block-description"),
+            cls="link-block-description-container"
+        )
+    )
 )
 
 
@@ -52,7 +88,13 @@ link_block_with_site_name = (
             url="https://example.com",
             site_name="Example Domain"
         )
-    ]
+    ],
+    format_constructor("https://example.com",
+        dominate.tags.div(
+            dominate.tags.div(dominate.tags.span(dominate.tags.span("Example Domain")), cls="link-block-subtitles"),
+            cls="link-block-description-container"
+        )
+    )
 )
 
 
@@ -64,7 +106,17 @@ link_block_with_site_name_and_author = (
             site_name="Example Domain",
             author="Example Author"
         )
-    ]
+    ],
+    format_constructor("https://example.com",
+        dominate.tags.div(
+            dominate.tags.div(dominate.tags.span(
+                dominate.tags.span("Example Domain"),
+                dominate.tags.span("|", cls="site-name-author-separator"),
+                dominate.tags.span("Example Author")
+            ), cls="link-block-subtitles"),
+            cls="link-block-description-container"
+        )
+    )
 )
 
 
@@ -88,7 +140,18 @@ link_block_with_poster = (
                 )
             ]
         )
-    ]
+    ],
+    format_constructor("https://example.com",
+        dominate.tags.div(
+            dominate.tags.img(
+                alt="Link block poster",
+                sizes="(max-width: 540px) 100vh, 540px",
+                srcset="https://example.com/image 1280w",
+            ),
+            cls="poster-container"
+        ),
+        dominate.tags.div(cls="link-block-description-container")
+    )
 )
 
 
@@ -126,5 +189,31 @@ link_block_with_all = (
             ]
 
         )
-    ]
+    ],
+
+    format_constructor("https://example.com",
+        dominate.tags.div(
+            dominate.tags.img(
+                alt="Example Domain",
+                sizes="(max-width: 540px) 100vh, 540px",
+                srcset="https://example.com/image 1280w",
+            ),
+
+            dominate.tags.div(
+                dominate.tags.span("Example Domain"),
+                cls="link-block-title poster-overlay-text"
+            ),
+
+            cls="poster-container"
+        ),
+        dominate.tags.div(
+            dominate.tags.p("This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.", cls="link-block-description"),
+            dominate.tags.div(dominate.tags.span(
+                dominate.tags.span("Example Domain"),
+                dominate.tags.span("|", cls="site-name-author-separator"),
+                dominate.tags.span("Example Author")
+            ), cls="link-block-subtitles"),
+            cls="link-block-description-container"
+        )
+    )
 )

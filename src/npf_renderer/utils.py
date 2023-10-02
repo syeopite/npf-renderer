@@ -62,6 +62,51 @@ font-size: 1.3em
   color: inherit;
 }
 
+/* Link Blocks */
+
+.link-block {
+  border: 1px;
+  border-style: solid;
+  border-color: rgba(0,0,0,0.4);
+}
+
+.poster-container {
+  position: relative;
+  display: flex;
+  height: 240px;
+  text-align: center;
+}
+
+.poster-overlay-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0,0,0,0.4);
+}
+
+.link-block-title {
+  margin: 20px 15px;
+  font-size: 1.5em;
+}
+
+.poster-overlay-text {
+  margin: 0;
+  color: #f1f1f1;
+}
+
+.link-block-description-container {
+  padding: 0 10px 15px 10px;
+}
+
+.site-name-author-separator {
+  margin: 0px 3px;
+}
+
 /* Ask */
 
 .ask {
