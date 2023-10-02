@@ -177,5 +177,5 @@ class Formatter(helpers.CursorIterator):
         return self.post
 
 
-def format_content(parsed_contents, layouts=None, trails=None, url_handler=None):
+def format_content(parsed_contents, layouts=None, url_handler=None):
     return Formatter(parsed_contents, layouts, url_handler=url_handler).format()
