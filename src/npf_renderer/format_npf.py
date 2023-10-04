@@ -3,7 +3,7 @@ from .parse import Parser, LayoutParser
 from . import exceptions
 
 
-def format_npf(contents, layouts=None, url_handler=None, 
+def format_npf(contents, layouts=None, *_, url_handler=None, 
                parser=Parser, layout_parser=LayoutParser, formatter=Formatter, 
                pretty_html=False):
     contents = parser(contents).parse()
