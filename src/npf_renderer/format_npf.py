@@ -3,14 +3,14 @@ from .parse import Parser, LayoutParser
 from . import exceptions
 
 
-def format_npf(contents, layouts=None, url_handler=None):
-    contents = Parser(contents).parse()
+def format_npf(contents, layouts=None, url_handler=None, parser=Parser, layout_parser=LayoutParser, formatter=Formatter):
+    contents = parser(contents).parse()
     if layouts:
-        layouts = LayoutParser(layouts).parse()
+        layouts = layout_parser(layouts).parse()
 
     try:
         contains_render_errors = False
-        formatted = Formatter(contents, layouts, url_handler).format()
+        formatted = formatter(contents, layouts, url_handler).format()
     except exceptions.RenderErrorDisclaimerError as e:
         contains_render_errors = True
         formatted = e.rendered_result
