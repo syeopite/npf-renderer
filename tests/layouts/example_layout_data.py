@@ -399,3 +399,85 @@ layouts_with_anon_ask_section = (
     )
 
 )
+
+# Because we merge list subtypes blocks together
+# We need to pad the amount of total blocks within the formatter
+# as to successfully arrange blocks in accordance to the layout given
+# by Tumblr
+
+with_list_content_list = [
+    content_list[0],
+    {"type": "text", "text": "item 1", "subtype": "unordered-list-item"},
+    {"type": "text", "text": "item 2", "subtype": "unordered-list-item"},
+    {"type": "text", "text": "item 3", "subtype": "unordered-list-item"},
+    {"type": "text", "text": "item 4", "subtype": "unordered-list-item"},
+    *content_list[1:],
+
+]
+
+layouts_in_content_with_lists = (
+    {
+        "layouts": [
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [0]},
+                    {"blocks": [1]},
+                    {"blocks": [2]},
+                    {"blocks": [3]},
+                    {"blocks": [4]},
+                    {"blocks": [5]},
+                    {"blocks": [6, 7]},
+                    {"blocks": [8, 9]},
+                ]
+            }
+        ]
+    },
+
+    [
+        layouts.Rows(
+            rows=[
+                layouts.RowLayout([0]),
+                layouts.RowLayout([1]),
+                layouts.RowLayout([2]),
+                layouts.RowLayout([3]),
+                layouts.RowLayout([4]),
+                layouts.RowLayout([5]),
+                layouts.RowLayout([6, 7]),
+                layouts.RowLayout([8, 9]),
+            ],
+        )
+    ],
+
+    dominate.tags.div(
+        dominate.tags.div(
+            dominate.tags.p("Hi there", cls="text-block"),
+            cls="layout-row"
+        ),
+
+        dominate.tags.div(
+            dominate.tags.ul(
+                dominate.tags.li("item 1", cls="text-block unordered-list-item"),
+                dominate.tags.li("item 2", cls="text-block unordered-list-item"),
+                dominate.tags.li("item 3", cls="text-block unordered-list-item"),
+                dominate.tags.li("item 4", cls="text-block unordered-list-item"),
+                cls="unordered-list"
+            ),
+            cls="layout-row"
+        ),
+
+        dominate.tags.div(generate_image_block_html(1, 1), cls="layout-row"),
+        dominate.tags.div(
+            generate_image_block_html(2, 2),
+            generate_image_block_html(3, 2),
+            cls="layout-row"
+        ),
+        dominate.tags.div(
+            generate_image_block_html(4, 2),
+            generate_image_block_html(5, 2),
+            cls="layout-row"
+        ),
+
+        cls="post-body"
+    )
+)

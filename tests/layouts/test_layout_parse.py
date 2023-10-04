@@ -46,3 +46,7 @@ def test_layouts_with_only_ask_section_parse():
 
 def test_layouts_with_anon_ask_section_parse():
     helper_function(data.layouts_with_anon_ask_section[0], data.layouts_with_anon_ask_section[1])
+
+
+def test_layouts_in_content_with_lists_parse():
+    helper_function(data.layouts_in_content_with_lists[0], data.layouts_in_content_with_lists[1])

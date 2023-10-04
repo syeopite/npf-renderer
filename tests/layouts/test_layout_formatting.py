@@ -5,8 +5,10 @@ from npf_renderer import format_npf
 import example_layout_data as data
 
 
-def helper_function(raw, answer):
-    has_error, formatted_result = format_npf(data.content_list, raw["layouts"])
+def helper_function(raw, answer, contents_list = data.content_list):
+    print(f"Contents: #{len(contents_list)}")
+
+    has_error, formatted_result = format_npf(contents_list, raw["layouts"])
 
     assert not has_error
 
@@ -32,3 +34,5 @@ def test_layouts_layouts_with_anon_ask_section_format():
     helper_function(data.layouts_with_anon_ask_section[0], data.layouts_with_anon_ask_section[2])
 
 
+def test_layouts_in_content_with_lists_format():
+    helper_function(data.layouts_in_content_with_lists[0], data.layouts_in_content_with_lists[2], data.with_list_content_list)

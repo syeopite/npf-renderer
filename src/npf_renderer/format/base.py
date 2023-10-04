@@ -140,7 +140,7 @@ class Formatter(helpers.CursorIterator):
                     self.current_context_padding = _count_nested(self.current)
                 return self._format_text, (self.current,)
             case objects.text_block.ListGrouping():
-                self.current_context_padding = len(self.current.group)
+                self.current_context_padding = (len(self.current.group) - 1)
                 return self._format_list, (self.current,)
             case objects.image.ImageBlock():
                 return self._format_image, (self.current,)
