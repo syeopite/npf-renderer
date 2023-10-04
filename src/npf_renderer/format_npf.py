@@ -16,4 +16,4 @@ def format_npf(contents, layouts=None, url_handler=None, parser=Parser, layout_p
         formatted = e.rendered_result
         assert formatted is not None
 
-    return contains_render_errors, formatted
+    return contains_render_errors, formatted.render()
