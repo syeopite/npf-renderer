@@ -8,7 +8,7 @@ from format_only_inline_test_data import *
 
 
 def helper_function(content, answer, url_handler=None):
-    has_error, formatted_result = format_npf(content["content"], url_handler=url_handler)
+    has_error, formatted_result = format_npf(content["content"], url_handler=url_handler, pretty_html=True)
 
     assert not has_error
 

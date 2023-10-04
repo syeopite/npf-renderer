@@ -7,7 +7,7 @@ from example_text_block_data import *
 
 
 def helper_function(content, answer):
-    has_error, formatted_result = format_npf(content["content"])
+    has_error, formatted_result = format_npf(content["content"], pretty_html=True)
 
     assert not has_error
 

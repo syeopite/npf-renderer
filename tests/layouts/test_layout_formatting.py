@@ -8,7 +8,7 @@ import example_layout_data as data
 def helper_function(raw, answer, contents_list = data.content_list):
     print(f"Contents: #{len(contents_list)}")
 
-    has_error, formatted_result = format_npf(contents_list, raw["layouts"])
+    has_error, formatted_result = format_npf(contents_list, raw["layouts"], pretty_html=True)
 
     assert not has_error
 

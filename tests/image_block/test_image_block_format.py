@@ -7,7 +7,7 @@ import image_block_test_data as test_data
 
 
 def helper_function(raw, answer, url_handler=None):
-    has_error, formatted_result = format_npf(raw, url_handler=url_handler)
+    has_error, formatted_result = format_npf(raw, url_handler=url_handler, pretty_html=True)
 
     assert not has_error
 
