@@ -1,1 +1,1 @@
-from .base import format_content
+from .base import Formatter

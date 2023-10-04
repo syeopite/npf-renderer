@@ -1,15 +1,13 @@
 import logging
 
-from npf_renderer.parse.parse import Parser
-from npf_renderer import format
+from npf_renderer import format_npf
 
 from example_link_block_data import *
 
 def helper_function(raw, answer):
-    parser = Parser(raw["content"])
-    parsed_results = parser.parse()
+    has_error, formatted_result = format_npf(raw["content"])
 
-    formatted_result = format.format_content(parsed_results)
+    assert not has_error
 
     logging.info(f"Formatted: {formatted_result}")
     logging.info(f"Answer: {answer}")

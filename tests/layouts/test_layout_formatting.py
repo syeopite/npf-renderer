@@ -1,21 +1,19 @@
 import logging
 
-import example_layout_data as data
-from npf_renderer import parse
+from npf_renderer import format_npf
 
-from npf_renderer.format.base import format_content
+import example_layout_data as data
 
 
 def helper_function(raw, answer):
-    parsed_layouts = parse.LayoutParser(raw["layouts"]).parse()
-    parsed_contents = parse.Parser(data.content_list).parse()
+    has_error, formatted_result = format_npf(data.content_list, raw["layouts"])
 
-    formatted_results = format_content(parsed_contents, parsed_layouts)
+    assert not has_error
 
-    logging.info(f"Formatted: {formatted_results}")
+    logging.info(f"Formatted: {formatted_result}")
     logging.info(f"Answer: {answer}")
 
-    assert str(formatted_results) == str(answer)
+    assert str(formatted_result) == str(answer)
 
 
 def test_basic_layout_format():

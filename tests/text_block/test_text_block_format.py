@@ -1,14 +1,15 @@
 import urllib.parse
 import logging
 
-from npf_renderer import parse, format
+from npf_renderer import format_npf
 
 from example_text_block_data import *
 
 
 def helper_function(content, answer):
-    parsed_results = parse.Parser(content["content"]).parse()
-    formatted_result = format.format_content(parsed_results)
+    has_error, formatted_result = format_npf(content["content"])
+
+    assert not has_error
 
     logging.info(f"Formatted: \n{formatted_result}\n")
     logging.info(f"Answer: \n{answer}\n")

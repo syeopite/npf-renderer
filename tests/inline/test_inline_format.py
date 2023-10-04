@@ -1,14 +1,16 @@
 import logging
 import urllib.parse
 
+from npf_renderer import format_npf
+
 from inline_formatting_data import *
 from format_only_inline_test_data import *
-from npf_renderer import parse, format
 
 
-def helper_function(content, answer):
-    parsed_results = parse.Parser(content["content"]).parse()
-    formatted_result = format.format_content(parsed_results)
+def helper_function(content, answer, url_handler=None):
+    has_error, formatted_result = format_npf(content["content"], url_handler=url_handler)
+
+    assert not has_error
 
     logging.info(f"Formatted: \n{formatted_result}\n")
     logging.info(f"Answer: \n{answer}\n")
@@ -116,14 +118,4 @@ def test_link_url_handler_replaced():
         elif url.hostname.endswith("reddit.com"):
             return url._replace(netloc="libredd.it").geturl()
 
-    # Basically helper_function with a couple more additions
-
-    parsed_results = parse.Parser(link_url_handler_test_data[0]).parse()
-    formatted_result = format.format_content(parsed_results, url_handler=url_handler)
-
-    answer = link_url_handler_test_data[2]
-
-    logging.info(f"Formatted: \n{formatted_result}\n")
-    logging.info(f"Answer: \n{answer}\n")
-
-    assert str(formatted_result) == str(answer)
+    helper_function({"content": link_url_handler_test_data[0]}, link_url_handler_test_data[2], url_handler=url_handler)

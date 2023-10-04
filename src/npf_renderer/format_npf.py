@@ -1,4 +1,4 @@
-from .format import format_content
+from .format import Formatter
 from .parse import Parser, LayoutParser
 from . import exceptions
 
@@ -10,7 +10,7 @@ def format_npf(contents, layouts=None, url_handler=None):
 
     try:
         contains_render_errors = False
-        formatted = format_content(contents, layouts, url_handler)
+        formatted = Formatter(contents, layouts, url_handler).format()
     except exceptions.RenderErrorDisclaimerError as e:
         contains_render_errors = True
         formatted = e.rendered_result
