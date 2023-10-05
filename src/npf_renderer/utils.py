@@ -68,6 +68,8 @@ font-size: 1.3em
   border: 1px;
   border-style: solid;
   border-color: rgba(0,0,0,0.4);
+
+  width: 100%;
 }
 
 .poster-container {
