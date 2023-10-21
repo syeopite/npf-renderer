@@ -7,7 +7,7 @@ A Python library for rendering Tumblr's Neue Post Format (NPF) into HTML
 Output
 </summary>
 
-![Example output](screenshots/example.png)
+![Example output](https://raw.githubusercontent.com/syeopite/npf-renderer/master/screenshots/example.png)
 
 </details>
 
@@ -105,7 +105,7 @@ HTML
 Output
 </summary>
 
-![Example output](screenshots/example.png)
+![Example output](https://raw.githubusercontent.com/syeopite/npf-renderer/master/screenshots/example.png)
 
 </details>
 
