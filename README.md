@@ -118,6 +118,10 @@ with open("basic_layout.css", "w") as file:
     file.write(npf_renderer.utils.BASIC_LAYOUT_CSS)
 ```
 
+```html
+<link rel="stylesheet" href="basic_layout.css">
+```
+
 `format_npf` will return placeholder HTML for any blocks it doesn't support.
 
 
