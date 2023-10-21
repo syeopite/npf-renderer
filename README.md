@@ -147,9 +147,7 @@ In the event that it cannot format anything an empty div will be returned
 ## Installation
 
 ```bash
-git clone "https://github.com/syeopite/npf-renderer"
-
-pip install ./npf-renderer
+pip install npf-renderer
 ```
 
 ## Advanced
