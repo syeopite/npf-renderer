@@ -9,6 +9,10 @@ BASIC_LAYOUT_CSS = """
   word-break: break-word;
 }
 
+@media (min-width: 540px) {
+  width: 540px;
+}
+
 .post-body > * {
   margin: 8px;
 }
@@ -114,17 +118,13 @@ font-size: 1.3em
 .ask {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   margin-bottom: 10px;
   padding: 10px;
 }
 
 .ask-header {
   margin-bottom: 6px;
-}
-
-.ask-body {
-  margin-right: 20px;
-  width: 540px;
 }
 
 .ask-content * {
