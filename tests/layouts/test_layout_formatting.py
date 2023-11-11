@@ -36,3 +36,11 @@ def test_layouts_layouts_with_anon_ask_section_format():
 
 def test_layouts_in_content_with_lists_format():
     helper_function(data.layouts_in_content_with_lists[0], data.layouts_in_content_with_lists[2], data.with_list_content_list)
+
+
+def test_with_nested_blocks_format():
+    helper_function(data.with_nested_blocks_layout_list[0], data.with_nested_blocks_layout_list[2], data.with_nested_blocks_content_list)
+
+
+def test_with_nested_list_blocks_format():
+    helper_function(data.with_nested_list_blocks_layout_list[0], data.with_nested_list_blocks_layout_list[2], data.with_nested_list_blocks_content_list)

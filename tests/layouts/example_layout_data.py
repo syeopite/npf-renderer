@@ -405,15 +405,14 @@ layouts_with_anon_ask_section = (
 # as to successfully arrange blocks in accordance to the layout given
 # by Tumblr
 
-with_list_content_list = [
+with_list_content_list = (
     content_list[0],
     {"type": "text", "text": "item 1", "subtype": "unordered-list-item"},
     {"type": "text", "text": "item 2", "subtype": "unordered-list-item"},
     {"type": "text", "text": "item 3", "subtype": "unordered-list-item"},
     {"type": "text", "text": "item 4", "subtype": "unordered-list-item"},
     *content_list[1:],
-
-]
+)
 
 layouts_in_content_with_lists = (
     {
@@ -480,4 +479,211 @@ layouts_in_content_with_lists = (
 
         cls="post-body"
     )
+)
+
+
+# Because nested NPF text blocks are grouped together, we need to pad the render instructions
+# in order to account for the missing blocks.
+
+with_nested_blocks_content_list = (
+    {
+        "type": "text",
+        "subtype": "indented",
+        "text": "1: blockquote, not nested"
+    },
+    {
+        "type": "text",
+        "subtype": "indented",
+        "text": "2: blockquote, nested",
+        "indent_level": 1
+    },
+    {
+        "type": "text",
+        "subtype": "unordered-list-item",
+        "text": "3: nested in two blockquotes",
+        "indent_level": 2
+    },
+    {
+        "type": "text",
+        "subtype": "ordered-list-item",
+        "text": "4: nested in two blockquotes and a list",
+        "indent_level": 3
+    },
+    {
+        "type": "text",
+        "subtype": "unordered-list-item",
+        "text": "3: back to level 3, double nesting",
+        "indent_level": 2
+    },
+    {
+        "type": "text",
+        "subtype": "indented",
+        "text": "1: back to level 1, no nesting",
+    }
+)
+
+with_nested_blocks_layout_list = (
+    {
+        "layouts": [
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [0]},
+                    {"blocks": [1]},
+                    {"blocks": [2]},
+                    {"blocks": [3]},
+                    {"blocks": [4]},
+                    {"blocks": [5]},
+                ]
+            }
+        ]
+    },
+
+    [
+        layouts.Rows(
+            rows=[
+                layouts.RowLayout([0]),
+                layouts.RowLayout([1]),
+                layouts.RowLayout([2]),
+                layouts.RowLayout([3]),
+                layouts.RowLayout([4]),
+                layouts.RowLayout([5]),
+            ],
+        )
+    ],
+
+    dominate.tags.div(
+        dominate.tags.div(
+            dominate.tags.blockquote(
+                "1: blockquote, not nested",
+                dominate.tags.blockquote(
+                    "2: blockquote, nested",
+                    dominate.tags.ul(
+                        dominate.tags.li(
+                            "3: nested in two blockquotes",
+                            dominate.tags.ol(
+                                dominate.tags.li(
+                                    "4: nested in two blockquotes and a list",
+                                    cls="text-block ordered-list-item"
+                                ),
+                                cls="ordered-list",
+                            ),
+                            cls="text-block unordered-list-item",
+                        ),
+
+                        dominate.tags.li(
+                            "3: back to level 3, double nesting",
+                            cls="text-block unordered-list-item"
+                        ),
+
+                        cls="unordered-list",
+                    ),
+                    cls="text-block indented"
+                ),
+                cls="text-block indented"
+            ),
+            cls="layout-row"
+        ),
+
+        dominate.tags.div(
+            dominate.tags.blockquote(
+                "1: back to level 1, no nesting",
+                cls="text-block indented"
+            ),
+            cls="layout-row"
+        ),
+
+        cls="post-body"
+    ),
+)
+
+
+with_nested_list_blocks_content_list = (
+    {"type": "text", "subtype": "heading1", "text": "Sward's Shopping List"},
+    {
+        "type": "text",
+        "subtype": "ordered-list-item",
+        "text": "First level: Fruit",
+    },
+    {
+        "type": "text",
+        "subtype": "unordered-list-item",
+        "text": "Second level: Apples",
+        "indent_level": 1,
+    },
+    {
+        "type": "text",
+        "subtype": "ordered-list-item",
+        "text": "Third Level: Green",
+        "indent_level": 2,
+    },
+    {
+        "type": "text",
+        "subtype": "unordered-list-item",
+        "text": "Second level: Pears",
+        "indent_level": 1,
+    },
+    {
+        "type": "text",
+        "subtype": "ordered-list-item",
+        "text": "First level: Pears",
+    },
+)
+
+with_nested_list_blocks_layout_list = (
+    {
+        "layouts": [
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [0]},
+                    {"blocks": [1]},
+                    {"blocks": [2]},
+                    {"blocks": [3]},
+                    {"blocks": [4]},
+                    {"blocks": [5]},
+                ]
+            }
+        ]
+    },
+
+    [
+        layouts.Rows(
+            rows=[
+                layouts.RowLayout([0]),
+                layouts.RowLayout([1]),
+                layouts.RowLayout([2]),
+                layouts.RowLayout([3]),
+                layouts.RowLayout([4]),
+                layouts.RowLayout([5]),
+            ],
+        )
+    ],
+
+    dominate.tags.div(
+        dominate.tags.div(dominate.tags.h1("Sward's Shopping List", cls="text-block heading1"), cls="layout-row"),
+        dominate.tags.div(
+            dominate.tags.ol(
+                dominate.tags.li(
+                    "First level: Fruit",
+                    dominate.tags.ul(
+                        dominate.tags.li(
+                            "Second level: Apples",
+                            dominate.tags.ol(
+                                dominate.tags.li("Third Level: Green", cls="text-block ordered-list-item"),
+                                cls="ordered-list",
+                            ),
+                            cls="text-block unordered-list-item",
+                        ),
+                        dominate.tags.li("Second level: Pears", cls="text-block unordered-list-item"),
+                        cls="unordered-list",
+                    ),
+                    cls="text-block ordered-list-item",
+                ),
+                dominate.tags.li("First level: Pears", cls="text-block ordered-list-item"),
+                cls="ordered-list",
+            ),
+            cls="layout-row"),
+        cls="post-body",
+    ),
 )

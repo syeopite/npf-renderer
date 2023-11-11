@@ -44,6 +44,10 @@ def test_subtype_and_indent_level_parse():
     helper_function(subtype_and_indent_level_test[0], subtype_and_indent_level_test[1])
 
 
+def test_mixed_block_quote_list_parse():
+    helper_function(mixed_block_quote_list_test[0], mixed_block_quote_list_test[1])
+
+
 def test_top_level_list_with_children_merging_parse():
     helper_function(top_level_list_with_children_merging_test_data[0],
                     top_level_list_with_children_merging_test_data[1])

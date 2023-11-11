@@ -226,6 +226,130 @@ subtype_and_indent_level_test = (
     ),
 )
 
+mixed_block_quote_list_test = (
+    {
+        "content": [
+            {
+                "type": "text",
+                "subtype": "indented",
+                "text": "1: blockquote, not nested"
+            },
+            {
+                "type": "text",
+                "subtype": "indented",
+                "text": "2: blockquote, nested",
+                "indent_level": 1
+            },
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "text": "3: nested in two blockquotes",
+                "indent_level": 2
+            },
+            {
+                "type": "text",
+                "subtype": "ordered-list-item",
+                "text": "4: nested in two blockquotes and a list",
+                "indent_level": 3
+            },
+            {
+                "type": "text",
+                "subtype": "unordered-list-item",
+                "text": "3: back to level 3, double nesting",
+                "indent_level": 2
+            },
+            {
+                "type": "text",
+                "subtype": "indented",
+                "text": "1: back to level 1, no nesting",
+            }
+        ]
+    },
+
+    [
+        objects.text_block.TextBlock(
+            text="1: blockquote, not nested", 
+            subtype=objects.text_block.Subtypes.INDENTED,
+            nest=[
+                objects.text_block.TextBlock(
+                    text="2: blockquote, nested",
+                    subtype=objects.text_block.Subtypes.INDENTED,
+                    nest=[
+                        objects.text_block.ListGrouping(
+                            type=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                            group=[
+                                objects.text_block.TextBlock(
+                                    text="3: nested in two blockquotes",
+                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                                    nest=[
+                                        objects.text_block.ListGrouping(
+                                            type=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
+                                            group=[
+                                                objects.text_block.TextBlock(
+                                                    text="4: nested in two blockquotes and a list",
+                                                    subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                ),
+
+                                objects.text_block.TextBlock(
+                                    text="3: back to level 3, double nesting",
+                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,        
+                                )
+                            ]
+                        )
+                    ]
+                )
+            ]
+        ),
+
+        objects.text_block.TextBlock(
+            text="1: back to level 1, no nesting",
+            subtype= objects.text_block.Subtypes.INDENTED
+        )
+    ],
+
+    tags.div(
+        tags.blockquote(
+            "1: blockquote, not nested",
+            tags.blockquote(
+                "2: blockquote, nested",
+                tags.ul(
+                    tags.li(
+                        "3: nested in two blockquotes",
+                        tags.ol(
+                            tags.li(
+                                "4: nested in two blockquotes and a list",
+                                cls="text-block ordered-list-item"
+                            ),
+                            cls="ordered-list",
+                        ),
+                        cls="text-block unordered-list-item",
+                    ),
+
+                    tags.li(
+                        "3: back to level 3, double nesting",
+                        cls="text-block unordered-list-item"
+                    ),
+
+                    cls="unordered-list",
+                ),
+                cls="text-block indented"
+            ),
+            cls="text-block indented"
+        ),
+
+        tags.blockquote(
+            "1: back to level 1, no nesting",
+            cls="text-block indented"
+        ),
+
+        cls="post-body"
+    )
+)
+
 top_level_list_with_children_merging_test_data = (
     {
         "content": [

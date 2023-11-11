@@ -5,7 +5,6 @@ from npf_renderer.parse.layout_parse import LayoutParser
 
 try:
     import prettyprinter
-
     pprinter = prettyprinter.PrettyPrinter()
 except ImportError:
     pprinter = None
@@ -50,3 +49,11 @@ def test_layouts_with_anon_ask_section_parse():
 
 def test_layouts_in_content_with_lists_parse():
     helper_function(data.layouts_in_content_with_lists[0], data.layouts_in_content_with_lists[1])
+
+
+def test_with_nested_blocks_parse():
+    helper_function(data.with_nested_blocks_layout_list[0], data.with_nested_blocks_layout_list[1])
+
+
+def test_with_nested_list_blocks_parse():
+    helper_function(data.with_nested_list_blocks_layout_list[0], data.with_nested_list_blocks_layout_list[1])
