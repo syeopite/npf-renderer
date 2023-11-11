@@ -1,3 +1,5 @@
+import dominate
+
 from .format import Formatter
 from .parse import Parser, LayoutParser
 from . import exceptions
