@@ -4,14 +4,20 @@ from . import text, image, misc
 from .. import objects, helpers, exceptions
 
 
-def _count_nested(block):
-    count = len(block.nest)
+def _calculate_amount_to_pad_from_nested(block, parent=True):
+    if container := getattr(block, "nest", None):
+        amount_to_pad = len(block.nest)
+    elif container := getattr(block, "group", None):
+        # See commit 2e8953d0081ffbe777579fab95a2b98c99d01177 as to why we subtract one
+        amount_to_pad = (len(block.group) - 1)
+    else:
+        return 0
 
-    for nested in block.nest:
-        if nested.nest:
-            count += _count_nested(nested)
+    for child_block in container:
+        if getattr(child_block, "nest", None) or getattr(child_block, "group", None):
+            amount_to_pad += _calculate_amount_to_pad_from_nested(child_block, parent=False)
 
-    return count
+    return amount_to_pad
 
 
 class Formatter(helpers.CursorIterator):
@@ -137,10 +143,11 @@ class Formatter(helpers.CursorIterator):
         match self.current:
             case objects.text_block.TextBlock():
                 if self.current.nest:
-                    self.current_context_padding = _count_nested(self.current)
+                    self.current_context_padding = _calculate_amount_to_pad_from_nested(self.current)
                 return self._format_text, (self.current,)
             case objects.text_block.ListGrouping():
-                self.current_context_padding = (len(self.current.group) - 1)
+                self.current_context_padding = _calculate_amount_to_pad_from_nested(self.current)
+
                 return self._format_list, (self.current,)
             case objects.image.ImageBlock():
                 return self._format_image, (self.current,)
