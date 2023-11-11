@@ -988,3 +988,132 @@ link_url_handler_test_data = (
         cls="post-body"
     )
 )
+
+excessively_out_of_bounds_end_single_op_test = (
+    [{
+        "type": "text",
+        "text": "some text",
+        "subtype": "indented",
+
+        "formatting": [{
+            "type": "italic",
+            "start": 0,
+            "end": 57117
+        }]
+    }],
+
+    tags.div(
+        tags.blockquote(
+            tags.span(
+                tags.i("some text", cls="inline-italics"),
+                cls="inline-formatted-content"
+            ),
+            cls="text-block indented inline-formatted-block"
+        ),
+        cls="post-body"
+    )
+)
+
+
+excessively_out_of_bounds_end_multiple_op_test = (
+    [{
+        "type": "text",
+        "text": "some text",
+        "subtype": "indented",
+
+        "formatting": [
+            {
+                "type": "italic",
+                "start": 0,
+                "end": 57117
+            },
+
+            {
+                "type": "bold",
+                "start": 0,
+                "end": 27571
+            },
+
+        ]
+    }],
+
+    tags.div(
+        tags.blockquote(
+            tags.span(
+                tags.i(tags.b("some text", cls="inline-bold"), cls="inline-italics"),
+                cls="inline-formatted-content"
+            ),
+            cls="text-block indented inline-formatted-block"
+        ),
+        cls="post-body"
+    )
+)
+
+
+excessively_out_of_bounds_end_overlap_test = (
+    [{
+        "type": "text",
+        "text": "some text",
+        "subtype": "indented",
+
+        "formatting": [
+            {
+                "type": "italic",
+                "start": 0,
+                "end": 57117
+            },
+
+            {
+                "type": "bold",
+                "start": 0,
+                "end": 57117
+            },
+
+        ]
+    }],
+
+    tags.div(
+        tags.blockquote(
+            tags.span(
+                tags.i(tags.b("some text", cls="inline-bold"), cls="inline-italics"),
+                cls="inline-formatted-content"
+            ),
+            cls="text-block indented inline-formatted-block"
+        ),
+        cls="post-body"
+    )
+)
+
+excessively_out_of_bounds_end_multiple_op_differing_start_test = (
+    [{
+        "type": "text",
+        "text": "some text",
+        "subtype": "indented",
+
+        "formatting": [
+            {
+                "type": "italic",
+                "start": 0,
+                "end": 57117
+            },
+
+            {
+                "type": "bold",
+                "start": 5,
+                "end": 27571
+            },
+
+        ]
+    }],
+
+    tags.div(
+        tags.blockquote(
+            tags.span(
+                tags.i("some ", tags.b("text", cls="inline-bold"), cls="inline-italics"),
+                cls="inline-formatted-content"
+            ),
+            cls="text-block indented inline-formatted-block"
+        ),
+        cls="post-body"
+    )
+)

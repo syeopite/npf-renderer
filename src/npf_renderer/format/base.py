@@ -170,7 +170,10 @@ class Formatter(helpers.CursorIterator):
             self._pad()
 
         if self.layout:
+            # List to keep track of blocks that have been added to layouts
+            # this is used to handle the edge case in which only certain blocks have specified layouts but not others.
             blocks_in_layouts = []
+
             for layout in self.layout:
                 if isinstance(layout, objects.layouts.Rows):
                     for row in layout.rows:
@@ -224,14 +227,11 @@ class Formatter(helpers.CursorIterator):
             # the leftovers that comes immediately after the ask.
             if len(self.layout) == 1 and isinstance(self.layout[0], objects.layouts.AskLayout):
                 for index, render_instructions in enumerate(self.render_instructions):
-                    if index in blocks_in_layouts:
-                        continue
-                    if not render_instructions:
+                    if (index in blocks_in_layouts) or (not render_instructions):
                         continue
 
                     func, args = render_instructions
                     self.post.add(dominate.tags.div(func(*args), cls="layout-row"))
-
         else:
             for render_instructions in self.render_instructions:
                 if not render_instructions:

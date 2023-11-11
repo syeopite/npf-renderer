@@ -169,7 +169,10 @@ class InlineFormatter(helpers.CursorIterator):
                     # Therefore, we shall advance up until till (either our stopping point or end of our operation)
                     # and then append the result to current_tag and let whoever called us handle the remaining stuff if
                     # any.
-                    while self.cursor < till:
+                    #
+                    # However, sometimes the ending index of an operation (till) is out of bounds. And if we've already reached
+                    # the end of the string then there is nothing left to do.
+                    while (self.cursor < till) and not self._at_end:
                         self.next()
 
                     current_tag.add(dominate.util.text("".join(self._accumulator)))
@@ -386,8 +389,10 @@ class InlineFormatter(helpers.CursorIterator):
                 self.next()
                 self._route_operations(till)
 
-                # Check for remaining operations in the current cursor position
-                while self._ops.current.start <= self.cursor < (till := self._ops.current.end):
+                # Check for remaining characters to format in the current cursor position
+                while not self._at_end and (
+                    self._ops.current.start <= self.cursor < (till := self._ops.current.end)
+                ):
                     self.next()
                     self._route_operations(till)
 

@@ -119,3 +119,19 @@ def test_link_url_handler_replaced():
             return url._replace(netloc="libredd.it").geturl()
 
     helper_function({"content": link_url_handler_test_data[0]}, link_url_handler_test_data[2], url_handler=url_handler)
+
+
+def test_excessively_out_of_bounds_end_single_op():
+    helper_function({"content": excessively_out_of_bounds_end_single_op_test[0]}, excessively_out_of_bounds_end_single_op_test[1])
+
+
+def test_excessively_out_of_bounds_end_multiple_op():
+    helper_function({"content": excessively_out_of_bounds_end_multiple_op_test[0]}, excessively_out_of_bounds_end_multiple_op_test[1])
+
+
+def test_excessively_out_of_bounds_end_overlap():
+    helper_function({"content": excessively_out_of_bounds_end_overlap_test[0]}, excessively_out_of_bounds_end_overlap_test[1])
+
+
+def test_excessively_out_of_bounds_end_multiple_op_differing_start():
+    helper_function({"content": excessively_out_of_bounds_end_multiple_op_differing_start_test[0]}, excessively_out_of_bounds_end_multiple_op_differing_start_test[1])
