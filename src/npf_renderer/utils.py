@@ -10,7 +10,9 @@ BASIC_LAYOUT_CSS = """
 }
 
 @media (min-width: 540px) {
-  width: 540px;
+  .post-body {
+    width: 540px;
+  }
 }
 
 .post-body > * {
