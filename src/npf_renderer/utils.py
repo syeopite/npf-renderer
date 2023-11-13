@@ -56,6 +56,10 @@ font-size: 1.6em
 font-size: 1.3em
 }
 
+.heading1, .heading2 {
+  margin: 0;
+}
+
 .quote {
   font-size: 26px;
 }
