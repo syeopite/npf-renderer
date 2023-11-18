@@ -37,8 +37,24 @@ def format_image(image_block, row_length=1, url_handler=None):
         def url_handler(url):
             return url
 
+    processed_media_blocks = []
+
+    # Fetch the media object with the original dimensions to be used as a src= attribute
+    original_media = None
+    for media in image_block.media:
+        processed_media_blocks.append(media)
+
+        if media.has_original_dimensions:
+            original_media = media
+
+    # If for whatever reason we cannot the media object with the original dimensions
+    # we'd just use the one with the highest res (default)
+
+    original_media = original_media or processed_media_blocks[0]
+
     container.add(
         dominate.tags.img(
+            src=url_handler(original_media.url),
             srcset=", ".join(create_srcset(image_block.media, url_handler)),
             cls="image", loading="lazy",
             alt=image_block.alt_text or "image",

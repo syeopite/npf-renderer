@@ -16,6 +16,7 @@ def generate_image_block_html(index, siblings):
     return dominate.tags.figure(
         dominate.tags.div(
             dominate.tags.img(
+                src=f"https://example.com/example-image-{index}.png",
                 srcset=f"https://example.com/example-image-{index}.png 540w",
                 cls="image", loading="lazy",
                 sizes=f"(max-width: 540px) {round(100 / siblings)}vh, {round(540 / siblings)}px",
