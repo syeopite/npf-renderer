@@ -127,7 +127,8 @@ font-size: 1.3em
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 5px;
+  gap: 10px;
 }
 
 .ask-header {
