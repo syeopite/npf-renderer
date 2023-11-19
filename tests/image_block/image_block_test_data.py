@@ -626,3 +626,58 @@ image_block_with_replaced_link = (
         cls="post-body"
     )
 )
+
+
+skip_cropped_image_block_test = (
+    [
+        {
+            "type": "image",
+            "media": [
+                {
+                    "type": "image/jpeg",
+                    "url": "https://example.com/image/s1280x1920.jpg",
+                    "width": 1280,
+                    "height": 1920
+                },
+                {
+                    "type": "image/jpeg",
+                    "url": "https://example.com/image/s640x460.jpg",
+                    "width": 640.0,
+                    "height": 460.0,
+                    "cropped": True,
+                },
+                {
+                    "type": "image/jpeg",
+                    "url": "https://example.com/image/s512x512.jpg",
+                    "width": 512,
+                    "height": 512,
+                    "cropped": True,
+                },
+
+                {
+                    "type": "image/jpeg",
+                    "url": "https://example.com/image/s320x480.jpg",
+                    "width": 320,
+                    "height": 480,
+                    "hasOriginalDimensions": True
+                }
+            ],
+        }
+    ],
+
+    dominate.tags.div(
+        dominate.tags.figure(dominate.tags.div(
+            dominate.tags.img(
+                src="https://example.com/image/s320x480.jpg",
+                srcset="https://example.com/image/s1280x1920.jpg 1280w, https://example.com/image/s320x480.jpg 320w",
+                alt="image",
+                cls="image", loading="lazy",
+                sizes="(max-width: 540px) 100vh, 540px",
+            ), cls="image-container"),
+
+            cls="image-block"
+        ),
+
+        cls="post-body"
+    )
+)

@@ -18,7 +18,7 @@ def create_srcset(media_blocks, url_handler):
     return main_srcset
 
 
-def format_image(image_block, row_length=1, url_handler=None):
+def format_image(image_block, row_length=1, url_handler=None, skip_cropped_images=False):
     """Renders a ImageBlock into HTML"""
     container_attributes = {
         "cls": "image-container"
@@ -42,6 +42,9 @@ def format_image(image_block, row_length=1, url_handler=None):
     # Fetch the media object with the original dimensions to be used as a src= attribute
     original_media = None
     for media in image_block.media:
+        if skip_cropped_images and media.cropped:
+            continue
+
         processed_media_blocks.append(media)
 
         if media.has_original_dimensions:
@@ -55,7 +58,7 @@ def format_image(image_block, row_length=1, url_handler=None):
     container.add(
         dominate.tags.img(
             src=url_handler(original_media.url),
-            srcset=", ".join(create_srcset(image_block.media, url_handler)),
+            srcset=", ".join(create_srcset(processed_media_blocks, url_handler)),
             cls="image", loading="lazy",
             alt=image_block.alt_text or "image",
             sizes=f"(max-width: 540px) {int(100 / row_length)}vh, {int(540 / row_length)}px"

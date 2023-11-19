@@ -21,7 +21,7 @@ def _calculate_amount_to_pad_from_nested(block, parent=True):
 
 
 class Formatter(helpers.CursorIterator):
-    def __init__(self, content, layout=None, url_handler=None):
+    def __init__(self, content, layout=None, *, url_handler=None, skip_cropped_images = False):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
 
@@ -34,6 +34,7 @@ class Formatter(helpers.CursorIterator):
         self.render_instructions = []
 
         self.url_handler = url_handler
+        self.skip_cropped_images = skip_cropped_images
 
         self.has_render_error = False
 
@@ -71,7 +72,7 @@ class Formatter(helpers.CursorIterator):
     def _format_image(self, block, row_length=1):
         """Renders an ImageBlock into HTML"""
         figure = dominate.tags.figure(cls="image-block")
-        figure.add(image.format_image(block, row_length, url_handler=self.url_handler))
+        figure.add(image.format_image(block, row_length, url_handler=self.url_handler, skip_cropped_images=self.skip_cropped_images))
 
         if block.caption:
             figure.add(dominate.tags.figcaption(block.caption, cls="image-caption"))

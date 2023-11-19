@@ -6,8 +6,8 @@ from npf_renderer import format_npf
 import image_block_test_data as test_data
 
 
-def helper_function(raw, answer, url_handler=None):
-    has_error, formatted_result = format_npf(raw, url_handler=url_handler, pretty_html=True)
+def helper_function(raw, answer, **kwargs):
+    has_error, formatted_result = format_npf(raw, pretty_html=True, **kwargs)
 
     assert not has_error
 
@@ -45,6 +45,7 @@ def test_image_block_url_replacement_format():
 
     helper_function(test_data.image_block_with_replaced_link[0], test_data.image_block_with_replaced_link[2], url_handler=url_handler)
 
+
 def test_gif_image_block_with_link_attribution_format():
     helper_function(test_data.gif_image_block_with_link_attribution[0],
                     test_data.gif_image_block_with_link_attribution[2])
@@ -56,6 +57,9 @@ def test_gif_image_block_with_post_attribution_format():
 
 
 def test_image_block_with_app_attribution_format():
-    helper_function(test_data.image_block_with_app_attribution[0],
-                    test_data.image_block_with_app_attribution[2])
+    helper_function(test_data.image_block_with_app_attribution[0], test_data.image_block_with_app_attribution[2])
 
+
+
+def test_image_block_skip_cropped_format():
+    helper_function(test_data.skip_cropped_image_block_test[0], test_data.skip_cropped_image_block_test[1], skip_cropped_images=True)
