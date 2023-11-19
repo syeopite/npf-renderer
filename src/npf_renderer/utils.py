@@ -73,10 +73,6 @@ font-size: 1.3em
   color: inherit;
 }
 
-ol, ul {
-  margin: 0;
-}
-
 /* Link Blocks */
 
 .link-block {
