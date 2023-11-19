@@ -43,6 +43,7 @@ def format_npf(contents, layouts=None, *_, url_handler=None, skip_cropped_images
     except Exception as e:
         # TODO
         # Something had gone wrong block
+
         formatted = dominate.tags.div(cls="post-body")
         contains_render_errors = True
 

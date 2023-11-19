@@ -69,15 +69,9 @@ class Formatter(helpers.CursorIterator):
 
         return unsupported
 
-    def _format_image(self, block, row_length=1):
+    def _format_image(self, block, row_length=1, initial_row_padding=None):
         """Renders an ImageBlock into HTML"""
-        figure = dominate.tags.figure(cls="image-block")
-        figure.add(image.format_image(block, row_length, url_handler=self.url_handler, skip_cropped_images=self.skip_cropped_images))
-
-        if block.caption:
-            figure.add(dominate.tags.figcaption(block.caption, cls="image-caption"))
-
-        return figure
+        return image.format_image(block, row_length, url_handler=self.url_handler, skip_cropped_images=self.skip_cropped_images, override_padding=initial_row_padding)
 
     def _format_link(self, block):
         container = dominate.tags.div(cls="link-block")
@@ -179,6 +173,12 @@ class Formatter(helpers.CursorIterator):
                 if isinstance(layout, objects.layouts.Rows):
                     for row in layout.rows:
                         row_items = []
+
+                        # This style data sets the height at which images should be displayed within the row. 
+                        # It is set by the first image that gets rendered. Useless without 
+                        # setting the accurate_imagesets_option
+                        row_item_height_style = None
+
                         for index in row.ranges:
                             blocks_in_layouts.append(index)
 
@@ -190,7 +190,12 @@ class Formatter(helpers.CursorIterator):
 
                             match render_method:
                                 case self._format_image:
-                                    row_items.append(render_method(*arguments, len(row.ranges)))
+                                    figure, image_height_style = render_method(*arguments, len(row.ranges), row_item_height_style)
+
+                                    if not row_item_height_style:
+                                        row_item_height_style = image_height_style
+
+                                    row_items.append(figure)
                                 case _:
                                     row_items.append(render_method(*arguments))
 
@@ -211,7 +216,13 @@ class Formatter(helpers.CursorIterator):
                             continue
 
                         render_method, arguments = render_instructions
-                        layout_items.append(render_method(*arguments))
+
+                        match render_method:
+                            case self._format_image:
+                                figure, _ = render_method(*arguments)
+                                layout_items.append(figure)
+                            case _:
+                                layout_items.append(render_method(*arguments))
 
                     self.post.add(
                         dominate.tags.div(
@@ -232,14 +243,23 @@ class Formatter(helpers.CursorIterator):
                         continue
 
                     func, args = render_instructions
-                    self.post.add(dominate.tags.div(func(*args), cls="layout-row"))
+                    if func == self._format_image:
+                        block, _ = func(*args)
+                    else:
+                        block = func(*args)
+
+                    self.post.add(dominate.tags.div(block, cls="layout-row"))
         else:
             for render_instructions in self.render_instructions:
                 if not render_instructions:
                     continue
 
                 func, args = render_instructions
-                self.post.add(func(*args))
+                if func == self._format_image:
+                    img_block, _ = func(*args)
+                    self.post.add(img_block)
+                else:
+                    self.post.add(func(*args))
 
         if self.has_render_error:
             raise exceptions.RenderErrorDisclaimerError("Rendered post contains errors", rendered_result=self.post)

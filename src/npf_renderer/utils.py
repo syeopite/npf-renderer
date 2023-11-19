@@ -40,6 +40,23 @@ img {
   max-width: 100%;
 }
 
+.accurate-imagesets.image-block {
+  width: 100%;
+}
+
+.accurate-imagesets .image-container {
+  position: relative;
+  width: initial;
+  height: initial;
+  object-fit: initial;
+}
+
+.accurate-imagesets img {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 /* Text blocks */
 
 .indented {

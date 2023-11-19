@@ -18,8 +18,10 @@ def create_srcset(media_blocks, url_handler):
     return main_srcset
 
 
-def format_image(image_block, row_length=1, url_handler=None, skip_cropped_images=False):
+def format_image(image_block, row_length=1, url_handler=lambda url: url, skip_cropped_images=False, override_padding=None):
     """Renders a ImageBlock into HTML"""
+    figure = dominate.tags.figure(cls="image-block accurate-imagesets")
+
     container_attributes = {
         "cls": "image-container"
     }
@@ -30,12 +32,6 @@ def format_image(image_block, row_length=1, url_handler=None, skip_cropped_image
     # if image_block.colors:
     #     colors = [f"#{color}" for color in image_block.colors]
     #     container_attributes["style"] = f"background: linear-gradient(to left bottom, {', '.join(colors)});"
-
-    container = dominate.tags.div(**container_attributes)
-
-    if not url_handler:
-        def url_handler(url):
-            return url
 
     processed_media_blocks = []
 
@@ -54,6 +50,18 @@ def format_image(image_block, row_length=1, url_handler=None, skip_cropped_image
     # we'd just use the one with the highest res (default)
 
     original_media = original_media or processed_media_blocks[0]
+
+    if skip_cropped_images:
+        if override_padding:
+            padding = override_padding
+        else:
+            height, width = original_media.height, original_media.width
+            padding = round((height / width) * 100, 4)
+            override_padding = padding
+        
+        container = dominate.tags.div(**container_attributes, style=f"padding-bottom: {padding}%;")
+    else:
+        container = dominate.tags.div(**container_attributes)
 
     container.add(
         dominate.tags.img(
@@ -77,6 +85,8 @@ def format_image(image_block, row_length=1, url_handler=None, skip_cropped_image
             # TODO Add "Unsupported Attribution HTML"
             raise RuntimeError
 
+    figure.add(container)
+
     # Similar to the reason above, we won't be able to hide the poster image once the main content loads.
     # if poster_srcset:
     #     container.add(dominate.tags.img(
@@ -86,4 +96,7 @@ def format_image(image_block, row_length=1, url_handler=None, skip_cropped_image
     #
     #     ))
 
-    return container
+    if image_block.caption:
+        figure.add(dominate.tags.figcaption(image_block.caption, cls="image-caption"))
+
+    return figure, override_padding
