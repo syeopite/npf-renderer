@@ -168,8 +168,6 @@ def url_handler(url):
 format_npf(contents, layouts, url_handler=url_handler)
 ```
 
-You can also pass in an subclassed `Parser`, `LayoutParser` or `Formatter` object to `format_npf` to customize its behavior on all parts of the chain.
-
 
 ## Features
 

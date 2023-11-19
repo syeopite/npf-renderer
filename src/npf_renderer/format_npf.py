@@ -5,16 +5,14 @@ from .parse import Parser, LayoutParser
 from . import exceptions
 
 
-def format_npf(contents, layouts=None, *_, url_handler=None, 
-               parser=Parser, layout_parser=LayoutParser, formatter=Formatter, 
-               pretty_html=False):
-    contents = parser(contents).parse()
+def format_npf(contents, layouts=None, *_, url_handler=None, pretty_html=False):
+    contents = Parser(contents).parse()
     if layouts:
-        layouts = layout_parser(layouts).parse()
+        layouts = LayoutParser(layouts).parse()
 
     try:
         contains_render_errors = False
-        formatted = formatter(contents, layouts, url_handler).format()
+        formatted = Formatter(contents, layouts, url_handler).format()
     except exceptions.RenderErrorDisclaimerError as e:
         contains_render_errors = True
         formatted = e.rendered_result
