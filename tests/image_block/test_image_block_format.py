@@ -60,6 +60,9 @@ def test_image_block_with_app_attribution_format():
     helper_function(test_data.image_block_with_app_attribution[0], test_data.image_block_with_app_attribution[2])
 
 
-
 def test_image_block_skip_cropped_format():
     helper_function(test_data.skip_cropped_image_block_test[0], test_data.skip_cropped_image_block_test[1], skip_cropped_images=True)
+
+
+def test_reserve_space_for_images_parameter():
+    helper_function(test_data.reserve_space_for_image_test[0], test_data.reserve_space_for_image_test[1], skip_cropped_images=True, reserve_space_for_images=True)

@@ -40,6 +40,23 @@ img {
   max-width: 100%;
 }
 
+.reserved-space-img.image-block {
+  width: 100%;
+}
+
+.reserved-space-img .image-container {
+  position: relative;
+  width: initial;
+  height: initial;
+  object-fit: initial;
+}
+
+.reserved-space-img img {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 /* Text blocks */
 
 .indented {

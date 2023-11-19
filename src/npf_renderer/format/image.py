@@ -17,43 +17,54 @@ def create_srcset(media_blocks, url_handler):
 
     return main_srcset
 
-
-def format_image(image_block, row_length=1, url_handler=None, skip_cropped_images=False):
+def format_image(image_block, row_length=1, url_handler=lambda url: url, 
+                 skip_cropped_images=False, override_padding=None, 
+                 original_media=None, reserve_space_for_images=None):
     """Renders a ImageBlock into HTML"""
+
     container_attributes = {
         "cls": "image-container"
     }
 
     # Disabled. We cannot generate a gradient background that takes up the same amount of space as the browser-selected
-    # responsive image as we do not know which image the browser is going to pick. Therefore, we shall skip this part.
+    # responsive image as the image doesn't really have a size until its loaded and as such neither will the background.
+    #
+    # In addition some images do not have a colors attribute even though a consistent gradient image is still being 
+    # generated on Tumblr's UI, and it is also consistent across reloads. Some investigation is needed on this part
 
     # if image_block.colors:
     #     colors = [f"#{color}" for color in image_block.colors]
     #     container_attributes["style"] = f"background: linear-gradient(to left bottom, {', '.join(colors)});"
 
-    container = dominate.tags.div(**container_attributes)
-
-    if not url_handler:
-        def url_handler(url):
-            return url
-
     processed_media_blocks = []
 
-    # Fetch the media object with the original dimensions to be used as a src= attribute
-    original_media = None
-    for media in image_block.media:
-        if skip_cropped_images and media.cropped:
-            continue
+    # Fetch the media object with the original dimensions to be used as a src= attribute when we
+    # are not already given one
+    if not original_media:
+        for media in image_block.media:
+            if skip_cropped_images and media.cropped:
+                continue
 
-        processed_media_blocks.append(media)
+            processed_media_blocks.append(media)
 
-        if media.has_original_dimensions:
-            original_media = media
+            if media.has_original_dimensions:
+                original_media = media
 
-    # If for whatever reason we cannot the media object with the original dimensions
-    # we'd just use the one with the highest res (default)
+        # If for whatever reason we cannot the media object with the original dimensions
+        # we'd just use the one with the highest res (default)
 
-    original_media = original_media or processed_media_blocks[0]
+        original_media = original_media or processed_media_blocks[0]
+    
+    if skip_cropped_images and reserve_space_for_images:
+        if override_padding:
+            padding = override_padding
+        else:
+            height, width = original_media.height, original_media.width
+            padding = round((height / width) * 100, 4)
+
+        container = dominate.tags.div(**container_attributes, style=f"padding-bottom: {padding}%;")
+    else:
+        container = dominate.tags.div(**container_attributes)
 
     container.add(
         dominate.tags.img(

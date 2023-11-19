@@ -537,7 +537,6 @@ image_block_with_app_attribution = (
 
         cls="post-body"
     )
-
 )
 
 
@@ -676,6 +675,82 @@ skip_cropped_image_block_test = (
             ), cls="image-container"),
 
             cls="image-block"
+        ),
+
+        cls="post-body"
+    )
+)
+
+
+# Test for when reserve_space_for_images is true
+reserve_space_for_image_test = (
+    (
+        {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-0.png", "width": 1280,"height": 1920 }]},
+        {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-1.png", "width": 640, "height": 460}]},
+        {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-2.png", "width": 512, "height": 512}]},
+        {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-3.png", "width": 320, "height": 480}]},
+    ),
+
+    dominate.tags.div(
+        dominate.tags.figure(
+            dominate.tags.div(
+                dominate.tags.img(
+                    src="https://example.com/example-image-0.png",
+                    srcset="https://example.com/example-image-0.png 1280w",
+                    cls="image", loading="lazy",
+                    sizes="(max-width: 540px) 100vh, 540px",
+                    alt="image",
+                ),
+
+                style="padding-bottom: 150.0%;",
+                cls="image-container"
+            ),
+            cls="image-block reserved-space-img"
+        ),
+
+        dominate.tags.figure(
+            dominate.tags.div(
+                dominate.tags.img(
+                    src="https://example.com/example-image-1.png",
+                    srcset="https://example.com/example-image-1.png 640w",
+                    cls="image", loading="lazy",
+                    sizes="(max-width: 540px) 100vh, 540px",
+                    alt="image",
+                ),
+                style="padding-bottom: 71.875%;",
+                cls="image-container"
+            ),
+            cls="image-block reserved-space-img"
+        ),
+
+        dominate.tags.figure(
+            dominate.tags.div(
+                dominate.tags.img(
+                    src="https://example.com/example-image-2.png",
+                    srcset="https://example.com/example-image-2.png 512w",
+                    cls="image", loading="lazy",
+                    sizes="(max-width: 540px) 100vh, 540px",
+                    alt="image",
+                ),
+                style="padding-bottom: 100.0%;",
+                cls="image-container"
+            ),
+            cls="image-block reserved-space-img"
+        ),
+
+        dominate.tags.figure(
+            dominate.tags.div(
+                dominate.tags.img(
+                    src="https://example.com/example-image-3.png",
+                    srcset="https://example.com/example-image-3.png 320w",
+                    cls="image", loading="lazy",
+                    sizes="(max-width: 540px) 100vh, 540px",
+                    alt="image",
+                ),
+                style="padding-bottom: 150.0%;",
+                cls="image-container"
+            ),
+            cls="image-block reserved-space-img"
         ),
 
         cls="post-body"

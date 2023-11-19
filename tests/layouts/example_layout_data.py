@@ -13,8 +13,7 @@ content_list = [
 
 
 def generate_image_block_html(index, siblings):
-    return dominate.tags.figure(
-        dominate.tags.div(
+    inner =dominate.tags.div(
             dominate.tags.img(
                 src=f"https://example.com/example-image-{index}.png",
                 srcset=f"https://example.com/example-image-{index}.png 540w",
@@ -24,8 +23,11 @@ def generate_image_block_html(index, siblings):
             ),
             cls="image-container"
         ),
-        cls="image-block"
-    ),
+
+    if siblings > 1:
+        return dominate.tags.figure(inner, cls="image-block", style=f"width: {round(100/siblings, 2)}%")
+    else:
+        return dominate.tags.figure(inner, cls="image-block" )
 
 
 basic_rows_layout_example = (
@@ -69,6 +71,7 @@ basic_rows_layout_example = (
     )
 )
 
+
 basic_rows_layout_with_truncate_example = (
     {
         "layouts": [
@@ -99,6 +102,7 @@ basic_rows_layout_with_truncate_example = (
     ]
 )
 
+
 rows_with_carousel_and_weighted = (
     {
         "layouts": [
@@ -125,6 +129,7 @@ rows_with_carousel_and_weighted = (
         )
     ]
 )
+
 
 layouts_with_ask_section = (
     {
@@ -231,6 +236,7 @@ layouts_with_ask_section = (
     )
 )
 
+
 layouts_with_only_ask_section = (
     {
         "layouts": [
@@ -314,6 +320,7 @@ layouts_with_only_ask_section = (
     )
 
 )
+
 
 layouts_with_anon_ask_section = (
     {
@@ -401,6 +408,7 @@ layouts_with_anon_ask_section = (
 
 )
 
+
 # Because we merge list subtypes blocks together
 # We need to pad the amount of total blocks within the formatter
 # as to successfully arrange blocks in accordance to the layout given
@@ -414,6 +422,7 @@ with_list_content_list = (
     {"type": "text", "text": "item 4", "subtype": "unordered-list-item"},
     *content_list[1:],
 )
+
 
 layouts_in_content_with_lists = (
     {
@@ -486,6 +495,7 @@ layouts_in_content_with_lists = (
 # Because nested NPF text blocks are grouped together, we need to pad the render instructions
 # in order to account for the missing blocks.
 
+
 with_nested_blocks_content_list = (
     {
         "type": "text",
@@ -522,6 +532,7 @@ with_nested_blocks_content_list = (
         "text": "1: back to level 1, no nesting",
     }
 )
+
 
 with_nested_blocks_layout_list = (
     {
@@ -631,6 +642,7 @@ with_nested_list_blocks_content_list = (
     },
 )
 
+
 with_nested_list_blocks_layout_list = (
     {
         "layouts": [
@@ -687,4 +699,98 @@ with_nested_list_blocks_layout_list = (
             cls="layout-row"),
         cls="post-body",
     ),
+)
+
+
+# When a format_npf has both skip_cropped_images and reserve_space_for_images enabled
+# The space an image takes up will be reserved through the `padding-bottom` trick which also has 
+# the side-effect of creating accurate photosets that are exactly like those on Tumblr itself 
+
+reserve_image_space_content_list = (
+    {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-0.png", "width": 1280,"height": 1920 }]},
+    {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-1.png", "width": 640, "height": 460}]},
+    {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-2.png", "width": 512, "height": 512}]},
+    {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-3.png", "width": 320, "height": 480}]},
+)
+
+reserve_image_space_layouts = (
+    {
+        "layouts": [
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [0, 1]},
+                    {"blocks": [2, 3]},
+                ]
+            }
+        ]
+    },
+
+    (
+        dominate.tags.div(
+            dominate.tags.div(
+                dominate.tags.figure(
+                    dominate.tags.div(
+                        dominate.tags.img(
+                            src=f"https://example.com/example-image-0.png",
+                            srcset=f"https://example.com/example-image-0.png 1280w",
+                            cls="image", loading="lazy",
+                            sizes=f"(max-width: 540px) {round(100 / 2)}vh, {round(540 / 2)}px",
+                            alt="image",
+                        ),
+                        cls="image-container", style="padding-bottom: 71.875%;"
+                    ),
+                    cls="image-block reserved-space-img"
+                ),
+
+                dominate.tags.figure(
+                    dominate.tags.div(
+                        dominate.tags.img(
+                            src=f"https://example.com/example-image-1.png",
+                            srcset=f"https://example.com/example-image-1.png 640w",
+                            cls="image", loading="lazy",
+                            sizes=f"(max-width: 540px) {round(100 / 2)}vh, {round(540 / 2)}px",
+                            alt="image",
+                        ),
+                        cls="image-container", style="padding-bottom: 71.875%;"
+                    ),
+                    cls="image-block reserved-space-img"
+                ),
+
+                cls="layout-row"
+            ),
+
+            dominate.tags.div(
+                dominate.tags.figure(
+                    dominate.tags.div(
+                        dominate.tags.img(
+                            src=f"https://example.com/example-image-2.png",
+                            srcset=f"https://example.com/example-image-2.png 512w",
+                            cls="image", loading="lazy",
+                            sizes=f"(max-width: 540px) {round(100 / 2)}vh, {round(540 / 2)}px",
+                            alt="image",
+                        ),
+                        cls="image-container", style="padding-bottom: 100.0%;"
+                    ),
+                    cls="image-block reserved-space-img"
+                ),
+
+                dominate.tags.figure(
+                    dominate.tags.div(
+                        dominate.tags.img(
+                            src=f"https://example.com/example-image-3.png",
+                            srcset=f"https://example.com/example-image-3.png 320w",
+                            cls="image", loading="lazy",
+                            sizes=f"(max-width: 540px) {round(100 / 2)}vh, {round(540 / 2)}px",
+                            alt="image",
+                        ),
+                        cls="image-container", style="padding-bottom: 100.0%;"
+                    ),
+                    cls="image-block reserved-space-img"
+                ),
+                cls="layout-row"
+            ),
+
+            cls="post-body")
+    )
 )

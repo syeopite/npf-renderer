@@ -21,7 +21,7 @@ def _calculate_amount_to_pad_from_nested(block, parent=True):
 
 
 class Formatter(helpers.CursorIterator):
-    def __init__(self, content, layout=None, *, url_handler=None, skip_cropped_images = False):
+    def __init__(self, content, layout=None, *, url_handler=None, skip_cropped_images=False, reserve_space_for_images=False):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
 
@@ -35,6 +35,7 @@ class Formatter(helpers.CursorIterator):
 
         self.url_handler = url_handler
         self.skip_cropped_images = skip_cropped_images
+        self.reserve_space_for_images = reserve_space_for_images
 
         self.has_render_error = False
 
@@ -69,10 +70,27 @@ class Formatter(helpers.CursorIterator):
 
         return unsupported
 
-    def _format_image(self, block, row_length=1):
+    def _format_image(self, block, row_length=1, override_padding=None):
         """Renders an ImageBlock into HTML"""
-        figure = dominate.tags.figure(cls="image-block")
-        figure.add(image.format_image(block, row_length, url_handler=self.url_handler, skip_cropped_images=self.skip_cropped_images))
+        # On Chromium based browsers, images within a row can sometimes become squished and not of equal widths.
+        # As such we'll have to explicitly specify the amount of space the images should take up in the row
+        if row_length > 1 and not self.reserve_space_for_images:
+            figure = dominate.tags.figure(cls="image-block", style=f"width: {round(100/row_length, 2)}%")
+        elif self.reserve_space_for_images:
+            figure = dominate.tags.figure(cls="image-block reserved-space-img")
+        else:
+            figure = dominate.tags.figure(cls="image-block")
+
+        image_container = image.format_image(
+            block,
+            row_length,
+            url_handler=self.url_handler,
+            skip_cropped_images=self.skip_cropped_images,
+            override_padding=override_padding,
+            reserve_space_for_images=self.reserve_space_for_images
+        )
+
+        figure.add(image_container)
 
         if block.caption:
             figure.add(dominate.tags.figcaption(block.caption, cls="image-caption"))
@@ -163,6 +181,13 @@ class Formatter(helpers.CursorIterator):
         [self.render_instructions.append(None) for _ in range(self.current_context_padding)]
         self.current_context_padding = 0
 
+    def _arrange_layout_section(self, row):
+        """Returns a list of rendered blocks that are within the given layout section"""
+        row_items = []
+
+        return row_items
+
+
     def format(self):
         """Renders the list of content blocks into HTML"""
         while self.next():
@@ -178,10 +203,27 @@ class Formatter(helpers.CursorIterator):
             for layout in self.layout:
                 if isinstance(layout, objects.layouts.Rows):
                     for row in layout.rows:
+                        blocks_in_layouts += row.ranges
                         row_items = []
-                        for index in row.ranges:
-                            blocks_in_layouts.append(index)
 
+                        # Arrange blocks into layouts.
+                        # The process works in two phrases. 
+                        # 
+                        # The first phrase produces a list of rows, with each item (save for images) 
+                        # in the row rendered in their final html form. 
+                        # 
+                        # Images in the row however will be stored as a tuple of the render instruction, 
+                        # and the original dimensions of the image. 
+                        # This is so the image with the smallest aspect ratio  can be used to arrange the rest of the images.
+                        #
+                        # The second phrase will then iterate through rows with images, select the smallest aspect ratio,
+                        # and render each image block into their html forms according to the selected aspect ratio to use 
+                        #
+                        # TODO rephrase the above
+
+                        has_image = False
+
+                        for index in row.ranges:
                             render_instructions = self.render_instructions[index]
                             if not render_instructions:
                                 continue
@@ -190,12 +232,36 @@ class Formatter(helpers.CursorIterator):
 
                             match render_method:
                                 case self._format_image:
-                                    row_items.append(render_method(*arguments, len(row.ranges)))
+                                    has_image = True
+                                    image_block = arguments[0]
+
+                                    # TODO add tests for image blocks missing hasOriginalDimensions attr
+                                    original_media = [media for media in image_block.media if media.has_original_dimensions]
+                                    original_media = original_media[0] if original_media else image_block.media[0]
+
+                                    row_items.append((
+                                        arguments, original_media
+                                    ))
                                 case _:
                                     row_items.append(render_method(*arguments))
 
                         if not row_items:
                             continue
+                    
+                        if has_image:
+                            original_media_ratios = []
+                            images_in_row = []
+
+                            for item_index, item in enumerate(row_items):
+                                if not isinstance(item, tuple):
+                                    continue
+
+                                images_in_row.append((item_index, item[0])) 
+                                original_media_ratios.append(round((item[1].height / item[1].width) * 100, 4))
+                            
+                            padding_ratio = min(original_media_ratios)
+                            for index, render_instruction_args in images_in_row:
+                                row_items[index] = self._format_image(*render_instruction_args, len(images_in_row), override_padding=padding_ratio)
 
                         row_tag = dominate.tags.div(cls="layout-row")
                         self.post.add(row_tag)
@@ -206,12 +272,12 @@ class Formatter(helpers.CursorIterator):
                     for index in layout.ranges:
                         blocks_in_layouts.append(index)
 
-                        render_instructions = self.render_instructions[index]
-                        if not render_instructions:
+                        render_instruction = self.render_instructions[index]
+                        if not render_instruction:
                             continue
 
-                        render_method, arguments = render_instructions
-                        layout_items.append(render_method(*arguments))
+                        render_method, args = render_instruction
+                        layout_items.append(render_method(*args))
 
                     self.post.add(
                         dominate.tags.div(
@@ -227,19 +293,19 @@ class Formatter(helpers.CursorIterator):
             # HTML is the content blocks that makes up the ask. So we'll have some special handling here to handle
             # the leftovers that comes immediately after the ask.
             if len(self.layout) == 1 and isinstance(self.layout[0], objects.layouts.AskLayout):
-                for index, render_instructions in enumerate(self.render_instructions):
-                    if (index in blocks_in_layouts) or (not render_instructions):
+                for index, render_instruction in enumerate(self.render_instructions):
+                    if (index in blocks_in_layouts) or (not render_instruction):
                         continue
 
-                    func, args = render_instructions
-                    self.post.add(dominate.tags.div(func(*args), cls="layout-row"))
+                    render_method, args = render_instruction
+                    self.post.add(dominate.tags.div(render_method(*args), cls="layout-row"))
         else:
-            for render_instructions in self.render_instructions:
-                if not render_instructions:
+            for render_instruction in self.render_instructions:
+                if not render_instruction:
                     continue
 
-                func, args = render_instructions
-                self.post.add(func(*args))
+                render_method, args = render_instruction
+                self.post.add(render_method(*args))
 
         if self.has_render_error:
             raise exceptions.RenderErrorDisclaimerError("Rendered post contains errors", rendered_result=self.post)
