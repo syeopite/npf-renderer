@@ -119,7 +119,7 @@ with open("basic_layout.css", "w") as file:
 ```
 
 ```html
-<link rel="stylesheet" href="basic_layout.css">
+<link rel="stylesheet" type="text/css" href="basic_layout.css">
 ```
 
 `format_npf` will return placeholder HTML for any blocks it doesn't support.
