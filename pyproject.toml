@@ -24,4 +24,5 @@ pythonpath = ["src"]
 testpaths = "tests"
 
 [project.urls]
-"Homepage" = "https://github.com/syeopite/npf-renderer"
+Homepage = "https://github.com/syeopite/npf-renderer"
+Source = "https://github.com/syeopite/npf-renderer"
