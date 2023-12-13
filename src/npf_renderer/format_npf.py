@@ -5,7 +5,9 @@ from .parse import Parser, LayoutParser
 from . import exceptions
 
 
-def format_npf(contents, layouts=None, *_, url_handler=None, skip_cropped_images=False, reserve_space_for_images=False, pretty_html=False):
+def format_npf(contents, layouts=None, *_, url_handler=None, 
+               skip_cropped_images=False, reserve_space_for_images=False,
+               forbid_external_iframes=False, pretty_html=False):
     """Formats the given NPF blocks into HTML
     
     Parameters:
@@ -26,6 +28,11 @@ def format_npf(contents, layouts=None, *_, url_handler=None, skip_cropped_images
 
             This also fixes any discrepancies between the aspect ratio of images 
             in layouts compared with how it is on Tumblr.
+
+        forbid_external_iframes: 
+            When True embeds to external services won't be added 
+            in the final output. This can change the resulting HTML of certain 
+            blocks. 
         
         pretty_html: Whether or not to render human readable html 
     """
@@ -44,7 +51,8 @@ def format_npf(contents, layouts=None, *_, url_handler=None, skip_cropped_images
             layouts, 
             url_handler=url_handler,
             skip_cropped_images=skip_cropped_images,
-            reserve_space_for_images=reserve_space_for_images
+            reserve_space_for_images=reserve_space_for_images,
+            forbid_external_iframes=forbid_external_iframes
         ).format()
 
     except exceptions.RenderErrorDisclaimerError as e:
@@ -54,6 +62,8 @@ def format_npf(contents, layouts=None, *_, url_handler=None, skip_cropped_images
     except Exception as e:
         # TODO
         # Something had gone wrong block
+
+        raise e
 
         formatted = dominate.tags.div(cls="post-body")
         contains_render_errors = True

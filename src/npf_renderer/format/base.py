@@ -21,7 +21,9 @@ def _calculate_amount_to_pad_from_nested(block, parent=True):
 
 
 class Formatter(helpers.CursorIterator):
-    def __init__(self, content, layout=None, *, url_handler=None, skip_cropped_images=False, reserve_space_for_images=False):
+    def __init__(self, content, layout=None, *, url_handler=None,
+                 skip_cropped_images=False, reserve_space_for_images=False,
+                 forbid_external_iframes=False):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
 
@@ -36,6 +38,7 @@ class Formatter(helpers.CursorIterator):
         self.url_handler = url_handler
         self.skip_cropped_images = skip_cropped_images
         self.reserve_space_for_images = reserve_space_for_images
+        self.forbid_external_iframes = forbid_external_iframes
 
         self.has_render_error = False
 
@@ -157,6 +160,92 @@ class Formatter(helpers.CursorIterator):
 
         return container
 
+    def _format_video(self, block):
+        """Renders a parsed NPF video block into HTML
+
+        If the video is an embed and external iframes are disabled, a link block linking
+        to the video will be rendered instead.
+
+        """
+        root_video_block_attrs = {"cls": "video-block"}
+        video_container_attrs = {"cls": "video-container"}
+
+        video = None
+
+        if block.media:
+            additional_attrs = {}
+            width, height = block.media[0].width, block.media[0].height
+
+            # if self.reserve_space_for_images:
+            #     root_video_block_attrs["cls"] += " reserved-space-img"
+            #     video_container_attrs["style"] = f"padding-bottom: {round((height / width) * 100, 4)}%;"
+
+            if block.poster:
+                additional_attrs["poster"] = self.url_handler(block.poster[0].url)
+
+            video = dominate.tags.video(
+                dominate.tags.source(
+                    src=self.url_handler(block.media[0].url), type=block.media[0].type
+                ),
+                width=width,
+                height=height,
+                preload="none",
+                controls=True,
+                **additional_attrs
+            )
+        elif not self.forbid_external_iframes:
+            if block.embed_iframe:
+                additional_attrs = {}
+                width, height = block.embed_iframe.width, block.embed_iframe.height
+
+                # YouTube should have an hardcoded height of 300px for some reason
+                if block.provider == "youtube":
+                    height = 300
+
+                if block.provider:
+                    additional_attrs["title"] = block.provider
+
+                video = dominate.tags.iframe(
+                    src=block.embed_iframe.url,
+                    width=f"{width}",
+                    height=f"{height}",
+                    scrolling="no",
+                    frameborder="0",
+                    **additional_attrs
+                )
+            elif block.embed_html:
+                video = dominate.util.raw(block.embed_html)
+
+        # If we are unable to render a video based on any of the above
+        # We'll try to render a link block instead
+        if video is None:
+            # If a url exists
+            if block.url:
+                return self._format_link(
+                    objects.link_block.LinkBlock(
+                        block.url,
+                        title=f"Embedded videos are not supported",
+                        description=f"Please click me to visit \"{block.provider}\" to watch the video",
+                        poster=block.poster,
+                        site_name=block.provider,
+                        display_url=block.url
+                    )
+                )
+
+            raise RuntimeError("Unable to render video")
+
+        video_block = dominate.tags.div(**root_video_block_attrs)
+        video_container = dominate.tags.div(**video_container_attrs)
+        video_container.add(video)
+        video_block.add(video_container)
+
+        # if self.reserve_space_for_images:
+        #     root_video_block_attrs["cls"] += " reserved-space-img"
+        #     video_container_attrs["style"] = f"padding-bottom: {round((height / 540) * 100, 4)}%;"
+
+        return video_block
+
+
     def __prepare_instruction_for_current_block(self):
         """Finds and returns the instruction (method) necessary to render a content block"""
         match self.current:
@@ -172,6 +261,8 @@ class Formatter(helpers.CursorIterator):
                 return self._format_image, (self.current,)
             case objects.link_block.LinkBlock():
                 return self._format_link, (self.current,)
+            case objects.video_block.VideoBlock():
+                return self._format_video, (self.current,)
             case objects.unsupported.Unsupported():
                 return self.format_unsupported, (self.current,)
             case _:  # Unreachable
@@ -186,7 +277,6 @@ class Formatter(helpers.CursorIterator):
         row_items = []
 
         return row_items
-
 
     def format(self):
         """Renders the list of content blocks into HTML"""

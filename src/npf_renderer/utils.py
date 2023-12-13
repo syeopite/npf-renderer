@@ -40,7 +40,7 @@ img {
   max-width: 100%;
 }
 
-.reserved-space-img.image-block {
+.reserved-space-img {
   width: 100%;
 }
 
@@ -135,6 +135,22 @@ font-size: 1.3em
 
 .site-name-author-separator {
   margin: 0px 3px;
+}
+
+/* Video blocks */
+.video-block iframe {
+  width: 100%;
+}
+
+.video-block {
+  position: relative;
+  width: 100%;
+}
+
+.post-body video {
+  max-width: 540px;
+  height: 100%;
+  width: 100%;
 }
 
 /* Ask */

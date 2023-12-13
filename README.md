@@ -171,11 +171,13 @@ format_npf(contents, layouts, url_handler=url_handler)
 
 ## Features
 
+(True as of master branch)
+
 - [x] Text blocks
 - [x] Image blocks
 - [x] Link Blocks
 - [ ] Audio Blocks
-- [ ] Video Blocks
+- [x] Video Blocks
 - [ ] Polls Blocks
 
 - [x] Layouts 

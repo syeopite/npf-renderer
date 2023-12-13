@@ -7,7 +7,7 @@ results = parser.parse()
 
 from . import misc
 from .. import helpers
-from ..objects import inline, text_block, image, link_block, unsupported
+from ..objects import inline, text_block, image, link_block, video_block , unsupported
 
 
 class Parser(helpers.CursorIterator):
@@ -181,14 +181,8 @@ class Parser(helpers.CursorIterator):
 
     def _parse_image_block(self):
         """Parses a NPF Image Content Block into a ImageBlock NamedTuple"""
-        if not isinstance(self.current["media"], list):
-            raw_media_list = [self.current["media"]]
-        else:
-            raw_media_list = self.current["media"]
-
-        media_list = []
-        for img in raw_media_list:
-            media_list.append(misc.parse_media_block(img))
+        media_list = self._parse_media_object(self.current["media"])
+        assert media_list
 
         alt_text = self.current.get("alt_text")
         if not alt_text:  # Try Camel Case Variant
@@ -231,17 +225,7 @@ class Parser(helpers.CursorIterator):
         if not display_url:  # Try snake case
             display_url = self.current.get("display_url")
         
-        if raw_poster := self.current.get("poster"):
-            if not isinstance(raw_poster, list):
-                raw_media_list = [raw_poster]
-            else:
-                raw_media_list = raw_poster
-
-            poster_media_object = []
-            for poster in raw_poster:
-                poster_media_object.append(misc.parse_media_block(poster))
-        else:
-            poster_media_object = None
+        poster_media_object = self._parse_media_object(self.current.get("poster"))
 
         return link_block.LinkBlock(
             url=url,
@@ -254,6 +238,65 @@ class Parser(helpers.CursorIterator):
             poster=poster_media_object
         )
 
+    def _parse_video_block(self):
+        url = self.current.get("url")
+
+        media = self._parse_media_object(self.current.get("media"))
+
+        provider = self.current.get("provider")
+
+        if not media:
+            embed_html = self.current.get("embedHtml") or self.current.get("embed_html")
+            embed_url = self.current.get("embedUrl") or self.current.get("embed_url")
+            embed_iframe = self.current.get("embedIframe") or self.current.get("embed_iframe")
+            
+            if embed_iframe:
+                embed_iframe = video_block.EmbedIframeObject(
+                    embed_iframe["url"],
+                    embed_iframe["width"],
+                    embed_iframe["height"],
+                )
+        else:
+            embed_html = None
+            embed_url = None 
+            embed_iframe = None
+
+        poster_media_object = self._parse_media_object(self.current.get("poster"))
+
+        if attribution := self.current.get("attribution"):
+            attribution = misc.parse_attribution(attribution)
+
+        filmstrip = self._parse_media_object(self.current.get("filmstrip"))
+
+        return video_block.VideoBlock(
+            url=url,
+
+            provider=provider,
+            media=media,
+            embed_html=embed_html,
+            embed_iframe=embed_iframe,
+            embed_url=embed_url,
+            poster=poster_media_object,
+            attribution=attribution,
+            filmstrip=filmstrip,
+        )
+
+    def _parse_media_object(self, raw_media_object):
+        """Parses a NPF media object"""
+        if raw_media_object:
+            if not isinstance(raw_media_object, list):
+                raw_media_object_list = [raw_media_object]
+            else:
+                raw_media_object_list = raw_media_object
+
+            media_objects = []
+            for poster in raw_media_object_list:
+                media_objects.append(misc.parse_media_block(poster))
+        else:
+            media_objects = None
+        
+        return media_objects
+
     def __parse_block(self):
         """Parses a content block and appends the result to self.parsed_result
 
@@ -263,15 +306,16 @@ class Parser(helpers.CursorIterator):
         match self.current["type"]:
             case "text":
                 block = self._parse_text()
-                self.parsed_result.append(block)
             case "image":
                 block = self._parse_image_block()
-                self.parsed_result.append(block)
             case "link":
                 block = self._parse_link_block()
-                self.parsed_result.append(block)
+            case "video":
+                block = self._parse_video_block()
             case _:
-                self.parsed_result.append(unsupported.Unsupported(self.current["type"]))
+                block = unsupported.Unsupported(self.current["type"])
+
+        self.parsed_result.append(block)
 
     def parse(self):
         """Begins the parsing chain and returns the final list of parsed objects"""
