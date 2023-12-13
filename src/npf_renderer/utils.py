@@ -80,6 +80,8 @@ font-size: 1.3em
 .quote {
   font-family: serif;
   font-size: 26px;
+  margin-left: 0;
+  margin-top: 0;
 }
 
 .inline-small {
