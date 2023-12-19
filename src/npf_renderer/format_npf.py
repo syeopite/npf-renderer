@@ -37,7 +37,7 @@ def format_npf(contents, layouts=None, *_, url_handler=None,
         pretty_html: Whether or not to render human readable html 
     """
     if reserve_space_for_images and not skip_cropped_images:
-        raise ValueError("skip_cropped_images myst be True if reserve_space_for_images is True")
+        raise ValueError("skip_cropped_images must be True if reserve_space_for_images is True")
     
     contents = Parser(contents).parse()
     if layouts:
