@@ -266,7 +266,7 @@ class Formatter(helpers.CursorIterator):
             case objects.unsupported.Unsupported():
                 return self.format_unsupported, (self.current,)
             case _:  # Unreachable
-                raise RuntimeError
+                raise ValueError("Unable to format unsupported block. This block should've been replaced with the \"Unsupported\" during the parsing stage. Something has gone wrong.")
 
     def _pad(self):
         [self.render_instructions.append(None) for _ in range(self.current_context_padding)]

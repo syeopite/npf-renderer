@@ -344,7 +344,7 @@ class InlineFormatter(helpers.CursorIterator):
                         self._priority_operation_queue.put(operation)
         else:
             # Not Possible
-            raise RuntimeError
+            raise RuntimeError("Priority operation failed check. Shouldn't be possible")
 
         if self._at_end:
             return

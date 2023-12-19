@@ -86,7 +86,7 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url,
             container.add(attribution.format_app_attribution(attr, url_handler))
         else:
             # TODO Add "Unsupported Attribution HTML"
-            raise RuntimeError
+            raise ValueError(f"Unable to format unsupported attribution: \"{attr}\" ")
 
     # Similar to the reason above, we won't be able to hide the poster image once the main content loads.
     # if poster_srcset:
