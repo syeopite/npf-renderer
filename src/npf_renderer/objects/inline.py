@@ -1,7 +1,7 @@
 """Objects storing data for inline formatting used in NPF's Text Content Block"""
 
 import enum
-from typing import NamedTuple, Union
+from typing import NamedTuple, Union, Sequence
 
 
 class FMTTypes(enum.Enum):
@@ -13,51 +13,48 @@ class FMTTypes(enum.Enum):
     MENTION = 5
     COLOR = 6
 
-    TOTAL_OVERLAP_PACKAGE = 7
 
-
-class Standard(NamedTuple):
+class Instruction(NamedTuple):
     """A tuple storing data on various inline formatting options"""
-    type: FMTTypes
-    start: int
-    end: int
+    type_: FMTTypes
+
+    def __lt__(self, other):
+        return self.type_.value < other.type_.value
 
 
-class Link(NamedTuple):
+class LinkInstruction(NamedTuple):
     """A tuple storing data on formatting an inline link"""
-    type: FMTTypes
-    start: int
-    end: int
+    type_: FMTTypes
     url: str
 
+    def __lt__(self, other):
+        return self.type_.value < other.type_.value
 
-class Mention(NamedTuple):
+class MentionInstruction(NamedTuple):
     """A tuple storing data on formatting an inline mention of a blog"""
-    type: FMTTypes
-    start: int
-    end: int
+    type_: FMTTypes
 
     blog_name: str
     blog_url: str
     blog_uuid: str
 
+    def __lt__(self, other):
+        return self.type_.value < other.type_.value
 
-class Color(NamedTuple):
+
+class ColorInstruction(NamedTuple):
     """A tuple storing data on formatting colored text"""
-    type: FMTTypes
-    start: int
-    end: int
+    type_: FMTTypes
     hex: str
 
+    def __lt__(self, other):
+        return self.type_.value < other.type_.value
 
-class TotalOverlaps(NamedTuple):
-    """A tuple storing data on formatting operations that overlaps from start to finish
 
-    This allows for easily constructing the nested HTML tags that comes out of this.
-    """
-    type: list[Union[Standard, Link, Mention, Color]]
+class StyleInterval(NamedTuple):
     start: int
     end: int
+    instructions: Sequence[Union[Instruction, LinkInstruction, MentionInstruction, ColorInstruction]]
 
 
-INLINE_FMT_TYPES = Union[Standard, Link, Mention, Color, TotalOverlaps]
+INLINE_FMT_TYPES = Union[Instruction, LinkInstruction, MentionInstruction, ColorInstruction]

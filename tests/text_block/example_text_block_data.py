@@ -436,8 +436,10 @@ top_level_list_with_children_merging_test_data = (
             text="I've got a bunch of links for you!",
             subtype=objects.text_block.Subtypes.HEADING1,
             inline_formatting=[
-                objects.inline.Standard(start=0, end=34, type=objects.inline.FMTTypes.BOLD)
-            ]
+                objects.inline.StyleInterval(
+                    start=0, end=34, instructions=[objects.inline.Instruction(objects.inline.FMTTypes.BOLD)]
+                )
+            ],
         ),
         objects.text_block.TextBlock(text="Interesting stuff",
                                      subtype=objects.text_block.Subtypes.HEADING2),
@@ -455,36 +457,48 @@ top_level_list_with_children_merging_test_data = (
                                 objects.text_block.TextBlock(
                                     text="NASA",
                                     inline_formatting=[
-                                        objects.inline.Link(
+                                        objects.inline.StyleInterval(
                                             start=0,
                                             end=4,
-                                            type=objects.inline.FMTTypes.LINK,
-                                            url="https://www.nasa.gov",
-                                        ),
+                                            instructions=[
+                                                objects.inline.LinkInstruction(
+                                                    type_=objects.inline.FMTTypes.LINK,
+                                                    url="https://www.nasa.gov",
+                                                )
+                                            ],
+                                        )
                                     ],
                                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
                                 ),
                                 objects.text_block.TextBlock(
                                     text="ESA",
                                     inline_formatting=[
-                                        objects.inline.Link(
+                                        objects.inline.StyleInterval(
                                             start=0,
                                             end=3,
-                                            type=objects.inline.FMTTypes.LINK,
-                                            url="https://www.esa.int/",
-                                        ),
-                                    ],
+                                            instructions=[
+                                                objects.inline.LinkInstruction(
+                                                    type_=objects.inline.FMTTypes.LINK,
+                                                    url="https://www.esa.int/",
+                                                )
+                                            ],
+                                        )
+                                    ],                                    
                                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
                                 ),
                                 objects.text_block.TextBlock(
                                     text="SpaceX",
                                     inline_formatting=[
-                                        objects.inline.Link(
+                                        objects.inline.StyleInterval(
                                             start=0,
                                             end=6,
-                                            type=objects.inline.FMTTypes.LINK,
-                                            url="https://www.spacex.com/",
-                                        ),
+                                            instructions=[
+                                                objects.inline.LinkInstruction(
+                                                    type_=objects.inline.FMTTypes.LINK,
+                                                    url="https://www.spacex.com/",
+                                                )
+                                            ],
+                                        )
                                     ],
                                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
                                 ),
@@ -502,11 +516,15 @@ top_level_list_with_children_merging_test_data = (
                                 objects.text_block.TextBlock(
                                     text="Github",
                                     inline_formatting=[
-                                        objects.inline.Link(
+                                        objects.inline.StyleInterval(
                                             start=0,
                                             end=6,
-                                            type=objects.inline.FMTTypes.LINK,
-                                            url="https://www.github.com/",
+                                            instructions=[
+                                                objects.inline.LinkInstruction(
+                                                    type_=objects.inline.FMTTypes.LINK,
+                                                    url="https://www.github.com/",
+                                                )
+                                            ],
                                         ),
                                     ],
                                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
@@ -514,11 +532,15 @@ top_level_list_with_children_merging_test_data = (
                                 objects.text_block.TextBlock(
                                     text="Gitlab",
                                     inline_formatting=[
-                                        objects.inline.Link(
+                                        objects.inline.StyleInterval(
                                             start=0,
                                             end=6,
-                                            type=objects.inline.FMTTypes.LINK,
-                                            url="https://about.gitlab.com/",
+                                            instructions=[
+                                                objects.inline.LinkInstruction(
+                                                    type_=objects.inline.FMTTypes.LINK,
+                                                    url="https://about.gitlab.com/",
+                                                )
+                                            ],
                                         ),
                                     ],
                                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
