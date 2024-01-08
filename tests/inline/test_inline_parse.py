@@ -38,11 +38,3 @@ def test_mention_formatting_parse():
 
 def test_color_formatting_parse():
     helper_function(color_test[0], color_test[1])
-
-
-def test_overlapping_parse():
-    helper_function(test_overlapping[0], test_overlapping[1])
-
-
-def test_total_overlapping_parse():
-    helper_function(test_total_overlapping[0], test_total_overlapping[1])

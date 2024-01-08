@@ -5,6 +5,8 @@ results = parser.parse()
 
 """
 
+import intervaltree
+
 from . import misc
 from .. import helpers
 from ..objects import inline, text_block, image, link_block, video_block , unsupported
@@ -104,79 +106,87 @@ class Parser(helpers.CursorIterator):
         return create_text_block(text, subtype, inline_formats, nest_=nest_array)
 
     @staticmethod
-    def route_inline_format(inline_format, start, end):
+    def route_inline_format(inline_format):
         inline_type = getattr(inline.FMTTypes, inline_format["type"].upper())
 
         match inline_type:
             case (inline.FMTTypes.BOLD | inline.FMTTypes.ITALIC |
                   inline.FMTTypes.STRIKETHROUGH | inline.FMTTypes.SMALL):
-                return inline.Standard(
-                    start=start,
-                    end=end,
-                    type=inline_type
+                return inline.Instruction(
+                    type_=inline_type
                 )
             case inline.FMTTypes.LINK:
-                return inline.Link(
-                    start=start,
-                    end=end,
-                    type=inline_type,
+                return inline.LinkInstruction(
+                    type_=inline_type,
                     url=inline_format["url"]
                 )
             case inline.FMTTypes.MENTION:
                 blog = inline_format["blog"]
-                return inline.Mention(
-                    start=start,
-                    end=end,
-                    type=inline_type,
+                return inline.MentionInstruction(
+                    type_=inline_type,
 
                     blog_name=blog["name"],
                     blog_uuid=blog["uuid"],
                     blog_url=blog["url"]
                 )
             case inline.FMTTypes.COLOR:
-                return inline.Color(
-                    start=start,
-                    end=end,
-                    type=inline_type,
-
+                return inline.ColorInstruction(
+                    type_=inline_type,
                     hex=inline_format["hex"],
                 )
 
-    def _parse_inline_text(self, inline_formatting):
+    def _parse_inline_text(self, raw_inline_formatting):
         """Parses the inline formatting of a content block into an array of inline fmt objects"""
-        inline_formats = []
-        inline_formatting_iter = helpers.CursorIterator(inline_formatting)
-        while not inline_formatting_iter._at_end:
-            inline_formatting_iter.next()
+        # The Interval Tree is needed to convert NPF inline fmt intervals
+        # into discrete non-overlapping chunks.
+        #
+        # This is to simplify the final formatting operation.
+        #
+        # For instance:
+        #
+        # {'end': 1, 'start': 5, 'type': 'bold'} and {'end': 2, 'start': 7, 'type': 'italics'}
+        #
+        # Would be converted to something like:
+        # [1, 2, [bold]], [2,5, [bold, italics]], [5,7, [italics]]
+        #
 
-            inline_format = inline_formatting_iter.current
-            start, end = inline_format["start"], inline_format["end"]
-            current_parsed_inline_fmt = self.route_inline_format(inline_format, start, end)
+        inline_format_intervals = intervaltree.IntervalTree()
 
-            overlapping_formats = []
-            while peek := inline_formatting_iter.peek():
-                p_start, p_end = peek["start"], peek["end"]
+        # Insert
+        for raw_inline in raw_inline_formatting:
+            start = raw_inline["start"]
+            end = raw_inline["end"]
 
-                if start == p_start and end == p_end:
-                    overlapping_formats.append(self.route_inline_format(peek, p_start, p_end))
-                    inline_formatting_iter.next()
+            inline_format_intervals[start:end] = self.route_inline_format(raw_inline)
 
+        inline_format_intervals.split_overlaps()
+        inline_format_intervals = sorted(inline_format_intervals.items())
+
+        # Merge duplicates
+        latch = None
+        discrete_formatting_instructions = []
+        for interval in inline_format_intervals:
+            if latch:
+                if latch[0] == interval.begin and latch[1] == interval.end:
+                    latch[2].append(interval.data)  # Data being a formatting instruction
                 else:
-                    # Tumblr's API should return the list of inline fmts sorted. So if even one doesn't match then
-                    # we shouldn't have any overlapping ranges with same start and end
-                    break
-
-            if overlapping_formats:
-                inline_formats.append(
-                    inline.TotalOverlaps(
-                        type=[current_parsed_inline_fmt] + overlapping_formats,
-                        start=start,
-                        end=end
-                    )
-                )
+                    discrete_formatting_instructions.append(latch)
+                    latch = [interval[0], interval[1], [interval[2]]]
             else:
-                inline_formats.append(current_parsed_inline_fmt)
+                latch = [interval[0], interval[1], [interval[2]]]
 
+        # Validates that everything got added
+        if not discrete_formatting_instructions:
+            discrete_formatting_instructions.append(latch)
+        else:
+            last_raw_style = inline_format_intervals[-1]
+            last_processed_style = discrete_formatting_instructions[-1]
+
+            if last_raw_style.begin != last_processed_style[0] and last_raw_style.end != last_processed_style[1]:
+                discrete_formatting_instructions.append(latch)
+
+        # Package
+        inline_formats = [inline.StyleInterval(interval[0], interval[1], sorted(interval[2])) for interval in discrete_formatting_instructions]
         return inline_formats
 
     def _parse_image_block(self):

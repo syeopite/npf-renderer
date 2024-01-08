@@ -16,7 +16,7 @@ standard_test = (
     [
         objects.text_block.TextBlock(
             text="some small text",
-            inline_formatting=[objects.inline.Standard(type=objects.inline.FMTTypes.SMALL, start=5, end=10)],
+            inline_formatting=[objects.inline.StyleInterval(start=5, end=10, instructions=[objects.inline.Instruction(objects.inline.FMTTypes.SMALL)])],
         )
     ],
     tags.div(
@@ -51,11 +51,15 @@ link_test = (
         objects.text_block.TextBlock(
             text="Found this link for you",
             inline_formatting=[
-                objects.inline.Link(
-                    type=objects.inline.FMTTypes.LINK,
+                objects.inline.StyleInterval(
                     start=6,
                     end=10,
-                    url="https://www.nasa.gov",
+                    instructions=[
+                        objects.inline.LinkInstruction(
+                            type_=objects.inline.FMTTypes.LINK,
+                            url="https://www.nasa.gov",
+                        )
+                    ],
                 )
             ],
         )
@@ -73,6 +77,8 @@ link_test = (
         cls="post-body",
     ),
 )
+
+
 mention_test = (
     {
         "content": [
@@ -98,13 +104,17 @@ mention_test = (
         objects.text_block.TextBlock(
             text="Shout out to @david",
             inline_formatting=[
-                objects.inline.Mention(
-                    type=objects.inline.FMTTypes.MENTION,
+                objects.inline.StyleInterval(
                     start=13,
                     end=19,
-                    blog_uuid="t:123456abcdf",
-                    blog_name="david",
-                    blog_url="https://davidslog.com/",
+                    instructions=[
+                        objects.inline.MentionInstruction(
+                            type_=objects.inline.FMTTypes.MENTION,
+                            blog_uuid="t:123456abcdf",
+                            blog_name="david",
+                            blog_url="https://davidslog.com/",
+                        )
+                    ],
                 )
             ],
         )
@@ -122,6 +132,7 @@ mention_test = (
     ),
 )
 
+
 color_test = (
     {
         "content": [
@@ -136,8 +147,17 @@ color_test = (
         objects.text_block.TextBlock(
             text="Celebrate Pride Month",
             inline_formatting=[
-                objects.inline.Color(type=objects.inline.FMTTypes.COLOR, start=10, end=15, hex="#ff492f")
-            ],
+                objects.inline.StyleInterval(
+                    start=10,
+                    end=15,
+                    instructions=[
+                        objects.inline.ColorInstruction(
+                            type_=objects.inline.FMTTypes.COLOR,
+                            hex="#ff492f"
+                        )
+                    ],
+                )
+            ]
         )
     ],
     tags.div(
@@ -154,136 +174,3 @@ color_test = (
     ),
 )
 
-test_overlapping = (
-    {
-        "content": [
-            {
-                "type": "text",
-                "text": "supercalifragilisticexpialidocious",
-                "formatting": [
-                    {"start": 0, "end": 20, "type": "bold"},
-                    {"start": 9, "end": 34, "type": "italic"},
-                ],
-            }
-        ]
-    },
-    [
-        objects.text_block.TextBlock(
-            text="supercalifragilisticexpialidocious",
-            inline_formatting=[
-                objects.inline.Standard(
-                    type=objects.inline.FMTTypes.BOLD,
-                    start=0,
-                    end=20,
-                ),
-                objects.inline.Standard(
-                    type=objects.inline.FMTTypes.ITALIC,
-                    start=9,
-                    end=34,
-                ),
-            ],
-        ),
-    ],
-    tags.div(
-        tags.p(
-            tags.span(
-                tags.b(
-                    "supercali",
-                    tags.i("fragilistic", cls="inline-italics"),
-                    cls="inline-bold",
-                ),
-                tags.i("expialidocious", cls="inline-italics"),
-                cls="inline-formatted-content",
-            ),
-            cls="text-block",
-        ),
-        cls="post-body",
-    ),
-)
-
-test_total_overlapping = (
-    {
-        "content": [
-            {
-                "type": "text",
-                "text": "supercalifragilisticexpialidocious",
-                "formatting": [
-                    {"start": 0, "end": 34, "type": "bold"},
-                    {"start": 0, "end": 34, "type": "italic"},
-                    {"start": 0, "end": 34, "type": "small"},
-                    {"start": 0, "end": 34, "type": "strikethrough"},
-                    {"start": 0, "end": 34, "type": "link",
-                     "url": "https://en.wiktionary.org/wiki/supercalifragilisticexpialidocious"},
-                ],
-            }
-        ]
-    },
-    [
-        objects.text_block.TextBlock(
-            text="supercalifragilisticexpialidocious",
-            inline_formatting=[
-                objects.inline.TotalOverlaps(
-                    type=[
-                        objects.inline.Standard(
-                            type=objects.inline.FMTTypes.BOLD,
-                            start=0,
-                            end=34,
-                        ),
-                        objects.inline.Standard(
-                            type=objects.inline.FMTTypes.ITALIC,
-                            start=0,
-                            end=34,
-                        ),
-                        objects.inline.Standard(
-                            type=objects.inline.FMTTypes.SMALL,
-                            start=0,
-                            end=34,
-                        ),
-                        objects.inline.Standard(
-                            type=objects.inline.FMTTypes.STRIKETHROUGH,
-                            start=0,
-                            end=34,
-                        ),
-                        objects.inline.Link(
-                            type=objects.inline.FMTTypes.LINK,
-                            start=0,
-                            end=34,
-                            url="https://en.wiktionary.org/wiki/supercalifragilisticexpialidocious",
-                        )
-                    ],
-
-                    start=0,
-                    end=34
-                )
-
-            ],
-        ),
-    ],
-    tags.div(
-        tags.p(
-            tags.span(
-                tags.b(
-                    tags.i(
-                        tags.small(
-                            tags.s(
-                                tags.a(
-                                    "supercalifragilisticexpialidocious",
-                                    href="https://en.wiktionary.org/wiki/supercalifragilisticexpialidocious",
-                                    cls="inline-link"
-                                ),
-                                cls="inline-strikethrough",
-                            ),
-                            cls="inline-small",
-                        ),
-                        cls="inline-italics"
-                    ),
-
-                    cls="inline-bold",
-                ),
-                cls="inline-formatted-content",
-            ),
-            cls="text-block",
-        ),
-        cls="post-body",
-    ),
-)

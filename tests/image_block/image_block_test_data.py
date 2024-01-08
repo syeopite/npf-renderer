@@ -456,11 +456,15 @@ image_block_with_app_attribution = (
         objects.text_block.TextBlock(
             text="Check out my commission from author! Please follow them here https://twitter.com/example",
             inline_formatting= [
-                objects.inline.Link(
-                    type=objects.inline.FMTTypes.LINK,
+                objects.inline.StyleInterval(
                     start=61,
                     end=88,
-                    url="https://twitter.com/example"
+                    instructions=[
+                        objects.inline.LinkInstruction(
+                            type_=objects.inline.FMTTypes.LINK,
+                            url="https://twitter.com/example"
+                        )
+                    ],
                 )
             ]
         ),

@@ -41,6 +41,7 @@ connected_back_to_back_format_test = (
     ),
 )
 
+
 back_to_back_format_test = (
     [
         {
@@ -81,6 +82,7 @@ back_to_back_format_test = (
     ),
 )
 
+
 long_space_in_between_format_test = (
     [
         {
@@ -112,6 +114,7 @@ long_space_in_between_format_test = (
     ),
 )
 
+
 second_has_lower_end_index_test = (
     [
         {
@@ -128,18 +131,17 @@ second_has_lower_end_index_test = (
         tags.blockquote(
             tags.span(
                 "The ",
-                tags.span(
-                    "brown ",
-                    tags.b(
+                tags.span("brown ", cls="inline-color", style="color: #964B00;"),
+                tags.b(
+                    tags.span(
                         "fox",
-                        cls="inline-bold"
+                        cls="inline-color",
+                        style="color: #964B00;"
                     ),
-                    " jumped over",
-                    cls="inline-color",
-                    style="color: #964B00;",
+                    cls="inline-bold",
                 ),
+                tags.span(" jumped over", cls="inline-color", style="color: #964B00;"),
                 " the lazy dog",
-
                 cls="inline-formatted-content"
             ),
             cls="text-block indented inline-formatted-block",
@@ -148,6 +150,7 @@ second_has_lower_end_index_test = (
         cls="post-body"
     )
 )
+
 
 second_has_lower_end_index_test_2 = (
     [
@@ -166,21 +169,37 @@ second_has_lower_end_index_test_2 = (
         tags.blockquote(
             tags.span(
                 "The ",
-                tags.span(
-                    "br",
-                    tags.small(
+                tags.span("br", cls="inline-color", style="color: #964B00;"),
+                tags.small(
+                    tags.span(
                         "own ",
-                        tags.b(
-                            "fox",
-                            cls="inline-bold"
-                        ),
-                        " ",
-                        cls="inline-small",
+                        cls="inline-color",
+                        style="color: #964B00;"
                     ),
-                    "jumped over",
-                    cls="inline-color",
-                    style="color: #964B00;",
+                    cls="inline-small", 
                 ),
+                tags.b(
+                    tags.small(
+                        tags.span(
+                            "fox",
+                        cls="inline-color", 
+                        style="color: #964B00;"
+                        ),
+                        cls="inline-small"
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.small(
+                    tags.span(
+                        " ",
+                        cls="inline-color",
+                        style="color: #964B00;"
+                    ),
+                    cls="inline-small"
+                ),
+
+                tags.span("jumped over", cls="inline-color", style="color: #964B00;"),
                 " the lazy dog",
 
                 cls="inline-formatted-content"
@@ -192,6 +211,7 @@ second_has_lower_end_index_test_2 = (
         cls="post-body"
     )
 )
+
 
 overlapping_same_area_test_data = (
     [
@@ -214,26 +234,26 @@ overlapping_same_area_test_data = (
         tags.blockquote(
             tags.span(
                 "The ",
-                tags.span(
-                    tags.a(
-                        tags.b(
-                            tags.s(
-                                tags.i(
-                                    tags.small(
+                tags.b(
+                    tags.i(
+                        tags.s(
+                            tags.small(
+                                tags.a(
+                                    tags.span(
                                         "hypersonic brown fox",
-                                        cls="inline-small"
+                                        cls="inline-color",
+                                        style="color: #964B00;"
                                     ),
-                                    cls="inline-italics"
+                                    href="https://www.youtube.com/watch?v=jofNR_WkoCE",
+                                    cls="inline-link",
                                 ),
-                                cls="inline-strikethrough"
+                                cls="inline-small"
                             ),
-                            cls="inline-bold"
+                            cls="inline-strikethrough"
                         ),
-                        href="https://www.youtube.com/watch?v=jofNR_WkoCE",
-                        cls="inline-link"
+                        cls="inline-italics"
                     ),
-                    cls="inline-color",
-                    style="color: #964B00;"
+                    cls="inline-bold"
                 ),
                 " jumped over the sleeping dog",
                 cls="inline-formatted-content"
@@ -243,6 +263,7 @@ overlapping_same_area_test_data = (
         cls="post-body"
     )
 )
+
 
 overlapping_same_start_different_end_data = (
     [
@@ -268,16 +289,29 @@ overlapping_same_start_different_end_data = (
                             "brown ",
                             style="color: #964B00;",
                             cls="inline-color"
-
                         ),
+                        href="https://www.youtube.com/watch?v=jofNR_WkoCE",
+                        cls="inline-link"
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.b(
+                    tags.a(
                         "fox jumped",
                         href="https://www.youtube.com/watch?v=jofNR_WkoCE",
                         cls="inline-link"
                     ),
+                    cls="inline-bold"
+                ),
+
+                tags.b(
                     " over the ",
                     cls="inline-bold"
                 ),
+
                 "lazy dog",
+
                 cls="inline-formatted-content"
             ),
             cls="text-block indented inline-formatted-block"
@@ -285,6 +319,7 @@ overlapping_same_start_different_end_data = (
         cls="post-body"
     )
 )
+
 
 interrupted_same_indices_overlapping = (
     [
@@ -305,37 +340,35 @@ interrupted_same_indices_overlapping = (
         tags.blockquote(
             tags.span(
                 "Th",
-                tags.a(
-                    "e ",
-                    tags.span(
-                        tags.i(
-                            tags.small(
+                tags.a("e ", cls="inline-link", href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
+                tags.i(
+                    tags.small(
+                        tags.a(
+                            tags.span(
                                 "brow",
-                                cls="inline-small"
+                                style="color: #964B00;",
+                                cls="inline-color"
                             ),
-                            cls="inline-italics"
+                            cls="inline-link",
+                            href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                         ),
-                        style="color: #964B00;",
-                        cls="inline-color",
+                        cls="inline-small"
                     ),
-                    href="https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                    cls="inline-link"
+                    cls="inline-italics"
                 ),
 
-                tags.span(
-                    tags.i(
-                        tags.small(
+                tags.i(
+                    tags.small(
+                        tags.span(
                             "n fox jumped over",
-                            cls="inline-small"
+                            style="color: #964B00;",
+                            cls="inline-color"
                         ),
-                        cls="inline-italics"
+                        cls="inline-small"
                     ),
-                    style="color: #964B00;",
-                    cls="inline-color",
+                    cls="inline-italics"
                 ),
-
                 " the lazy dog",
-
                 cls="inline-formatted-content"
             ),
             cls="text-block indented inline-formatted-block"
@@ -343,6 +376,7 @@ interrupted_same_indices_overlapping = (
         cls="post-body"
     )
 )
+
 
 interrupted_overlap_test = (
     [
@@ -362,19 +396,20 @@ interrupted_overlap_test = (
         tags.h1(
             tags.span(
                 "The b",
-                tags.small(
-                    "row",
-                    tags.s(
-                        "n ",
+                tags.small("row", cls="inline-small"),
+                tags.s(tags.small("n ", cls="inline-small"), cls="inline-strikethrough"),
+                tags.s(
+                    tags.small(
                         tags.span(
                             "fox",
                             style="color: #964B00;",
                             cls="inline-color",
                         ),
-                        cls="inline-strikethrough"
+                        cls="inline-small"
                     ),
-                    cls="inline-small"
+                    cls="inline-strikethrough"
                 ),
+
                 tags.s(
                     tags.span(
                         " jump",
@@ -400,6 +435,7 @@ interrupted_overlap_test = (
     )
 )
 
+
 interrupted_overlap_test_2 = (
     [
         {
@@ -418,44 +454,93 @@ interrupted_overlap_test_2 = (
     ], tags.div(
         tags.h1(
             tags.span(
-                tags.span(
-                    tags.b(
-                        "The b",
+                tags.b(tags.span("The b", style="color: #964B00;", cls="inline-color"), cls="inline-bold"),
+                tags.b(
+                    tags.small(
+                        tags.span(
+                            "row", 
+                            style="color: #964B00;",
+                            cls="inline-color"  
+                        ),
+                        cls="inline-small",
+                    ),
+                    cls="inline-bold"
+                ),
+                tags.b(
+                    tags.s(
                         tags.small(
-                            "row",
-                            tags.s(
-                                "n ",
-                                tags.i(
-                                    "fox",
-                                    cls="inline-italics"
-                                ),
-                                cls="inline-strikethrough"
+                            tags.span(
+                                "n ", 
+                                style="color: #964B00;",
+                                cls="inline-color"  
                             ),
                             cls="inline-small",
                         ),
-
-                        tags.s(
-                            tags.i(
-                                " jumped",
-                                cls="inline-italics",
-                            ),
-                            cls="inline-strikethrough",
-                        ),
-
-                        tags.i(
-                            " over",
-                            cls="inline-italics",
-                        ),
-
-                        " the ",
-
-                        cls="inline-bold",
+                        cls="inline-strikethrough"
                     ),
-
-                    "laz",
-                    cls="inline-color",
-                    style="color: #964B00;",
+                    cls="inline-bold"
                 ),
+
+                tags.b(
+                    tags.i(
+                        tags.s(
+                            tags.small(
+                                tags.span(
+                                    "fox", 
+                                    style="color: #964B00;",
+                                    cls="inline-color"  
+                                ),
+                                cls="inline-small",
+                            ),
+                            cls="inline-strikethrough"
+                        ),
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.b(
+                    tags.i(
+                        tags.s(
+                            tags.span(
+                                " jumped", 
+                                style="color: #964B00;",
+                                cls="inline-color"  
+                            ),
+                            cls="inline-strikethrough"
+                        ),
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.b(
+                    tags.i(
+                        tags.span(
+                            " over", 
+                            style="color: #964B00;",
+                            cls="inline-color"  
+                        ),
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.b(
+                    tags.span(
+                        " the ", 
+                        style="color: #964B00;",
+                        cls="inline-color"  
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.span(
+                    "laz", 
+                    style="color: #964B00;",
+                    cls="inline-color"  
+                ),
+
                 "y dog",
 
                 cls="inline-formatted-content"
@@ -465,6 +550,7 @@ interrupted_overlap_test_2 = (
         cls="post-body"
     )
 )
+
 
 interrupted_overlap_test_3 = (
     [
@@ -486,65 +572,59 @@ interrupted_overlap_test_3 = (
         tags.h1(
             tags.span(
                 "The b",
-                tags.small(
-                    "row",
-                    tags.s(
-                        "n ",
-                        tags.i(
-                            "fo",
-                            tags.b(
-                                "x",
-                                cls="inline-bold"
-                            ),
-                            cls="inline-italics"
-                        ),
-                        cls="inline-strikethrough"
-                    ),
-                    cls="inline-small"
-                ),
-                tags.i(
-                    tags.s(
-                        tags.b(
+                tags.small("row", cls="inline-small"),
+                tags.s(tags.small("n ", cls="inline-small"), cls="inline-strikethrough"),
+                tags.i(tags.s(tags.small("fo", cls="inline-small"), cls="inline-strikethrough"), cls="inline-italics"),
+                tags.b(tags.i(tags.s(tags.small("x", cls="inline-small"), cls="inline-strikethrough"), cls="inline-italics"), cls="inline-bold"),
+                tags.b(
+                    tags.i(
+                        tags.s(
                             " ",
+                            cls="inline-strikethrough"
+                        ),
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.b(
+                    tags.i(
+                        tags.s(
                             tags.span(
                                 "jumped",
                                 style="color: #964B00;",
-                                cls="inline-color",
+                                cls="inline-color"
                             ),
-                            cls="inline-bold"
+                            cls="inline-strikethrough"
                         ),
-                        cls="inline-strikethrough"
+                        cls="inline-italics"
                     ),
+                    cls="inline-bold"
+                ),
 
-                    tags.b(
+                tags.b(
+                    tags.i(
                         tags.span(
                             " over",
                             style="color: #964B00;",
-                            cls="inline-color",
+                            cls="inline-color"
                         ),
-                        cls="inline-bold"
+                        cls="inline-italics"
                     ),
-
-                    cls="inline-italics"
+                    cls="inline-bold"
                 ),
 
                 tags.b(
                     tags.span(
                         " th",
                         style="color: #964B00;",
-                        cls="inline-color",
+                        cls="inline-color"
                     ),
                     cls="inline-bold"
                 ),
 
-                tags.span(
-                    "e laz",
-                    style="color: #964B00;",
-                    cls="inline-color",
-                ),
-
+                tags.span("e laz", style="color: #964B00;", cls="inline-color"),
                 "y dog",
-
                 cls="inline-formatted-content"
             ),
             cls="text-block heading1 inline-formatted-block"
@@ -574,72 +654,85 @@ interrupted_overlap_test_4 = (
         tags.h1(
             tags.span(
                 "The b",
-                tags.small(
-                    "row",
-                    tags.s(
-                        "n ",
-                        tags.i(
-                            "fo",
-                            tags.b(
-                                "x",
-                                cls="inline-bold"
-                            ),
-                            cls="inline-italics"
+                tags.small("row", cls="inline-small"),
+                tags.s(tags.small("n ", cls="inline-small"), cls="inline-strikethrough"),
+                tags.i(tags.s(tags.small("fo", cls="inline-small"),cls="inline-strikethrough"), cls="inline-italics"),
+                tags.b(
+                    tags.i(
+                        tags.s(
+                            tags.small("x", cls="inline-small"),
+                            cls="inline-strikethrough"
                         ),
-                        cls="inline-strikethrough"
+                        cls="inline-italics"
                     ),
-                    cls="inline-small"
+                    cls="inline-bold"
                 ),
-                tags.i(
-                    tags.s(
-                        tags.b(
+                tags.b(
+                    tags.i(
+                        tags.s(
                             " ",
+                            cls="inline-strikethrough"
+                        ),
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
+                ),
+                tags.b(
+                    tags.i(
+                        tags.s(
                             tags.span(
                                 "jumped",
                                 style="color: #964B00;",
-                                cls="inline-color",
+                                cls="inline-color"
                             ),
-                            cls="inline-bold"
+                            cls="inline-strikethrough"
                         ),
-                        cls="inline-strikethrough"
+                        cls="inline-italics"
                     ),
+                    cls="inline-bold"
+                ),
 
-                    tags.b(
+                tags.b(
+                    tags.i(
                         tags.span(
                             " over",
                             style="color: #964B00;",
-                            cls="inline-color",
+                            cls="inline-color"
                         ),
-                        cls="inline-bold"
+                        cls="inline-italics"
                     ),
-
-                    cls="inline-italics"
+                    cls="inline-bold"
                 ),
 
                 tags.b(
                     tags.span(
                         " th",
                         style="color: #964B00;",
-                        cls="inline-color",
+                        cls="inline-color"
                     ),
                     cls="inline-bold"
                 ),
 
                 tags.span(
                     "e lazy ",
+                    style="color: #964B00;",
+                    cls="inline-color"
+                ),
+
+                tags.span(
                     tags.span(
                         "d",
                         style="color: #FFFFFF;",
-                        cls="inline-color",
+                        cls="inline-color"
                     ),
                     style="color: #964B00;",
-                    cls="inline-color",
+                    cls="inline-color"
                 ),
 
                 tags.span(
                     "og",
                     style="color: #FFFFFF;",
-                    cls="inline-color",
+                    cls="inline-color"
                 ),
 
                 cls="inline-formatted-content"
@@ -649,6 +742,7 @@ interrupted_overlap_test_4 = (
         cls="post-body"
     )
 )
+
 
 interrupted_overlap_test_5 = (
     [
@@ -668,40 +762,51 @@ interrupted_overlap_test_5 = (
         tags.h1(
             tags.span(
                 "The b",
-                tags.small(
-                    "row",
+                tags.small("row", cls="inline-small"),
+                tags.s(
+                    tags.small("n ", cls="inline-small"),
+                    cls="inline-strikethrough"
+                ),
+                tags.i(
                     tags.s(
-                        "n ",
-                        tags.i(
-                            "fo",
-                            tags.b(
-                                "x",
-                                cls="inline-bold"
-                            ),
-                            cls="inline-italics"
-                        ),
+                        tags.small("fo", cls="inline-small"),
                         cls="inline-strikethrough"
                     ),
-                    cls="inline-small"
+                    cls="inline-italics"
+                ),
+                tags.b(
+                    tags.i(
+                        tags.s(
+                            tags.small("x", cls="inline-small"),
+                            cls="inline-strikethrough"
+                        ),
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.b(
+                    tags.i(
+                        tags.s(
+                            " jumped",
+                            cls="inline-strikethrough"
+                        ),
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.b(
+                    tags.i(
+                        " o",
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
                 ),
 
                 tags.i(
-                    tags.s(
-                        tags.b(
-                            " jumped",
-                            cls="inline-bold"
-                        ),
-                        cls="inline-strikethrough"
-                    ),
-
-                    tags.b(
-                        " o",
-                        cls="inline-bold"
-                    ),
-
                     "ver",
-
-                    cls="inline-italics",
+                    cls="inline-italics"
                 ),
 
                 " the lazy dog",
@@ -713,6 +818,7 @@ interrupted_overlap_test_5 = (
         cls="post-body"
     )
 )
+
 
 interrupted_overlap_test_6 = (
     [
@@ -735,61 +841,97 @@ interrupted_overlap_test_6 = (
         tags.h1(
             tags.span(
                 "The b",
-                tags.small(
-                    "row",
+                tags.small("row", cls="inline-small"),
+                tags.s(tags.small("n ", cls="inline-small"), cls="inline-strikethrough"),
+                tags.i(
                     tags.s(
-                        "n ",
-                        tags.i(
+                        tags.small(
                             tags.a(
                                 tags.span(
                                     "fo",
-                                    tags.b(
-                                        "x",
-                                        cls="inline-bold"
-                                    ),
                                     style="color: #FFFFFF;",
                                     cls="inline-color"
                                 ),
                                 href="example.com",
-                                cls="inline-link",
+                                cls="inline-link"
                             ),
-                            cls="inline-italics"
+                            cls="inline-small"
                         ),
                         cls="inline-strikethrough"
                     ),
-                    cls="inline-small"
+                    cls="inline-italics"
+                ),
+                tags.b(
+                    tags.i(
+                        tags.s(
+                            tags.small(
+                                tags.a(
+                                    tags.span(
+                                        "x",
+                                        style="color: #FFFFFF;",
+                                        cls="inline-color"
+                                    ),
+                                    href="example.com",
+                                    cls="inline-link"
+                                ),
+                                cls="inline-small"
+                            ),
+                            cls="inline-strikethrough"
+                        ),
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.b(
+                    tags.i(
+                        tags.s(
+                            tags.a(
+                                tags.span(
+                                    " jumped",
+                                    style="color: #FFFFFF;",
+                                    cls="inline-color"
+                                ),
+                                href="example.com",
+                                cls="inline-link"
+                            ),
+                            cls="inline-strikethrough"
+                        ),
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
+                ),
+
+                tags.b(
+                    tags.i(
+                        tags.a(
+                            tags.span(
+                                " o",
+                                style="color: #FFFFFF;",
+                                cls="inline-color"
+                            ),
+                            href="example.com",
+                            cls="inline-link"
+                        ),
+                        cls="inline-italics"
+                    ),
+                    cls="inline-bold"
                 ),
 
                 tags.i(
                     tags.a(
                         tags.span(
-                            tags.s(
-                                tags.b(
-                                    " jumped",
-                                    cls="inline-bold"
-                                ),
-                                cls="inline-strikethrough"
-                            ),
-
-                            tags.b(
-                                " o",
-                                cls="inline-bold"
-                            ),
-
                             "ver",
-
                             style="color: #FFFFFF;",
                             cls="inline-color"
                         ),
                         href="example.com",
-                        cls="inline-link",
+                        cls="inline-link"
                     ),
-
                     cls="inline-italics"
                 ),
 
                 " the lazy dog",
-
                 cls="inline-formatted-content"
             ),
             cls="text-block heading1 inline-formatted-block"
@@ -797,6 +939,7 @@ interrupted_overlap_test_6 = (
         cls="post-body"
     )
 )
+
 
 same_index_with_other_overlap_test = (
     [
@@ -817,23 +960,28 @@ same_index_with_other_overlap_test = (
     tags.div(
         tags.h1(
             tags.span(
-                tags.span(
-                    tags.b(
+                tags.b(
+                    tags.span(
                         "The brown",
-                        cls="inline-bold"
+                        style="color: #FFFFFF;",
+                        cls="inline-color"
                     ),
-                    style="color: #FFFFFF;",
-                    cls="inline-color",
+                    cls="inline-bold",
                 ),
                 " ",
                 tags.span(
                     "fox j",
-                    tags.i(
-                        "umped",
-                        cls="inline-italics"
-                    ),
                     style="color: #964B00;",
                     cls="inline-color",
+                ),
+
+                tags.i(
+                    tags.span(
+                        "umped",
+                        style="color: #964B00;",
+                        cls="inline-color"
+                    ),
+                    cls="inline-italics",
                 ),
 
                 tags.i(
@@ -989,6 +1137,7 @@ link_url_handler_test_data = (
     )
 )
 
+
 excessively_out_of_bounds_end_single_op_test = (
     [{
         "type": "text",
@@ -1040,7 +1189,7 @@ excessively_out_of_bounds_end_multiple_op_test = (
     tags.div(
         tags.blockquote(
             tags.span(
-                tags.i(tags.b("some text", cls="inline-bold"), cls="inline-italics"),
+                tags.b(tags.i("some text", cls="inline-italics"), cls="inline-bold"),
                 cls="inline-formatted-content"
             ),
             cls="text-block indented inline-formatted-block"
@@ -1075,7 +1224,7 @@ excessively_out_of_bounds_end_overlap_test = (
     tags.div(
         tags.blockquote(
             tags.span(
-                tags.i(tags.b("some text", cls="inline-bold"), cls="inline-italics"),
+                tags.b(tags.i("some text", cls="inline-italics"), cls="inline-bold"),
                 cls="inline-formatted-content"
             ),
             cls="text-block indented inline-formatted-block"
@@ -1083,6 +1232,7 @@ excessively_out_of_bounds_end_overlap_test = (
         cls="post-body"
     )
 )
+
 
 excessively_out_of_bounds_end_multiple_op_differing_start_test = (
     [{
@@ -1109,7 +1259,8 @@ excessively_out_of_bounds_end_multiple_op_differing_start_test = (
     tags.div(
         tags.blockquote(
             tags.span(
-                tags.i("some ", tags.b("text", cls="inline-bold"), cls="inline-italics"),
+                tags.i("some ", cls="inline-italics"),
+                tags.b(tags.i("text", cls="inline-italics"),cls="inline-bold"),
                 cls="inline-formatted-content"
             ),
             cls="text-block indented inline-formatted-block"

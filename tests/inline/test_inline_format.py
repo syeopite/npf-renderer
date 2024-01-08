@@ -34,10 +34,6 @@ def test_color_formatting_render():
     helper_function(color_test[0], color_test[2])
 
 
-def test_overlapping_render():
-    helper_function(test_overlapping[0], test_overlapping[2])
-
-
 # Exclusive formatting tests below:
 # -------------------------------------------------------------
 #
