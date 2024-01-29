@@ -135,6 +135,48 @@ font-size: 1.3em
   margin: 0px 3px;
 }
 
+.audio-block, .audio-block > iframe {
+  width: 100%;
+}
+
+/* Spotify embeds can sometimes generate with a large amount of excess white space */
+.spotify_audio_player {
+  max-height: 352px;
+}
+
+/* Audio blocks */
+.ab-heading {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 10px;
+}
+
+.ab-metadata {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 96px;
+}
+
+.ab-metadata > * {
+  margin: 0;
+}
+
+img.ab-poster {
+  width: 96px;
+  height: 96px;
+}
+
+.ap-container {
+  border: 3px solid rgba(0, 0, 0, 0.07);
+}
+
+.ap-container > audio {
+  display: block;
+  width: 100%;
+}
+
+
 /* Video blocks */
 .video-block iframe {
   width: 100%;

@@ -9,7 +9,7 @@ import intervaltree
 
 from . import misc
 from .. import helpers
-from ..objects import inline, text_block, image, link_block, video_block , unsupported
+from ..objects import inline, text_block, image, link_block, video_block, audio_block, unsupported
 
 
 class Parser(helpers.CursorIterator):
@@ -248,14 +248,12 @@ class Parser(helpers.CursorIterator):
             poster=poster_media_object
         )
 
-    def _parse_video_block(self):
+    def _fetch_audiovisual(self):
         url = self.current.get("url")
-
+        provider = self.current.get("provider")
         media = self._parse_media_object(self.current.get("media"))
 
-        provider = self.current.get("provider")
-
-        if not media:
+        if provider != "tumblr":
             embed_html = self.current.get("embedHtml") or self.current.get("embed_html")
             embed_url = self.current.get("embedUrl") or self.current.get("embed_url")
             embed_iframe = self.current.get("embedIframe") or self.current.get("embed_iframe")
@@ -276,11 +274,24 @@ class Parser(helpers.CursorIterator):
         if attribution := self.current.get("attribution"):
             attribution = misc.parse_attribution(attribution)
 
+        return url, media, poster_media_object, provider, embed_html, embed_url, embed_iframe, attribution
+
+    def _parse_video_block(self):
+        (
+            url,
+            media,
+            poster_media_object,
+            provider,
+            embed_html,
+            embed_url,
+            embed_iframe,
+            attribution,
+        ) = self._fetch_audiovisual()
+
         filmstrip = self._parse_media_object(self.current.get("filmstrip"))
 
         return video_block.VideoBlock(
             url=url,
-
             provider=provider,
             media=media,
             embed_html=embed_html,
@@ -289,6 +300,36 @@ class Parser(helpers.CursorIterator):
             poster=poster_media_object,
             attribution=attribution,
             filmstrip=filmstrip,
+        )
+
+    def _parse_audio_block(self):
+        (
+            url,
+            media,
+            poster_media_object,
+            provider,
+            embed_html,
+            embed_url,
+            _,
+            attribution,
+        ) = self._fetch_audiovisual()
+
+        title = self.current.get("title")
+        artist = self.current.get("artist")
+        album = self.current.get("album")
+
+        return audio_block.AudioBlock(
+            url=url,
+            provider=provider,
+            media=media,
+            embed_html=embed_html,
+            embed_url=embed_url,
+            poster=poster_media_object,
+            attribution=attribution,
+
+            title=title,
+            artist=artist,
+            album=album
         )
 
     def _parse_media_object(self, raw_media_object):
@@ -320,6 +361,8 @@ class Parser(helpers.CursorIterator):
                 block = self._parse_image_block()
             case "link":
                 block = self._parse_link_block()
+            case "audio":
+                block = self._parse_audio_block()
             case "video":
                 block = self._parse_video_block()
             case _:

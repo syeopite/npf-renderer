@@ -176,7 +176,7 @@ format_npf(contents, layouts, url_handler=url_handler)
 - [x] Text blocks
 - [x] Image blocks
 - [x] Link Blocks
-- [ ] Audio Blocks
+- [x] Audio Blocks
 - [x] Video Blocks
 - [ ] Polls Blocks
 

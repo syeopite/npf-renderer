@@ -232,6 +232,89 @@ class Formatter(helpers.CursorIterator):
 
         return video_block
 
+    def _format_audio(self, block):
+        """Renders a parsed NPF audio block into HTML
+
+        If the audio is an embed and external iframes are disabled, a link block linking
+        to the audio will be rendered instead.
+        """
+        audio = None
+
+        # use_native_player = False
+        # if block.media:
+        #     if self.forbid_external_media_sources and block.provider == "tumblr":
+        #         use_native_player = True
+        #     elif not self.forbid_external_media_sources:
+        #         use_native_player = True
+
+        if block.media and block.provider == "tumblr":
+            audio_container = dominate.tags.section(cls="ap-container")
+
+            audio_block_heading = dominate.tags.header(cls="ab-heading")
+            audio_block_metadata = dominate.tags.div(cls="ab-metadata")
+
+            metadata_elements = []
+            if block.title:
+                metadata_elements.append(dominate.tags.h3(block.title, cls="ab-title"))
+            if block.artist:
+                metadata_elements.append(dominate.tags.h4(block.artist, cls="ab-artist"))
+            if block.album:
+                metadata_elements.append(dominate.tags.h4(block.album, cls="ab-album"))
+
+            if metadata_elements:
+                [audio_block_metadata.add(el) for el in metadata_elements]
+                audio_block_heading.add(audio_block_metadata)
+
+            if block.poster:
+                audio_block_heading.add(
+                    dominate.tags.img(
+                        src=self.url_handler(block.poster[0].url),
+                        srcset=", ".join(image.create_srcset(block.poster, self.url_handler)),
+                        alt=block.title or "Audio block poster",
+                        sizes="(max-width: 540px) 100vh, 540px",
+                        cls="ab-poster"
+                    )
+                )
+
+            if metadata_elements or block.poster:
+                audio_container.add(audio_block_heading)
+
+            audio_container.add(
+                dominate.tags.audio(
+                    dominate.tags.source(src=self.url_handler(block.media[0].url), type=block.media[0].type),
+                    controls=True
+                    )
+                )
+
+            audio = audio_container
+        elif not self.forbid_external_iframes:
+            if block.embed_html:
+                audio = dominate.util.raw(block.embed_html)
+            elif block.embed_url:
+                audio = dominate.tags.iframe(src=block.embed_url, scrolling="no", frameborder="0")
+
+        # If we are unable to render an audio block based on any of the above
+        # We'll try to render a link block instead
+        if audio is None:
+            # If a url exists
+            if block.url:
+                return self._format_link(
+                    objects.link_block.LinkBlock(
+                        block.url,
+                        title=f"External audio source not supported",
+                        description=f"Please click me to visit \"{block.provider}\" in order to listen to the audio",
+                        poster=block.poster,
+                        site_name=block.provider,
+                        display_url=block.url
+                    )
+                )
+
+            raise RuntimeError("Unable to render audio")
+
+        audio_block = dominate.tags.div(cls="audio-block")
+        audio_block.add(audio)
+        return audio_block
+
     def __prepare_instruction_for_current_block(self):
         """Finds and returns the instruction (method) necessary to render a content block"""
         match self.current:
@@ -247,6 +330,8 @@ class Formatter(helpers.CursorIterator):
                 return self._format_image, (self.current,)
             case objects.link_block.LinkBlock():
                 return self._format_link, (self.current,)
+            case objects.audio_block.AudioBlock():
+                return self._format_audio, (self.current,)
             case objects.video_block.VideoBlock():
                 return self._format_video, (self.current,)
             case objects.unsupported.Unsupported():

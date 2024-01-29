@@ -35,7 +35,7 @@ def format_npf(contents, layouts=None, *_, url_handler=None,
             contents,
             layouts, 
             url_handler=url_handler,
-            forbid_external_iframes=forbid_external_iframes
+            forbid_external_iframes=forbid_external_iframes,
         ).format()
 
     except exceptions.RenderErrorDisclaimerError as e:
