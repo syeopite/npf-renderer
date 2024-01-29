@@ -4,6 +4,7 @@ from npf_renderer.objects import layouts, attribution
 
 content_list = [
     {"type": "text", "text": "Hi there"},
+    # Uses default width and height of 540 x 405
     {"type": "image", "media": [{"url": "https://example.com/example-image-1.png"}]},
     {"type": "image", "media": [{"url": "https://example.com/example-image-2.png"}]},
     {"type": "image", "media": [{"url": "https://example.com/example-image-3.png"}]},
@@ -21,13 +22,10 @@ def generate_image_block_html(index, siblings):
                 sizes=f"(max-width: 540px) {round(100 / siblings)}vh, {round(540 / siblings)}px",
                 alt="image",
             ),
-            cls="image-container"
+            cls="image-container", style="padding-bottom: 75.0%;"
         ),
 
-    if siblings > 1:
-        return dominate.tags.figure(inner, cls="image-block", style=f"width: {round(100/siblings, 2)}%")
-    else:
-        return dominate.tags.figure(inner, cls="image-block" )
+    return dominate.tags.figure(inner, cls="image-block" )
 
 
 basic_rows_layout_example = (
@@ -699,98 +697,4 @@ with_nested_list_blocks_layout_list = (
             cls="layout-row"),
         cls="post-body",
     ),
-)
-
-
-# When a format_npf has reserve_space_for_images enabled the space an image
-# takes up will be reserved through the `padding-bottom` trick which also has 
-# the side-effect of creating accurate photosets that are exactly like those on Tumblr itself 
-
-reserve_image_space_content_list = (
-    {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-0.png", "width": 1280,"height": 1920 }]},
-    {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-1.png", "width": 640, "height": 460}]},
-    {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-2.png", "width": 512, "height": 512}]},
-    {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-3.png", "width": 320, "height": 480}]},
-)
-
-reserve_image_space_layouts = (
-    {
-        "layouts": [
-            {
-                "type": "rows",
-                "display": [
-                    {"blocks": [0, 1]},
-                    {"blocks": [2, 3]},
-                ]
-            }
-        ]
-    },
-
-    (
-        dominate.tags.div(
-            dominate.tags.div(
-                dominate.tags.figure(
-                    dominate.tags.div(
-                        dominate.tags.img(
-                            src=f"https://example.com/example-image-0.png",
-                            srcset=f"https://example.com/example-image-0.png 1280w",
-                            cls="image", loading="lazy",
-                            sizes=f"(max-width: 540px) {round(100 / 2)}vh, {round(540 / 2)}px",
-                            alt="image",
-                        ),
-                        cls="image-container", style="padding-bottom: 71.875%;"
-                    ),
-                    cls="image-block reserved-space-img"
-                ),
-
-                dominate.tags.figure(
-                    dominate.tags.div(
-                        dominate.tags.img(
-                            src=f"https://example.com/example-image-1.png",
-                            srcset=f"https://example.com/example-image-1.png 640w",
-                            cls="image", loading="lazy",
-                            sizes=f"(max-width: 540px) {round(100 / 2)}vh, {round(540 / 2)}px",
-                            alt="image",
-                        ),
-                        cls="image-container", style="padding-bottom: 71.875%;"
-                    ),
-                    cls="image-block reserved-space-img"
-                ),
-
-                cls="layout-row"
-            ),
-
-            dominate.tags.div(
-                dominate.tags.figure(
-                    dominate.tags.div(
-                        dominate.tags.img(
-                            src=f"https://example.com/example-image-2.png",
-                            srcset=f"https://example.com/example-image-2.png 512w",
-                            cls="image", loading="lazy",
-                            sizes=f"(max-width: 540px) {round(100 / 2)}vh, {round(540 / 2)}px",
-                            alt="image",
-                        ),
-                        cls="image-container", style="padding-bottom: 100.0%;"
-                    ),
-                    cls="image-block reserved-space-img"
-                ),
-
-                dominate.tags.figure(
-                    dominate.tags.div(
-                        dominate.tags.img(
-                            src=f"https://example.com/example-image-3.png",
-                            srcset=f"https://example.com/example-image-3.png 320w",
-                            cls="image", loading="lazy",
-                            sizes=f"(max-width: 540px) {round(100 / 2)}vh, {round(540 / 2)}px",
-                            alt="image",
-                        ),
-                        cls="image-container", style="padding-bottom: 100.0%;"
-                    ),
-                    cls="image-block reserved-space-img"
-                ),
-                cls="layout-row"
-            ),
-
-            cls="post-body")
-    )
 )

@@ -19,10 +19,6 @@ BASIC_LAYOUT_CSS = """
   margin: 8px;
 }
 
-.post-body .image-block {
-  margin: 0;
-}
-
 .layout-row {
   display: flex;
   flex-direction: row;
@@ -30,31 +26,31 @@ BASIC_LAYOUT_CSS = """
   margin: 5px;
 }
 
-.image-container, img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+/* Image blocks and images*/
 
-img {
-  max-width: 100%;
-}
-
-.reserved-space-img {
+.image-block {
   width: 100%;
 }
 
-.reserved-space-img .image-container {
-  position: relative;
-  width: initial;
-  height: initial;
-  object-fit: initial;
+.post-body .image-block {
+  margin: 0;
 }
 
-.reserved-space-img img {
+.image-container {
+    position: relative;
+}
+
+.image-container img {
   position: absolute;
   left: 0;
   top: 0;
+}
+
+.post-body img {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  object-fit: cover;
 }
 
 /* Text blocks */

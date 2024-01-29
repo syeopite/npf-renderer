@@ -18,8 +18,7 @@ def create_srcset(media_blocks, url_handler):
     return main_srcset
 
 def format_image(image_block, row_length=1, url_handler=lambda url: url, 
-                 override_padding=None, original_media=None,
-                 reserve_space_for_images=None):
+                 override_padding=None, original_media=None):
     """Renders a ImageBlock into HTML"""
 
     container_attributes = {
@@ -55,16 +54,13 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url,
 
         original_media = original_media or processed_media_blocks[0]
     
-    if reserve_space_for_images:
-        if override_padding:
-            padding = override_padding
-        else:
-            height, width = original_media.height, original_media.width
-            padding = round((height / width) * 100, 4)
-
-        container = dominate.tags.div(**container_attributes, style=f"padding-bottom: {padding}%;")
+    if override_padding:
+        padding = override_padding
     else:
-        container = dominate.tags.div(**container_attributes)
+        height, width = original_media.height, original_media.width
+        padding = round((height / width) * 100, 4)
+
+    container = dominate.tags.div(**container_attributes, style=f"padding-bottom: {padding}%;")
 
     container.add(
         dominate.tags.img(

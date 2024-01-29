@@ -21,8 +21,7 @@ def _calculate_amount_to_pad_from_nested(block, parent=True):
 
 
 class Formatter(helpers.CursorIterator):
-    def __init__(self, content, layout=None, *, url_handler=None, reserve_space_for_images=False,
-                 forbid_external_iframes=False):
+    def __init__(self, content, layout=None, *, url_handler=None, forbid_external_iframes=False):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
 
@@ -35,7 +34,6 @@ class Formatter(helpers.CursorIterator):
         self.render_instructions = []
 
         self.url_handler = url_handler
-        self.reserve_space_for_images = reserve_space_for_images
         self.forbid_external_iframes = forbid_external_iframes
 
         self.has_render_error = False
@@ -73,21 +71,13 @@ class Formatter(helpers.CursorIterator):
 
     def _format_image(self, block, row_length=1, override_padding=None):
         """Renders an ImageBlock into HTML"""
-        # On Chromium based browsers, images within a row can sometimes become squished and not of equal widths.
-        # As such we'll have to explicitly specify the amount of space the images should take up in the row
-        if row_length > 1 and not self.reserve_space_for_images:
-            figure = dominate.tags.figure(cls="image-block", style=f"width: {round(100/row_length, 2)}%")
-        elif self.reserve_space_for_images:
-            figure = dominate.tags.figure(cls="image-block reserved-space-img")
-        else:
-            figure = dominate.tags.figure(cls="image-block")
+        figure = dominate.tags.figure(cls="image-block")
 
         image_container = image.format_image(
             block,
             row_length,
             url_handler=self.url_handler,
             override_padding=override_padding,
-            reserve_space_for_images=self.reserve_space_for_images
         )
 
         figure.add(image_container)

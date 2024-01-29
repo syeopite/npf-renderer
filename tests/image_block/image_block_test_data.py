@@ -3,9 +3,9 @@ import dominate.tags
 from npf_renderer import objects
 
 
-def format_constructor(*children):
+def format_constructor(*children, container_style=""):
     return dominate.tags.div(
-        dominate.tags.figure(dominate.tags.div(*children, cls="image-container"), cls="image-block"), cls="post-body"
+        dominate.tags.figure(dominate.tags.div(*children, cls="image-container", style=container_style), cls="image-block"), cls="post-body"
     )
 
 
@@ -81,7 +81,7 @@ basic_image_block = (
                 alt="Sonic the Hedgehog and friends",
                 cls="image", loading="lazy",
                 sizes="(max-width: 540px) 100vh, 540px",
-            ), cls="image-container"),
+            ), cls="image-container", style="padding-bottom: 83.8281%;"),
 
             dominate.tags.figcaption(
                 "I'm living my best life on earth.",
@@ -134,6 +134,8 @@ basic_gif_image_block = (
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
+
+        container_style="padding-bottom: 80.0%;"
     )
 
 )
@@ -180,6 +182,8 @@ image_block_with_color_attr = (
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
+
+        container_style="padding-bottom: 83.8281%;"
     )
 )
 
@@ -236,6 +240,8 @@ gif_image_block_with_poster = (
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
+
+        container_style="padding-bottom: 80.0%;"
     )
 )
 
@@ -301,7 +307,9 @@ gif_image_block_with_post_attribution = (
                 href="https://example-blog.tumblr.com/post/1234567890/example-gif-post",
             ),
             cls="post-attribution"
-        )
+        ),
+
+        container_style="padding-bottom: 48.7395%;"
     ),
 )
 
@@ -369,7 +377,9 @@ gif_image_block_with_link_attribution = (
                 href="https://davidragifs.com",
             ),
             cls="link-attribution"
-        )
+        ),
+
+        container_style="padding-bottom: 140.0%;"
     ),
 )
 
@@ -503,7 +513,7 @@ image_block_with_app_attribution = (
                 cls="image", loading="lazy",
                 sizes="(max-width: 540px) 100vh, 540px",
                 alt="image",
-            ), cls="image-container"),
+            ), cls="image-container", style="padding-bottom: 92.8113%;"),
             cls="image-block"
         ),
 
@@ -537,11 +547,10 @@ image_block_with_app_attribution = (
                     cls="post-attribution"
                 ),
 
-                cls="image-container"
+                cls="image-container", style="padding-bottom: 130.292%;"
             ),
             cls="image-block"
         ),
-
 
         cls="post-body"
     )
@@ -620,7 +629,7 @@ image_block_with_replaced_link = (
                 alt="Sonic the Hedgehog and friends",
                 cls="image", loading="lazy",
                 sizes="(max-width: 540px) 100vh, 540px",
-            ), cls="image-container"),
+            ), cls="image-container", style="padding-bottom: 83.8281%;"),
 
             dominate.tags.figcaption(
                 "I'm living my best life on earth.",
@@ -680,7 +689,7 @@ skips_cropped_image_block_test = (
                 alt="image",
                 cls="image", loading="lazy",
                 sizes="(max-width: 540px) 100vh, 540px",
-            ), cls="image-container"),
+            ), cls="image-container", style="padding-bottom: 150.0%;"),
 
             cls="image-block"
         ),
@@ -689,78 +698,3 @@ skips_cropped_image_block_test = (
     )
 )
 
-
-# Test for when reserve_space_for_images is true
-reserve_space_for_image_test = (
-    (
-        {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-0.png", "width": 1280,"height": 1920 }]},
-        {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-1.png", "width": 640, "height": 460}]},
-        {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-2.png", "width": 512, "height": 512}]},
-        {"type": "image", "media": [{"type": "image/jpeg", "url": "https://example.com/example-image-3.png", "width": 320, "height": 480}]},
-    ),
-
-    dominate.tags.div(
-        dominate.tags.figure(
-            dominate.tags.div(
-                dominate.tags.img(
-                    src="https://example.com/example-image-0.png",
-                    srcset="https://example.com/example-image-0.png 1280w",
-                    cls="image", loading="lazy",
-                    sizes="(max-width: 540px) 100vh, 540px",
-                    alt="image",
-                ),
-
-                style="padding-bottom: 150.0%;",
-                cls="image-container"
-            ),
-            cls="image-block reserved-space-img"
-        ),
-
-        dominate.tags.figure(
-            dominate.tags.div(
-                dominate.tags.img(
-                    src="https://example.com/example-image-1.png",
-                    srcset="https://example.com/example-image-1.png 640w",
-                    cls="image", loading="lazy",
-                    sizes="(max-width: 540px) 100vh, 540px",
-                    alt="image",
-                ),
-                style="padding-bottom: 71.875%;",
-                cls="image-container"
-            ),
-            cls="image-block reserved-space-img"
-        ),
-
-        dominate.tags.figure(
-            dominate.tags.div(
-                dominate.tags.img(
-                    src="https://example.com/example-image-2.png",
-                    srcset="https://example.com/example-image-2.png 512w",
-                    cls="image", loading="lazy",
-                    sizes="(max-width: 540px) 100vh, 540px",
-                    alt="image",
-                ),
-                style="padding-bottom: 100.0%;",
-                cls="image-container"
-            ),
-            cls="image-block reserved-space-img"
-        ),
-
-        dominate.tags.figure(
-            dominate.tags.div(
-                dominate.tags.img(
-                    src="https://example.com/example-image-3.png",
-                    srcset="https://example.com/example-image-3.png 320w",
-                    cls="image", loading="lazy",
-                    sizes="(max-width: 540px) 100vh, 540px",
-                    alt="image",
-                ),
-                style="padding-bottom: 150.0%;",
-                cls="image-container"
-            ),
-            cls="image-block reserved-space-img"
-        ),
-
-        cls="post-body"
-    )
-)

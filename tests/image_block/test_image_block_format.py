@@ -63,6 +63,3 @@ def test_image_block_with_app_attribution_format():
 def test_if_cropped_images_are_skipped():
     helper_function(test_data.skips_cropped_image_block_test[0], test_data.skips_cropped_image_block_test[1])
 
-
-def test_reserve_space_for_images_parameter():
-    helper_function(test_data.reserve_space_for_image_test[0], test_data.reserve_space_for_image_test[1], reserve_space_for_images=True)

@@ -5,7 +5,7 @@ from .parse import Parser, LayoutParser
 from . import exceptions
 
 
-def format_npf(contents, layouts=None, *_, url_handler=None, reserve_space_for_images=False,
+def format_npf(contents, layouts=None, *_, url_handler=None,
                forbid_external_iframes=False, pretty_html=False):
     """Formats the given NPF blocks into HTML
     
@@ -17,12 +17,6 @@ def format_npf(contents, layouts=None, *_, url_handler=None, reserve_space_for_i
             A function in which all URLs are passed into. Expects a string in return. 
             By default the internal logic will default to lambda url : url
         
-        reserve_space_for_images:
-            Whether or not to reserve space for images while they are loading. 
-
-            This also fixes any discrepancies between the aspect ratio of images 
-            in layouts compared with how it is on Tumblr.
-
         forbid_external_iframes: 
             When True embeds to external services won't be added 
             in the final output. This can change the resulting HTML of certain 
@@ -41,7 +35,6 @@ def format_npf(contents, layouts=None, *_, url_handler=None, reserve_space_for_i
             contents,
             layouts, 
             url_handler=url_handler,
-            reserve_space_for_images=reserve_space_for_images,
             forbid_external_iframes=forbid_external_iframes
         ).format()
 

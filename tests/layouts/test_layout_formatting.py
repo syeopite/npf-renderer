@@ -43,18 +43,3 @@ def test_with_nested_blocks_format():
 def test_with_nested_list_blocks_format():
     helper_function(data.with_nested_list_blocks_layout_list[0], data.with_nested_list_blocks_layout_list[2], data.with_nested_list_blocks_content_list)
 
-
-def test_reserve_image_space_layout_format():
-    has_error, formatted_result = format_npf(
-        data.reserve_image_space_content_list,
-        data.reserve_image_space_layouts[0]["layouts"],
-        pretty_html=True,
-        reserve_space_for_images=True
-    )
-
-    assert not has_error
-
-    logging.info(f"Formatted: {formatted_result}")
-    logging.info(f"Answer: {data.reserve_image_space_layouts[1]}")
-
-    assert str(formatted_result) == str(data.reserve_image_space_layouts[1])
