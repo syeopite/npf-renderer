@@ -46,7 +46,7 @@ BASIC_LAYOUT_CSS = """
   top: 0;
 }
 
-.post-body img {
+.image-container img, .link-block img {
   height: 100%;
   width: 100%;
   max-width: 100%;
