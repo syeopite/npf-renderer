@@ -62,7 +62,6 @@ basic_video = (
                     dominate.tags.source(src="https://va.media.tumblr.com/tumblr_some_id_720.mp4", type="video/mp4"),
                     width=1080,
                     height=1920,
-                    preload="none",
                     controls=True,
                     poster="https://64.media.tumblr.com/tumblr_some_id_frame1.jpg"
                 ),
@@ -106,7 +105,6 @@ simplest_possible_video = (
                     dominate.tags.source(src="https://va.media.tumblr.com/tumblr_some_id_720.mp4", type="video/mp4"),
                     width=1080,
                     height=1920,
-                    preload="none",
                     controls=True,
                 ),
                 cls="video-container"

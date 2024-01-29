@@ -176,7 +176,6 @@ class Formatter(helpers.CursorIterator):
                 ),
                 width=width,
                 height=height,
-                preload="none",
                 controls=True,
                 **additional_attrs
             )
