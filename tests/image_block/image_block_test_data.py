@@ -95,6 +95,7 @@ basic_image_block = (
     )
 )
 
+
 basic_gif_image_block = (
     [
         {
@@ -182,6 +183,7 @@ image_block_with_color_attr = (
     )
 )
 
+
 gif_image_block_with_poster = (
     [
         {
@@ -236,6 +238,7 @@ gif_image_block_with_poster = (
         ),
     )
 )
+
 
 gif_image_block_with_post_attribution = (
     [
@@ -369,6 +372,7 @@ gif_image_block_with_link_attribution = (
         )
     ),
 )
+
 
 image_block_with_app_attribution = (
     [
@@ -631,7 +635,7 @@ image_block_with_replaced_link = (
 )
 
 
-skip_cropped_image_block_test = (
+skips_cropped_image_block_test = (
     [
         {
             "type": "image",

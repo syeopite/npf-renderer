@@ -702,8 +702,8 @@ with_nested_list_blocks_layout_list = (
 )
 
 
-# When a format_npf has both skip_cropped_images and reserve_space_for_images enabled
-# The space an image takes up will be reserved through the `padding-bottom` trick which also has 
+# When a format_npf has reserve_space_for_images enabled the space an image
+# takes up will be reserved through the `padding-bottom` trick which also has 
 # the side-effect of creating accurate photosets that are exactly like those on Tumblr itself 
 
 reserve_image_space_content_list = (

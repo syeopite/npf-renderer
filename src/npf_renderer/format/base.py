@@ -21,8 +21,7 @@ def _calculate_amount_to_pad_from_nested(block, parent=True):
 
 
 class Formatter(helpers.CursorIterator):
-    def __init__(self, content, layout=None, *, url_handler=None,
-                 skip_cropped_images=False, reserve_space_for_images=False,
+    def __init__(self, content, layout=None, *, url_handler=None, reserve_space_for_images=False,
                  forbid_external_iframes=False):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
@@ -36,7 +35,6 @@ class Formatter(helpers.CursorIterator):
         self.render_instructions = []
 
         self.url_handler = url_handler
-        self.skip_cropped_images = skip_cropped_images
         self.reserve_space_for_images = reserve_space_for_images
         self.forbid_external_iframes = forbid_external_iframes
 
@@ -88,7 +86,6 @@ class Formatter(helpers.CursorIterator):
             block,
             row_length,
             url_handler=self.url_handler,
-            skip_cropped_images=self.skip_cropped_images,
             override_padding=override_padding,
             reserve_space_for_images=self.reserve_space_for_images
         )
@@ -244,7 +241,6 @@ class Formatter(helpers.CursorIterator):
         #     video_container_attrs["style"] = f"padding-bottom: {round((height / 540) * 100, 4)}%;"
 
         return video_block
-
 
     def __prepare_instruction_for_current_block(self):
         """Finds and returns the instruction (method) necessary to render a content block"""

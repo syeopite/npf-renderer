@@ -49,7 +49,6 @@ def test_reserve_image_space_layout_format():
         data.reserve_image_space_content_list,
         data.reserve_image_space_layouts[0]["layouts"],
         pretty_html=True,
-        skip_cropped_images=True,
         reserve_space_for_images=True
     )
 

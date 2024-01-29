@@ -18,8 +18,8 @@ def create_srcset(media_blocks, url_handler):
     return main_srcset
 
 def format_image(image_block, row_length=1, url_handler=lambda url: url, 
-                 skip_cropped_images=False, override_padding=None, 
-                 original_media=None, reserve_space_for_images=None):
+                 override_padding=None, original_media=None,
+                 reserve_space_for_images=None):
     """Renders a ImageBlock into HTML"""
 
     container_attributes = {
@@ -38,11 +38,11 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url,
 
     processed_media_blocks = []
 
-    # Fetch the media object with the original dimensions to be used as a src= attribute when we
-    # are not already given one
+    # Skip cropped images and attempt to fetch the media object with the
+    # original dimensions to be used in the src= attribute
     if not original_media:
         for media in image_block.media:
-            if skip_cropped_images and media.cropped:
+            if media.cropped:
                 continue
 
             processed_media_blocks.append(media)
@@ -50,12 +50,12 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url,
             if media.has_original_dimensions:
                 original_media = media
 
-        # If for whatever reason we cannot the media object with the original dimensions
-        # we'd just use the one with the highest res (default)
+        # If for whatever reason we cannot fetch the media object with the original dimensions
+        # we'd just use the one with the highest res
 
         original_media = original_media or processed_media_blocks[0]
     
-    if skip_cropped_images and reserve_space_for_images:
+    if reserve_space_for_images:
         if override_padding:
             padding = override_padding
         else:

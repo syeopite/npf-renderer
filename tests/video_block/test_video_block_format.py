@@ -5,7 +5,7 @@ from npf_renderer import format_npf
 import mocks
 
 def helper_function(raw, answer, forbid_external_iframes=False):
-    has_error, formatted_result = format_npf(raw, pretty_html=True, forbid_external_iframes=forbid_external_iframes, skip_cropped_images=True)
+    has_error, formatted_result = format_npf(raw, pretty_html=True, forbid_external_iframes=forbid_external_iframes)
 
     assert not has_error
 
