@@ -19,21 +19,21 @@ basic_image_block = (
                     "url": "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
                            "/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg",
                     "width": 1280,
-                    "height": 1073
+                    "height": 1076
                 },
                 {
                     "type": "image/jpeg",
                     "url": "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
-                           "/tumblr_nshp8oVOnV1rg0s9xo1_540.jpg",
-                    "width": 540,
-                    "height": 400
+                           "/tumblr_nshp8oVOnV1rg0s9xo1_640.jpg",
+                    "width": 640,
+                    "height": 538
                 },
                 {
                     "type": "image/jpeg",
                     "url": "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
-                           "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg",
-                    "width": 250,
-                    "height": 150
+                           "/tumblr_nshp8oVOnV1rg0s9xo1_320.jpg",
+                    "width": 320,
+                    "height": 269
                 }
             ],
             "alt_text": "Sonic the Hedgehog and friends",
@@ -48,21 +48,21 @@ basic_image_block = (
                         'tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg',
                     type='image/jpeg',
                     width=1280,
-                    height=1073,
+                    height=1076,
                 ),
                 objects.media_objects.MediaObject(
                     url='http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/'
-                        'tumblr_nshp8oVOnV1rg0s9xo1_540.jpg',
+                        'tumblr_nshp8oVOnV1rg0s9xo1_640.jpg',
                     type='image/jpeg',
-                    width=540,
-                    height=400,
+                    width=640,
+                    height=538,
                 ),
                 objects.media_objects.MediaObject(
                     url='http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/'
-                        'tumblr_nshp8oVOnV1rg0s9xo1_250.jpg',
+                        'tumblr_nshp8oVOnV1rg0s9xo1_320.jpg',
                     type='image/jpeg',
-                    width=250,
-                    height=150,
+                    width=320,
+                    height=269,
                 )
             ],
             alt_text='Sonic the Hedgehog and friends',
@@ -75,13 +75,13 @@ basic_image_block = (
             dominate.tags.img(
                 src="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg",
                 srcset="http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg "
-                       "1280w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_540"
-                       ".jpg 540w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
-                       "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg 250w",
+                       "1280w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_640"
+                       ".jpg 640w, http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
+                       "/tumblr_nshp8oVOnV1rg0s9xo1_320.jpg 320w",
                 alt="Sonic the Hedgehog and friends",
                 cls="image", loading="lazy",
                 sizes="(max-width: 540px) 100vh, 540px",
-            ), cls="image-container", style="padding-bottom: 83.8281%;"),
+            ), cls="image-container", style="padding-bottom: 84.0625%;"),
 
             dominate.tags.figcaption(
                 "I'm living my best life on earth.",
@@ -392,18 +392,18 @@ image_block_with_app_attribution = (
                 {
                     "mediaKey": "23ca9c69bda0020ca4c91df05c8-c8",
                     "type": "image/jpeg",
-                    "width": 779,
-                    "height": 723,
-                    "url": "https://example.com/image/s1280x1920.jpg",
+                    "width": 780,
+                    "height": 724,
+                    "url": "https://example.com/image/s780x724.jpg",
                     "hasOriginalDimensions": True
                 },
 
                 {
                     "mediaKey": "269bda0020ca4c91df05c8a00f5c8-c8",
                     "type": "image/jpeg",
-                    "width": 640,
-                    "height": 594,
-                    "url": "https://example.com/image/s640x960.jpg",
+                    "width": 390,
+                    "height": 362,
+                    "url": "https://example.com/image/s390x362.jpg",
                 },
             ]
         },
@@ -452,17 +452,17 @@ image_block_with_app_attribution = (
         objects.image.ImageBlock(
             media=[
                 objects.media_objects.MediaObject(
-                    url='https://example.com/image/s1280x1920.jpg',
+                    url='https://example.com/image/s780x724.jpg',
                     type='image/jpeg',
-                    width=779,
-                    height=723,
+                    width=780,
+                    height=724,
                     has_original_dimensions=True
                 ),
                 objects.media_objects.MediaObject(
-                    url='https://example.com/image/s640x960.jpg',
+                    url='https://example.com/image/s390x362.jpg',
                     type='image/jpeg',
-                    width=640,
-                    height=594,
+                    width=390,
+                    height=362,
                 ),
             ],
         ),
@@ -507,13 +507,13 @@ image_block_with_app_attribution = (
     dominate.tags.div(
         dominate.tags.figure(dominate.tags.div(
             dominate.tags.img(
-                src="https://example.com/image/s1280x1920.jpg",
-                srcset="https://example.com/image/s1280x1920.jpg "
-                       "779w, https://example.com/image/s640x960.jpg 640w",
+                src="https://example.com/image/s780x724.jpg",
+                srcset="https://example.com/image/s780x724.jpg "
+                       "780w, https://example.com/image/s390x362.jpg 390w",
                 cls="image", loading="lazy",
                 sizes="(max-width: 540px) 100vh, 540px",
                 alt="image",
-            ), cls="image-container", style="padding-bottom: 92.8113%;"),
+            ), cls="image-container", style="padding-bottom: 92.8205%;"),
             cls="image-block"
         ),
 
@@ -567,21 +567,21 @@ image_block_with_replaced_link = (
                     "url": "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
                            "/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg",
                     "width": 1280,
-                    "height": 1073
+                    "height": 1076
                 },
                 {
                     "type": "image/jpeg",
                     "url": "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
-                           "/tumblr_nshp8oVOnV1rg0s9xo1_540.jpg",
-                    "width": 540,
-                    "height": 400
+                           "/tumblr_nshp8oVOnV1rg0s9xo1_640.jpg",
+                    "width": 640,
+                    "height": 538
                 },
                 {
                     "type": "image/jpeg",
                     "url": "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90"
-                           "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg",
-                    "width": 250,
-                    "height": 150
+                           "/tumblr_nshp8oVOnV1rg0s9xo1_320.jpg",
+                    "width": 320,
+                    "height": 269
                 }
             ],
             "alt_text": "Sonic the Hedgehog and friends",
@@ -596,21 +596,21 @@ image_block_with_replaced_link = (
                         'tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg',
                     type='image/jpeg',
                     width=1280,
-                    height=1073,
+                    height=1076,
                 ),
                 objects.media_objects.MediaObject(
                     url='http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/'
-                        'tumblr_nshp8oVOnV1rg0s9xo1_540.jpg',
+                        'tumblr_nshp8oVOnV1rg0s9xo1_640.jpg',
                     type='image/jpeg',
-                    width=540,
-                    height=400,
+                    width=640,
+                    height=538,
                 ),
                 objects.media_objects.MediaObject(
                     url='http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/'
-                        'tumblr_nshp8oVOnV1rg0s9xo1_250.jpg',
+                        'tumblr_nshp8oVOnV1rg0s9xo1_320.jpg',
                     type='image/jpeg',
-                    width=250,
-                    height=150,
+                    width=320,
+                    height=269,
                 )
             ],
             alt_text='Sonic the Hedgehog and friends',
@@ -623,13 +623,13 @@ image_block_with_replaced_link = (
             dominate.tags.img(
                 src="http://example.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg",
                 srcset="http://example.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg "
-                       "1280w, http://example.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_540"
-                       ".jpg 540w, http://example.com/b06fe71cc4ab47e93749df060ff54a90"
-                       "/tumblr_nshp8oVOnV1rg0s9xo1_250.jpg 250w",
+                       "1280w, http://example.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_640"
+                       ".jpg 640w, http://example.com/b06fe71cc4ab47e93749df060ff54a90"
+                       "/tumblr_nshp8oVOnV1rg0s9xo1_320.jpg 320w",
                 alt="Sonic the Hedgehog and friends",
                 cls="image", loading="lazy",
                 sizes="(max-width: 540px) 100vh, 540px",
-            ), cls="image-container", style="padding-bottom: 83.8281%;"),
+            ), cls="image-container", style="padding-bottom: 84.0625%;"),
 
             dominate.tags.figcaption(
                 "I'm living my best life on earth.",
