@@ -156,6 +156,8 @@ pip install npf-renderer
 
 ## Advanced
 
+### URL Handling
+
 You can pass in a custom URL handler function to `format_npf` to replace any links within the NPF tree.
 
 ```python
@@ -168,6 +170,41 @@ def url_handler(url):
 format_npf(contents, layouts, url_handler=url_handler)
 ```
 
+### Polls
+
+As polls require an additional request in order to fetch results, `npf-renderer` by default can only render a very basic poll without any votes attached.
+
+You can however provide the data necessary for `npf-renderer` to populate polls by passing in a callback function to `format_npf` that takes a `poll_id` argument.
+
+Be sure to have the blog name and the post ID at hand too, as Tumblr's API requires all three to fetch poll results.
+
+The data returned should be in the form:
+
+```json
+{
+  "results": {
+    // answer_id => vote_count
+    "9a025e86-2f02-452e-99d3-b4c0fd9afd48": 123,
+    "fad65faf-06d3-4a24-85a9-47c096ab07e3": 321
+  },
+  "timestamp": 1706642448
+}
+```
+
+Example:
+
+```python
+def create_callback(blog_name, post_id)
+    def poll_callback(poll_id):
+        initial_results = request_poll_results(blog_name, post_id, poll_id)
+
+        return initial_results["response"]
+
+    return poll_callback
+
+npf_renderer.format_npf(content, layout, poll_result_callback=create_callback(blog_name, post_id))
+```
+
 
 ## Features
 
@@ -178,7 +215,7 @@ format_npf(contents, layouts, url_handler=url_handler)
 - [x] Link Blocks
 - [x] Audio Blocks
 - [x] Video Blocks
-- [ ] Polls Blocks
+- [x] Polls Blocks
 
 - [x] Layouts 
-- [x] Attributions [Partial]
+- [x] Attributions

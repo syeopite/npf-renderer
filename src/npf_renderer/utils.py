@@ -193,6 +193,72 @@ img.ab-poster {
   width: 100%;
 }
 
+/* Poll blocks */
+
+.poll-block {
+  display: flex;
+  flex-direction: column;
+  border: 3px solid rgba(0, 0, 0, 0.07);
+  padding: 10px;
+
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.poll-block > header > h3 {
+  margin: 0 0 10px 0;
+}
+
+.poll-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+}
+
+.expired-poll > .poll-body {
+  text-align: unset;
+}
+
+.poll-block > footer {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.poll-choice {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 5px 10px;
+  border: 3px solid rgba(0, 0, 0, 0.15);
+  text-wrap: balance;
+}
+
+.vote-proportion {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  background: #e9e9e9;
+  height: 100%;
+}
+
+.poll-winner .vote-proportion {
+  background: #d0d0d0;
+}
+
+.answer {
+  flex: 1;
+}
+
+.answer, .vote-count {
+  z-index: 1
+}
+
+.vote-count {
+  margin-left: auto;
+}
+
 /* Ask */
 
 .ask {

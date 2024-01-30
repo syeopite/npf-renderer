@@ -9,16 +9,18 @@ import intervaltree
 
 from . import misc
 from .. import helpers
-from ..objects import inline, text_block, image, link_block, video_block, audio_block, unsupported
+from ..objects import (inline, text_block, image, link_block, video_block,
+                       audio_block, poll_block, unsupported)
 
 
 class Parser(helpers.CursorIterator):
     """All-in-one parser to process NPF content types"""
 
-    def __init__(self, content):
+    def __init__(self, content, poll_result_callback = None):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
         self.parsed_result = []
+        self.poll_result_callback = poll_result_callback
 
     def _parse_text(self, nest_level=0, in_list_grouping=False):
         """Parses a NPF text content block into a TextBlock
@@ -327,6 +329,71 @@ class Parser(helpers.CursorIterator):
             album=album
         )
 
+    def _parse_poll_block(self):
+        """Parses a NPF Poll Block into a PollBlock NamedTuple
+
+        Also fetches the poll results through self.poll_result_callback
+        when it is defined.
+        """
+        poll_id = self.current.get("clientId") or self.current.get("client_id")
+        if poll_id is None:
+            raise ValueError("Invalid poll ID")
+
+        question = self.current["question"]
+
+        answers = {}
+        for raw_ans in self.current["answers"]:
+            answer_id = raw_ans.get("clientId") or raw_ans.get("client_id")
+            answer_text = raw_ans.get("answerText") or raw_ans.get("answer_text")
+
+            if answer_id is None or answer_text is None:
+                raise ValueError("Invalid poll answer")
+
+            answers[answer_id] = answer_text
+
+        votes = None
+        total_votes = None
+
+        if self.poll_result_callback:
+            callback_response = self.poll_result_callback(poll_id)
+
+            #{answer_id: vote_count}
+            raw_results = callback_response["results"].items()
+            processed_results = sorted(raw_results, key=lambda item: -item[1])
+
+            votes_dict = {}
+            total_votes = 0
+
+            for index, results in enumerate(processed_results):
+                vote_count = results[1]
+                total_votes += vote_count
+
+                if index == 0:
+                    votes_dict[results[0]] = poll_block.PollResult(is_winner=True, vote_count=vote_count)
+                else:
+                    votes_dict[results[0]] = poll_block.PollResult(is_winner=False, vote_count=vote_count)
+
+            votes = poll_block.PollResults(
+                timestamp=callback_response["timestamp"],
+                results=votes_dict
+            )
+
+
+        creation_timestamp = self.current["timestamp"]
+        expires_after = self.current["settings"]["expireAfter"]
+
+        return poll_block.PollBlock(
+            poll_id=poll_id,
+            question=question,
+            answers=answers,
+
+            creation_timestamp=int(creation_timestamp),
+            expires_after=int(expires_after),
+
+            votes=votes,
+            total_votes=total_votes,
+        )
+
     def _parse_media_object(self, raw_media_object):
         """Parses a NPF media object"""
         if raw_media_object:
@@ -360,6 +427,8 @@ class Parser(helpers.CursorIterator):
                 block = self._parse_audio_block()
             case "video":
                 block = self._parse_video_block()
+            case "poll":
+                block = self._parse_poll_block()
             case _:
                 block = unsupported.Unsupported(self.current["type"])
 

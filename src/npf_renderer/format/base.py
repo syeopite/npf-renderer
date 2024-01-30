@@ -1,3 +1,4 @@
+import datetime
 import urllib.parse
 
 import dominate.tags
@@ -339,6 +340,64 @@ class Formatter(helpers.CursorIterator):
         audio_block.add(audio)
         return audio_block
 
+    def _format_poll(self, block):
+        """Renders a parsed NPF poll block into HTML"""
+        poll_block = dominate.tags.section(cls="poll-block")
+        with poll_block:
+            with dominate.tags.header():
+                dominate.tags.h3(block.question)
+
+        poll_body = dominate.tags.div(cls="poll-body")
+
+        for answer_id, answer in block.answers.items():
+            poll_choice = dominate.tags.div(cls="poll-choice")
+            poll_answer = dominate.tags.span(answer, cls="answer")
+
+            if block.votes:
+                votes = block.votes.results[answer_id]
+                if votes[0] is True:
+                    poll_choice["class"] += " poll-winner"
+
+                poll_vote_proportion_element = dominate.tags.span(cls="vote-proportion")
+                if block.total_votes != 0:
+                    poll_vote_proportion_element["style"] = f"width: {round((votes[1]/block.total_votes) * 100, 3)}%;"
+
+                poll_vote_count = dominate.tags.span(votes[1], cls="vote-count")
+
+                poll_choice.add(
+                    poll_vote_proportion_element,
+                    poll_answer,
+                    poll_vote_count
+                )
+            else:
+                poll_choice.add(poll_answer)
+
+            poll_body.add(poll_choice)
+
+        footer = dominate.tags.footer()
+        with footer:
+            creation = datetime.datetime.utcfromtimestamp(block.creation_timestamp)
+            expiration = datetime.datetime.utcfromtimestamp(block.creation_timestamp + block.expires_after)
+            now = datetime.datetime.utcnow()
+
+            # If not expired we display how many days till expired
+            if expiration > now:
+                if block.votes:
+                    dominate.tags.p(f"{block.total_votes} votes")
+
+                dominate.tags.p(f"Poll ends in {expiration - now}")
+            else:
+                if block.votes:
+                    dominate.tags.p(f"Final result from {block.total_votes} votes")
+                dominate.tags.p(f"Poll ended on {expiration}")
+
+        poll_block.add(poll_body, footer)
+
+        if now > expiration:
+            poll_block["class"] += " expired-poll"
+
+        return poll_block
+
     def _audiovisual_link_block_fallback(self, block, title : str, description : str):
         """Renders a link block from the given audio or video block
         
@@ -385,6 +444,8 @@ class Formatter(helpers.CursorIterator):
                 return self._format_audio, (self.current,)
             case objects.video_block.VideoBlock():
                 return self._format_video, (self.current,)
+            case objects.poll_block.PollBlock():
+                return self._format_poll, (self.current,)
             case objects.unsupported.Unsupported():
                 return self.format_unsupported, (self.current,)
             case _:  # Unreachable
