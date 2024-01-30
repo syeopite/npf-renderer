@@ -6,7 +6,7 @@ from .embed_iframe import EmbedIframeObject
 
 
 class VideoBlock(NamedTuple):
-    url : str
+    url : Optional[str] = None
     provider : Optional[str] = None
     media: Optional[Sequence[MediaObject]] = None
 

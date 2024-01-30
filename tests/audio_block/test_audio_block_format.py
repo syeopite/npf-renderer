@@ -71,6 +71,14 @@ def test_can_format_embedded_audio_block_when_iframes_are_disabled():
     )
 
 
+def test_audio_block_fallbacks_to_link_block():
+    return helper_function(
+        mock_audio_blocks.audio_block_fallbacks_to_link_block[0],
+        mock_audio_blocks.audio_block_fallbacks_to_link_block[2],
+        wrap_answer=False
+    )
+
+
 def test_format_audio_block_with_tumblr_as_provider_but_non_tumblr_media_link():
     return helper_function(
         mock_audio_blocks.audio_block_with_tumblr_as_provider_but_non_tumblr_media_link[0],
@@ -80,10 +88,10 @@ def test_format_audio_block_with_tumblr_as_provider_but_non_tumblr_media_link():
     )
 
 
-def test_audio_block_can_still_fallback_to_link_block_with_only_media_url():
+def test_audio_block_can_still_fallback_to_link_block_with_only_media_url_and_provider():
     return helper_function(
-        mock_audio_blocks.audio_block_fallback_with_only_media_url[0],
-        mock_audio_blocks.audio_block_fallback_with_only_media_url[2],
+        mock_audio_blocks.audio_block_fallback_with_only_media_url_and_provider[0],
+        mock_audio_blocks.audio_block_fallback_with_only_media_url_and_provider[2],
         wrap_answer=False
     )
 

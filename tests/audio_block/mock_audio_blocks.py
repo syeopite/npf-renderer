@@ -284,7 +284,7 @@ forbid_external_iframes_fallback_test = (
                 ),
 
                 dominate.tags.div(
-                    dominate.tags.p("Please click me to visit \"spotify\" in order to listen to the audio", cls="link-block-description"),
+                    dominate.tags.p("Please click me to listen on the original site", cls="link-block-description"),
                     dominate.tags.div(dominate.tags.span(dominate.tags.span("spotify")), cls="link-block-subtitles"),
                     cls="link-block-description-container"
                 ),
@@ -340,8 +340,42 @@ audio_block_with_tumblr_as_provider_but_non_tumblr_media_link = (
     )
 )
 
+audio_block_fallbacks_to_link_block = (
+    {
+        "type": "audio",
+        "media": MEDIA["raw"]
+    },
 
-audio_block_fallback_with_only_media_url = (
+    [
+        objects.audio_block.AudioBlock(
+            media=MEDIA["parsed"]
+        )
+    ],
+
+    dominate.tags.div(
+        dominate.tags.div(
+            dominate.tags.a(
+                dominate.tags.div(
+                    dominate.tags.span("Error: unable to render audio block"),
+                    cls="link-block-title"
+                ),
+
+                dominate.tags.div(
+                    dominate.tags.p("Please click me to listen on the original site", cls="link-block-description"),
+                    cls="link-block-description-container"
+                ),
+
+                href="https://a.tumblr.com/someaudiosource.mp3",
+                cls="link-block-link"
+            ),
+            cls="link-block"
+        ),
+        cls="post-body"
+    )
+)
+
+
+audio_block_fallback_with_only_media_url_and_provider = (
     {
         "type": "audio",
         "provider": "tumblr",

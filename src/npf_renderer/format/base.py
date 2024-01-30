@@ -161,9 +161,22 @@ class Formatter(helpers.CursorIterator):
 
         video = None
 
-        if block.media:
+        if block.media and block.provider == "tumblr":
             additional_attrs = {}
             width, height = block.media[0].width, block.media[0].height
+
+            # Validate media URL is actually of a tumblr domain
+            media_url = urllib.parse.urlparse(block.media[0].url)
+
+            # If not then we fallback to a link block
+            if not media_url.hostname.endswith(".tumblr.com"):
+                return self._audiovisual_link_block_fallback(
+                    block,
+                    title="Error: Cannot construct video player",
+                    description="Please click me to watch on the original site"
+                )
+
+            media_url = media_url.geturl()
 
             # if self.reserve_space_for_images:
             #     root_video_block_attrs["cls"] += " reserved-space-img"
@@ -174,14 +187,14 @@ class Formatter(helpers.CursorIterator):
 
             video = dominate.tags.video(
                 dominate.tags.source(
-                    src=self.url_handler(block.media[0].url), type=block.media[0].type
+                    src=self.url_handler(media_url), type=block.media[0].type
                 ),
                 width=width,
                 height=height,
                 controls=True,
                 **additional_attrs
             )
-        elif not self.forbid_external_iframes:
+        if not video and not self.forbid_external_iframes:
             if block.embed_iframe:
                 additional_attrs = {}
                 width, height = block.embed_iframe.width, block.embed_iframe.height
@@ -206,18 +219,18 @@ class Formatter(helpers.CursorIterator):
 
         # If we are unable to render a video based on any of the above
         # We'll try to render a link block instead
-        if video is None:
+        if not video:
             if self.forbid_external_iframes and (block.embed_html or block.embed_url or block.embed_iframe):
                 return self._audiovisual_link_block_fallback(
                     block,
                     "Embeds are disabled",
-                    f"Please click me to visit \"{block.provider}\" to watch the video"
+                    f"Please click me to watch on the original site"
                 )
             else:
                 return self._audiovisual_link_block_fallback(
                     block,
-                    "Err: unable to render video block",
-                    f"Please click me to visit \"{block.provider}\" to watch the video"
+                    "Error: unable to render video block",
+                    f"Please click me to watch on the original site"
                 )
 
         video_block = dominate.tags.div(**root_video_block_attrs)
@@ -258,6 +271,8 @@ class Formatter(helpers.CursorIterator):
                     description="Please click me to listen on the original site"
                 )
 
+            media_url = media_url.geturl()
+
             audio_container = dominate.tags.section(cls="ap-container")
 
             audio_block_heading = dominate.tags.header(cls="ab-heading")
@@ -291,7 +306,7 @@ class Formatter(helpers.CursorIterator):
 
             audio_container.add(
                 dominate.tags.audio(
-                    dominate.tags.source(src=self.url_handler(block.media[0].url), type=block.media[0].type),
+                    dominate.tags.source(src=self.url_handler(media_url), type=block.media[0].type),
                     controls=True
                     )
                 )
@@ -311,13 +326,13 @@ class Formatter(helpers.CursorIterator):
                 return self._audiovisual_link_block_fallback(
                     block,
                     "Embeds are disabled",
-                    f"Please click me to visit \"{block.provider}\" in order to listen to the audio"
+                    f"Please click me to listen on the original site"
                 )
             else:
                 return self._audiovisual_link_block_fallback(
                     block,
-                    "Err: unable to render an audio block",
-                    f"Please click me to visit \"{block.provider}\" in order to listen to the audio"
+                    "Error: unable to render audio block",
+                    f"Please click me to listen on the original site"
                 )
 
         audio_block = dominate.tags.div(cls="audio-block")

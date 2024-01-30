@@ -77,6 +77,7 @@ basic_video = (
 simplest_possible_video = (
     [{
         "type": "video",
+        "provider": "tumblr",
         "url": "https://va.media.tumblr.com/tumblr_some_id_720.mp4",
         "media": [{
             "url": "https://va.media.tumblr.com/tumblr_some_id_720.mp4",
@@ -89,6 +90,7 @@ simplest_possible_video = (
     [
         objects.video_block.VideoBlock(
             url="https://va.media.tumblr.com/tumblr_some_id_720.mp4",
+            provider="tumblr",
             media=[objects.media_objects.MediaObject(
                 url="https://va.media.tumblr.com/tumblr_some_id_720.mp4",
                 type="video/mp4",
@@ -254,7 +256,7 @@ embedded_forbid_external_iframes_fallback = (
                 ),
 
                 dominate.tags.div(
-                    dominate.tags.p("Please click me to visit \"youtube\" to watch the video", cls="link-block-description"),
+                    dominate.tags.p("Please click me to watch on the original site", cls="link-block-description"),
                     dominate.tags.div(dominate.tags.span(dominate.tags.span("youtube")), cls="link-block-subtitles"),
                     cls="link-block-description-container"
                 ),
@@ -266,4 +268,102 @@ embedded_forbid_external_iframes_fallback = (
         ),
         cls="post-body"
     )
+)
+
+
+video_block_fallbacks_to_link_block = (
+    ({
+        "type": "video",
+        "media": [{
+            "url": "https://example.com/somevideo.mp4",
+            "type": "video/mp4",
+            "width": 1080,
+            "height": 1920
+        }],
+    },),
+
+    [objects.video_block.VideoBlock(
+        media=[objects.media_objects.MediaObject(
+            url="https://example.com/somevideo.mp4",
+            type="video/mp4",
+            width=1080,
+            height=1920
+        )],
+    )],
+
+    dominate.tags.div(
+        dominate.tags.div(
+            dominate.tags.a(
+                dominate.tags.div(
+                    dominate.tags.span("Error: unable to render video block"),
+                    cls="link-block-title"
+                ),
+
+                dominate.tags.div(
+                    dominate.tags.p("Please click me to watch on the original site", cls="link-block-description"),
+                    cls="link-block-description-container"
+                ),
+
+                href="https://example.com/somevideo.mp4",
+                cls="link-block-link"
+            ),
+            cls="link-block"
+        ),
+        cls="post-body"
+    )
+)
+
+
+video_block_fallbacks_to_link_block_when_invalid_media_source = (
+    [{
+        "type": "video",
+        "provider": "tumblr",
+        "media": [{
+            "url": "https://example.com/somevideo.mp4",
+            "type": "video/mp4",
+            "width": 1080,
+            "height": 1920
+        }],
+    }],
+
+    [
+        objects.video_block.VideoBlock(
+            provider="tumblr",
+            media=[objects.media_objects.MediaObject(
+                url="https://example.com/somevideo.mp4",
+                type="video/mp4",
+                width=1080,
+                height=1920
+            )],
+        )
+    ],
+
+
+    dominate.tags.div(
+        dominate.tags.div(
+            dominate.tags.a(
+                dominate.tags.div(
+                    dominate.tags.span("Error: Cannot construct video player"),
+                    cls="link-block-title"
+                ),
+
+                dominate.tags.div(
+                    dominate.tags.p("Please click me to watch on the original site", cls="link-block-description"),
+                    dominate.tags.div(dominate.tags.span(dominate.tags.span("tumblr")), cls="link-block-subtitles"),
+                    cls="link-block-description-container"
+                ),
+
+                href="https://example.com/somevideo.mp4",
+                cls="link-block-link"
+            ),
+            cls="link-block"
+        ),
+        cls="post-body"
+    )
+)
+
+
+video_block_raises_when_all_else_fails = (
+    ({"type": "video"},),
+    [objects.video_block.VideoBlock()]
 )

@@ -59,11 +59,17 @@ def test_parse_audio_block_with_tumblr_as_provider_but_non_tumblr_media_link():
     )
 
 
-
-def test_audio_block_can_still_fallback_to_link_block_with_only_media_url():
+def test_audio_block_fallbacks_to_link_block():
     return helper_function(
-        mock_audio_blocks.audio_block_fallback_with_only_media_url[0],
-        mock_audio_blocks.audio_block_fallback_with_only_media_url[1],
+        mock_audio_blocks.audio_block_fallbacks_to_link_block[0],
+        mock_audio_blocks.audio_block_fallbacks_to_link_block[1],
+    )
+
+
+def test_audio_block_can_still_fallback_to_link_block_with_only_media_url_and_provider():
+    return helper_function(
+        mock_audio_blocks.audio_block_fallback_with_only_media_url_and_provider[0],
+        mock_audio_blocks.audio_block_fallback_with_only_media_url_and_provider[1],
     )
 
 
