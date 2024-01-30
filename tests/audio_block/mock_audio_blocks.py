@@ -6,30 +6,30 @@ from npf_renderer import objects
 MEDIA = {
     "raw": {
         "type": "audio/mpeg",
-        "url": "https://example.com/someaudiosource.mp3",
+        "url": "https://a.tumblr.com/someaudiosource.mp3",
     },
 
     "parsed": [objects.media_objects.MediaObject(
-        url= "https://example.com/someaudiosource.mp3",
+        url= "https://a.tumblr.com/someaudiosource.mp3",
         width=540,
         height=405,
         type="audio/mpeg"
     )],
 
-    "formatted": dominate.tags.source(src="https://example.com/someaudiosource.mp3", type="audio/mpeg") 
+    "formatted": dominate.tags.source(src="https://a.tumblr.com/someaudiosource.mp3", type="audio/mpeg") 
 }
 
 basic_audio_block = (
     {
         "type": "audio",
         "provider": "tumblr",
-        "url": "https://example.com/someaudiosource.mp3",
+        "url": "https://a.tumblr.com/someaudiosource.mp3",
         "media": MEDIA["raw"]
     },
 
     [
         objects.audio_block.AudioBlock(
-            url="https://example.com/someaudiosource.mp3",
+            url="https://a.tumblr.com/someaudiosource.mp3",
             provider="tumblr",
             media=MEDIA["parsed"]
         )
@@ -50,7 +50,7 @@ audio_block_with_title = (
 
     [
         objects.audio_block.AudioBlock(
-            url="https://example.com/someaudiosource.mp3",
+            url="https://a.tumblr.com/someaudiosource.mp3",
             provider="tumblr",
             title="Example title",
             media=MEDIA["parsed"]
@@ -77,7 +77,7 @@ audio_block_with_metadata = (
 
     [
         objects.audio_block.AudioBlock(
-            url="https://example.com/someaudiosource.mp3",
+            url="https://a.tumblr.com/someaudiosource.mp3",
             provider="tumblr",
             title="Example title",
             artist="Example artist",
@@ -106,17 +106,17 @@ audio_block_with_poster = (
         **basic_audio_block[0],
         "poster": {
             "type": "image/png",
-            "url": "https://example.com/someimage.png",
+            "url": "https://media.tumblr.com/someimage.png",
         }
     },
 
     [
         objects.audio_block.AudioBlock(
-            url="https://example.com/someaudiosource.mp3",
+            url="https://a.tumblr.com/someaudiosource.mp3",
             provider="tumblr",
             media=MEDIA["parsed"],
             poster=[objects.media_objects.MediaObject(
-                url="https://example.com/someimage.png",
+                url="https://media.tumblr.com/someimage.png",
                 width=540, height=405, type="image/png"
             )]
         )
@@ -125,8 +125,8 @@ audio_block_with_poster = (
     dominate.tags.section(
         dominate.tags.header(
             dominate.tags.img(
-                src="https://example.com/someimage.png",
-                srcset="https://example.com/someimage.png 540w",
+                src="https://media.tumblr.com/someimage.png",
+                srcset="https://media.tumblr.com/someimage.png 540w",
                 sizes="(max-width: 540px) 100vh, 540px",
                 alt="Audio block poster", 
                 cls="ab-poster"
@@ -147,7 +147,7 @@ audio_block_with_metadata_and_poster = (
 
     [
         objects.audio_block.AudioBlock(
-            url="https://example.com/someaudiosource.mp3",
+            url="https://a.tumblr.com/someaudiosource.mp3",
             provider="tumblr",
             title="Example title",
             artist="Example artist",
@@ -166,8 +166,8 @@ audio_block_with_metadata_and_poster = (
                 cls="ab-metadata"),
 
             dominate.tags.img(
-                src="https://example.com/someimage.png",
-                srcset="https://example.com/someimage.png 540w",
+                src="https://media.tumblr.com/someimage.png",
+                srcset="https://media.tumblr.com/someimage.png 540w",
                 sizes="(max-width: 540px) 100vh, 540px",
                 alt="Example title", 
                 cls="ab-poster"
@@ -236,7 +236,7 @@ audio_block_embed_spotify_test = (
 #             embed_url="https://bandcamp.com/EmbeddedPlayer/size=medium/bgcol=ffffff/linkcol=23fdjeiuwhf/notracklist=true/transparent=true/track=2381893893128138921221121211/",
 #             embed_html='<iframe class="bandcamp_audio_player" width="100%" height="120" src="https://bandcamp.com/EmbeddedPlayer/size=medium/bgcol=ffffff/linkcol=23fdjeiuwhf/notracklist=true/transparent=true/track=2381893893128138921221121211/" allowtransparency="true" frameborder="0"><a href="https://benbondy.bandcamp.com/track/6am">6am by ben bondy</a></iframe>',
 #             poster=[objects.media_objects.MediaObject(
-#                 url="https://example.com/someimage.png",
+#                 url="https://media.tumblr.com/someimage.png",
 #                 width=540, height=405, type="image/png"
 #             )],
 #             media= [
@@ -259,8 +259,8 @@ audio_block_embed_spotify_test = (
 #                 cls="ab-metadata"),
 
 #             dominate.tags.img(
-#                 src="https://example.com/someimage.png",
-#                 srcset="https://example.com/someimage.png 540w",
+#                 src="https://media.tumblr.com/someimage.png",
+#                 srcset="https://media.tumblr.com/someimage.png 540w",
 #                 sizes="(max-width: 540px) 100vh, 540px",
 #                 alt="some fake song", 
 #                 cls="ab-poster"
@@ -279,7 +279,7 @@ forbid_external_iframes_fallback_test = (
         dominate.tags.div(
             dominate.tags.a(
                 dominate.tags.div(
-                    dominate.tags.span("External audio source not supported"),
+                    dominate.tags.span("Embeds are disabled"),
                     cls="link-block-title"
                 ),
 
@@ -296,4 +296,96 @@ forbid_external_iframes_fallback_test = (
         ),
         cls="post-body"
     )
+)
+
+
+audio_block_with_tumblr_as_provider_but_non_tumblr_media_link = (
+    {
+        "type": "audio",
+        "provider": "tumblr",
+        "url": "https://on.soundcloud.com/fwehiufweouij",
+        "media": {
+            "url": "https://on.soundcloud.com/fwehiufweouij"
+        }
+    },
+
+    [
+        objects.audio_block.AudioBlock(
+            url="https://on.soundcloud.com/fwehiufweouij",
+            provider="tumblr",
+            media=[objects.media_objects.MediaObject(url="https://on.soundcloud.com/fwehiufweouij", width=540, height=405,)]
+        )
+    ],
+
+    dominate.tags.div(
+        dominate.tags.div(
+            dominate.tags.a(
+                dominate.tags.div(
+                    dominate.tags.span("Error: Cannot construct audio player"),
+                    cls="link-block-title"
+                ),
+
+                dominate.tags.div(
+                    dominate.tags.p("Please click me to listen on the original site", cls="link-block-description"),
+                    dominate.tags.div(dominate.tags.span(dominate.tags.span("tumblr")), cls="link-block-subtitles"),
+                    cls="link-block-description-container"
+                ),
+
+                href="https://on.soundcloud.com/fwehiufweouij",
+                cls="link-block-link"
+            ),
+            cls="link-block"
+        ),
+        cls="post-body"
+    )
+)
+
+
+audio_block_fallback_with_only_media_url = (
+    {
+        "type": "audio",
+        "provider": "tumblr",
+        "media": {
+            "url": "https://on.soundcloud.com/medialink"
+        }
+    },
+
+
+    [
+        objects.audio_block.AudioBlock(
+            provider="tumblr",
+            media=[objects.media_objects.MediaObject(url="https://on.soundcloud.com/medialink", width=540, height=405)]
+        )
+    ],
+
+    dominate.tags.div(
+        dominate.tags.div(
+            dominate.tags.a(
+                dominate.tags.div(
+                    dominate.tags.span("Error: Cannot construct audio player"),
+                    cls="link-block-title"
+                ),
+
+                dominate.tags.div(
+                    dominate.tags.p("Please click me to listen on the original site", cls="link-block-description"),
+                    dominate.tags.div(dominate.tags.span(dominate.tags.span("tumblr")), cls="link-block-subtitles"),
+                    cls="link-block-description-container"
+                ),
+
+                href="https://on.soundcloud.com/medialink",
+                cls="link-block-link"
+            ),
+            cls="link-block"
+        ),
+        cls="post-body"
+    )
+)
+
+
+audio_block_raises_when_all_else_fails = (
+    {
+        "type": "audio",
+    },
+
+    [objects.audio_block.AudioBlock()]
 )

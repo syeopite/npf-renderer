@@ -1,3 +1,5 @@
+import urllib.parse
+
 import dominate.tags
 
 from . import text, image, misc
@@ -205,20 +207,18 @@ class Formatter(helpers.CursorIterator):
         # If we are unable to render a video based on any of the above
         # We'll try to render a link block instead
         if video is None:
-            # If a url exists
-            if block.url:
-                return self._format_link(
-                    objects.link_block.LinkBlock(
-                        block.url,
-                        title=f"Embedded videos are not supported",
-                        description=f"Please click me to visit \"{block.provider}\" to watch the video",
-                        poster=block.poster,
-                        site_name=block.provider,
-                        display_url=block.url
-                    )
+            if self.forbid_external_iframes and (block.embed_html or block.embed_url or block.embed_iframe):
+                return self._audiovisual_link_block_fallback(
+                    block,
+                    "Embeds are disabled",
+                    f"Please click me to visit \"{block.provider}\" to watch the video"
                 )
-
-            raise RuntimeError("Unable to render video")
+            else:
+                return self._audiovisual_link_block_fallback(
+                    block,
+                    "Err: unable to render video block",
+                    f"Please click me to visit \"{block.provider}\" to watch the video"
+                )
 
         video_block = dominate.tags.div(**root_video_block_attrs)
         video_container = dominate.tags.div(**video_container_attrs)
@@ -247,6 +247,17 @@ class Formatter(helpers.CursorIterator):
         #         use_native_player = True
 
         if block.media and block.provider == "tumblr":
+            # Validate media URL is actually of a tumblr domain
+            media_url = urllib.parse.urlparse(block.media[0].url)
+
+            # If not then we fallback to a link block
+            if not media_url.hostname.endswith(".tumblr.com"):
+                return self._audiovisual_link_block_fallback(
+                    block,
+                    title="Error: Cannot construct audio player",
+                    description="Please click me to listen on the original site"
+                )
+
             audio_container = dominate.tags.section(cls="ap-container")
 
             audio_block_heading = dominate.tags.header(cls="ab-heading")
@@ -286,7 +297,8 @@ class Formatter(helpers.CursorIterator):
                 )
 
             audio = audio_container
-        elif not self.forbid_external_iframes:
+
+        if not audio and not self.forbid_external_iframes:
             if block.embed_html:
                 audio = dominate.util.raw(block.embed_html)
             elif block.embed_url:
@@ -294,26 +306,51 @@ class Formatter(helpers.CursorIterator):
 
         # If we are unable to render an audio block based on any of the above
         # We'll try to render a link block instead
-        if audio is None:
-            # If a url exists
-            if block.url:
-                return self._format_link(
-                    objects.link_block.LinkBlock(
-                        block.url,
-                        title=f"External audio source not supported",
-                        description=f"Please click me to visit \"{block.provider}\" in order to listen to the audio",
-                        poster=block.poster,
-                        site_name=block.provider,
-                        display_url=block.url
-                    )
+        if not audio:
+            if self.forbid_external_iframes and (block.embed_html or block.embed_url):
+                return self._audiovisual_link_block_fallback(
+                    block,
+                    "Embeds are disabled",
+                    f"Please click me to visit \"{block.provider}\" in order to listen to the audio"
                 )
-
-            raise RuntimeError("Unable to render audio")
+            else:
+                return self._audiovisual_link_block_fallback(
+                    block,
+                    "Err: unable to render an audio block",
+                    f"Please click me to visit \"{block.provider}\" in order to listen to the audio"
+                )
 
         audio_block = dominate.tags.div(cls="audio-block")
         audio_block.add(audio)
         return audio_block
 
+    def _audiovisual_link_block_fallback(self, block, title : str, description : str):
+        """Renders a link block from the given audio or video block
+        
+        Used as a fallback when the audio or video block cannot be 
+        rendered successfully into HTML
+        """
+
+        # We attempt to find a valid URL in order to create a link block:
+        if block.url:
+            url = block.url
+        elif block.media:
+            url = block.media[0].url
+
+        if url:
+            return self._format_link(
+                objects.link_block.LinkBlock(
+                    url,
+                    title=title,
+                    description=description,
+                    poster=block.poster,
+                    site_name=block.provider,
+                    display_url=block.url
+                )
+            )
+        else:
+            raise RuntimeError("Unable to render")
+    
     def __prepare_instruction_for_current_block(self):
         """Finds and returns the instruction (method) necessary to render a content block"""
         match self.current:

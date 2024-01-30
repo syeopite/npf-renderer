@@ -247,7 +247,7 @@ embedded_forbid_external_iframes_fallback = (
                     ),
 
                     dominate.tags.div(
-                        dominate.tags.span("Embedded videos are not supported"),
+                        dominate.tags.span("Embeds are disabled"),
                         cls="link-block-title poster-overlay-text"
                     ),
                     cls="poster-container"

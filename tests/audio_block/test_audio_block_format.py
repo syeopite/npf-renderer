@@ -5,7 +5,7 @@ from npf_renderer import format_npf
 
 import mock_audio_blocks
 
-def helper_function(raw, answer, forbid_external_iframes=False):
+def helper_function(raw, answer, forbid_external_iframes=False, wrap_answer=True):
     has_error, formatted_result = format_npf(
         (raw,), 
         pretty_html=True, 
@@ -14,7 +14,10 @@ def helper_function(raw, answer, forbid_external_iframes=False):
 
     assert not has_error
 
-    answer = dominate.tags.div(dominate.tags.div(answer, cls="audio-block"), cls="post-body")
+    if wrap_answer:
+        answer = dominate.tags.div(dominate.tags.div(answer, cls="audio-block"), cls="post-body")
+    else:
+        answer = answer
 
     logging.info(f"Formatted: {formatted_result}")
     logging.info(f"Answer: {answer}")
@@ -59,18 +62,36 @@ def test_can_format_embedded_audio_block():
 #     )
 
 
-def test_fallback_to_link_block_when_unable_to_format_audio_block():
-    has_error, formatted_result = format_npf(
-        (mock_audio_blocks.forbid_external_iframes_fallback_test[0],),
-        pretty_html=True, 
-        forbid_external_iframes=True
+def test_can_format_embedded_audio_block_when_iframes_are_disabled():
+    return helper_function(
+        mock_audio_blocks.forbid_external_iframes_fallback_test[0],
+        mock_audio_blocks.forbid_external_iframes_fallback_test[1],
+        forbid_external_iframes=True,
+        wrap_answer=False
     )
 
-    assert not has_error
 
-    answer = mock_audio_blocks.forbid_external_iframes_fallback_test[1]
+def test_format_audio_block_with_tumblr_as_provider_but_non_tumblr_media_link():
+    return helper_function(
+        mock_audio_blocks.audio_block_with_tumblr_as_provider_but_non_tumblr_media_link[0],
+        mock_audio_blocks.audio_block_with_tumblr_as_provider_but_non_tumblr_media_link[2],
+        forbid_external_iframes=True,
+        wrap_answer=False
+    )
 
-    logging.info(f"Formatted: {formatted_result}")
-    logging.info(f"Answer: {answer}")
 
-    assert str(formatted_result) == str(answer)
+def test_audio_block_can_still_fallback_to_link_block_with_only_media_url():
+    return helper_function(
+        mock_audio_blocks.audio_block_fallback_with_only_media_url[0],
+        mock_audio_blocks.audio_block_fallback_with_only_media_url[2],
+        wrap_answer=False
+    )
+
+
+def test_audio_block_raises_when_all_else_fails():
+    has_error, formatted_result = format_npf(
+        (mock_audio_blocks.audio_block_raises_when_all_else_fails[0],), 
+        pretty_html=True, 
+    )
+
+    assert has_error == True

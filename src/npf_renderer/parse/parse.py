@@ -253,21 +253,16 @@ class Parser(helpers.CursorIterator):
         provider = self.current.get("provider")
         media = self._parse_media_object(self.current.get("media"))
 
-        if provider != "tumblr":
-            embed_html = self.current.get("embedHtml") or self.current.get("embed_html")
-            embed_url = self.current.get("embedUrl") or self.current.get("embed_url")
-            embed_iframe = self.current.get("embedIframe") or self.current.get("embed_iframe")
-            
-            if embed_iframe:
-                embed_iframe = video_block.EmbedIframeObject(
-                    embed_iframe["url"],
-                    embed_iframe["width"],
-                    embed_iframe["height"],
-                )
-        else:
-            embed_html = None
-            embed_url = None 
-            embed_iframe = None
+        embed_html = self.current.get("embedHtml") or self.current.get("embed_html")
+        embed_url = self.current.get("embedUrl") or self.current.get("embed_url")
+        embed_iframe = self.current.get("embedIframe") or self.current.get("embed_iframe")
+        
+        if embed_iframe:
+            embed_iframe = video_block.EmbedIframeObject(
+                embed_iframe["url"],
+                embed_iframe["width"],
+                embed_iframe["height"],
+            )
 
         poster_media_object = self._parse_media_object(self.current.get("poster"))
 

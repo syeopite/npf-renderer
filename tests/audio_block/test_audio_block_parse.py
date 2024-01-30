@@ -50,3 +50,25 @@ def test_can_parse_embedded_audio_block():
 
 # def test_can_parse_external_embedded_but_with_media_object_audio_block():
 #     return helper_function(mock_audio_blocks.audio_block_external_embed_but_with_media_object[0], mock_audio_blocks.audio_block_external_embed_but_with_media_object[1])
+
+
+def test_parse_audio_block_with_tumblr_as_provider_but_non_tumblr_media_link():
+    return helper_function(
+        mock_audio_blocks.audio_block_with_tumblr_as_provider_but_non_tumblr_media_link[0],
+        mock_audio_blocks.audio_block_with_tumblr_as_provider_but_non_tumblr_media_link[1],
+    )
+
+
+
+def test_audio_block_can_still_fallback_to_link_block_with_only_media_url():
+    return helper_function(
+        mock_audio_blocks.audio_block_fallback_with_only_media_url[0],
+        mock_audio_blocks.audio_block_fallback_with_only_media_url[1],
+    )
+
+
+def test_audio_block_raises_when_all_else_fails():
+    return helper_function(
+        mock_audio_blocks.audio_block_raises_when_all_else_fails[0],
+        mock_audio_blocks.audio_block_raises_when_all_else_fails[1],
+    )
