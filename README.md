@@ -180,7 +180,7 @@ Be sure to have the blog name and the post ID at hand too, as Tumblr's API requi
 
 The data returned should be in the form:
 
-```json
+```jsonc
 {
   "results": {
     // answer_id => vote_count
