@@ -362,6 +362,7 @@ audio_block_fallbacks_to_link_block = (
 
                 dominate.tags.div(
                     dominate.tags.p("Please click me to listen on the original site", cls="link-block-description"),
+                    dominate.tags.div(dominate.tags.span(dominate.tags.span("a.tumblr.com")), cls="link-block-subtitles"),
                     cls="link-block-description-container"
                 ),
 

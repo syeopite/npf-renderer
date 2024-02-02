@@ -131,6 +131,10 @@ font-size: 1.3em
   padding: 0 10px 15px 10px;
 }
 
+.link-block-description-container:only-child {
+  padding: 10px 15px;
+}
+
 .site-name-author-separator {
   margin: 0px 3px;
 }

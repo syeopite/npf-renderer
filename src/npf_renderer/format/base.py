@@ -130,23 +130,27 @@ class Formatter(helpers.CursorIterator):
                 dominate.tags.p(dominate.util.text(block.description), cls="link-block-description")
             )
 
-        if block.site_name or block.author:
-            subtitles_div = dominate.tags.div(cls="link-block-subtitles")
-            link_block_description_container.add(subtitles_div)
+        subtitles_div = dominate.tags.div(cls="link-block-subtitles")
+        link_block_description_container.add(subtitles_div)
 
-            subtitles = dominate.tags.span()
-            subtitles_div.add(subtitles)
+        subtitles = dominate.tags.span()
+        subtitles_div.add(subtitles)
 
-            if block.site_name:
-                subtitles.add(dominate.tags.span(dominate.util.text(block.site_name)))
+        if block.site_name:
+            site_name = block.site_name
+        else:
+            site_name = urllib.parse.urlparse(block.url).hostname or block.url
 
-                # When an author name exists in addition to the site name then we add it both to the subtitles
-                # separated by a |
-                if block.author:
-                    subtitles.add(dominate.tags.span(dominate.util.text("|"), cls="site-name-author-separator"))
-                    subtitles.add(dominate.tags.span(dominate.util.text(block.author)))
-            else:
+        if site_name:
+            subtitles.add(dominate.tags.span(dominate.util.text(site_name)))
+
+            # When an author name exists in addition to the site name then we add it both to the subtitles
+            # separated by a |
+            if block.author:
+                subtitles.add(dominate.tags.span(dominate.util.text("|"), cls="site-name-author-separator"))
                 subtitles.add(dominate.tags.span(dominate.util.text(block.author)))
+        else:
+            subtitles.add(dominate.tags.span(dominate.util.text(block.author)))
 
         return container
 

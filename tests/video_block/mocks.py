@@ -301,6 +301,7 @@ video_block_fallbacks_to_link_block = (
 
                 dominate.tags.div(
                     dominate.tags.p("Please click me to watch on the original site", cls="link-block-description"),
+                    dominate.tags.div(dominate.tags.span(dominate.tags.span("example.com")), cls="link-block-subtitles"),
                     cls="link-block-description-container"
                 ),
 

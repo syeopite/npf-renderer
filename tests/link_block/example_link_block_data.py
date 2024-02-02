@@ -25,7 +25,7 @@ simple_link_block = (
     ],
 
     format_constructor("https://example.com",
-        dominate.tags.div(cls="link-block-description-container")
+        dominate.tags.div(dominate.tags.div(dominate.tags.span(dominate.tags.span("example.com")), cls="link-block-subtitles"), cls="link-block-description-container")
     )
 )
 
@@ -40,7 +40,7 @@ link_block_with_title = (
     ],
     format_constructor("https://example.com",
         dominate.tags.div(dominate.tags.span("Example Domain"), cls="link-block-title"),
-        dominate.tags.div(cls="link-block-description-container")
+        dominate.tags.div(dominate.tags.div(dominate.tags.span(dominate.tags.span("example.com")), cls="link-block-subtitles"), cls="link-block-description-container")
     )
 )
 
@@ -56,6 +56,7 @@ link_block_with_description = (
     format_constructor("https://example.com", 
         dominate.tags.div(
             dominate.tags.p("This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.", cls="link-block-description"),
+            dominate.tags.div(dominate.tags.span(dominate.tags.span("example.com")), cls="link-block-subtitles"),
             cls="link-block-description-container"
         )
     )
@@ -75,6 +76,7 @@ link_block_with_title_and_description = (
         dominate.tags.div(dominate.tags.span("Example Domain"), cls="link-block-title"),
         dominate.tags.div(
             dominate.tags.p("This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.", cls="link-block-description"),
+            dominate.tags.div(dominate.tags.span(dominate.tags.span("example.com")), cls="link-block-subtitles"),
             cls="link-block-description-container"
         )
     )
@@ -150,7 +152,7 @@ link_block_with_poster = (
             ),
             cls="poster-container"
         ),
-        dominate.tags.div(cls="link-block-description-container")
+        dominate.tags.div(dominate.tags.div(dominate.tags.span(dominate.tags.span("example.com")), cls="link-block-subtitles"), cls="link-block-description-container")
     )
 )
 
