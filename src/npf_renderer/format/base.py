@@ -400,6 +400,9 @@ class Formatter(helpers.CursorIterator):
         if now > expiration:
             poll_block["class"] += " expired-poll"
 
+        if block.votes:
+            poll_block["class"] += " populated"
+
         return poll_block
 
     def _audiovisual_link_block_fallback(self, block, title : str, description : str):

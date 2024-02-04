@@ -66,7 +66,6 @@ basic_poll_data =  ({
         ),
         cls="poll-body"
     )
-
 )
 
 simple_poll_expired = (
@@ -97,7 +96,7 @@ simple_poll_expired = (
             dominate.tags.p(str("Final result from 810 votes")),
             dominate.tags.p(str("Poll ended on 2023-01-08 00:00:20"),
         )),
-        cls="poll-block expired-poll"
+        cls="poll-block expired-poll populated"
     ),
 )
 
@@ -131,7 +130,7 @@ simple_ongoing_poll = (
             dominate.tags.p(str("810 votes")),
             dominate.tags.p(str("Poll ends in 7 days, 0:00:00"),
         )),
-        cls="poll-block"
+        cls="poll-block populated"
     ),
 
 )
