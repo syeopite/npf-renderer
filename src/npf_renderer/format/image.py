@@ -25,6 +25,8 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url,
         "cls": "image-container"
     }
 
+    image_attributes = {}
+
     # Disabled. We cannot generate a gradient background that takes up the same amount of space as the browser-selected
     # responsive image as the image doesn't really have a size until its loaded and as such neither will the background.
     #
@@ -36,6 +38,9 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url,
     #     container_attributes["style"] = f"background: linear-gradient(to left bottom, {', '.join(colors)});"
 
     processed_media_blocks = []
+
+    # Whether or not to preserve image space based on the aspect ratio
+    pad = True
 
     # Skip cropped images and attempt to fetch the media object with the
     # original dimensions to be used in the src= attribute
@@ -51,16 +56,29 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url,
 
         # If for whatever reason we cannot fetch the media object with the original dimensions
         # we'd just use the one with the highest res
+        try:
+            original_media = original_media or processed_media_blocks[0]
+        except IndexError:
+            # Bugged image where the original media is also cropped... for some reason
+            original_media = image_block.media[0]
 
-        original_media = original_media or processed_media_blocks[0]
-    
-    if override_padding:
-        padding = override_padding
-    else:
-        height, width = original_media.height, original_media.width
-        padding = round((height / width) * 100, 4)
+            # I'm not entirely show how common these images are, but they do exist and with the way
+            # npf-renderer renders them, they look weird being stretched to the full width of the post when
+            # their actual size is a 1px by 1px black pixel for example
+            #
+            # TODO find more examples of these bugged images and find a proper solution
+            # Perhaps this could be a RenderDisclaimerError ? The post itself is fine. It is just weird.
+            image_attributes["style"] = f"width: {original_media.width}px; height: {original_media.height}px;"
+            pad = False
 
-    container = dominate.tags.div(**container_attributes, style=f"padding-bottom: {padding}%;")
+    if pad:
+        if override_padding:
+            container_attributes["style"] = f"padding-bottom: {override_padding}%;"
+        else:
+            height, width = original_media.height, original_media.width
+            container_attributes["style"] = f"padding-bottom: {round((height / width) * 100, 4)}%;"
+
+    container = dominate.tags.div(**container_attributes)
 
     container.add(
         dominate.tags.img(
@@ -68,7 +86,8 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url,
             srcset=", ".join(create_srcset(processed_media_blocks, url_handler)),
             cls="image", loading="lazy",
             alt=image_block.alt_text or "image",
-            sizes=f"(max-width: 540px) {int(100 / row_length)}vh, {int(540 / row_length)}px"
+            sizes=f"(max-width: 540px) {int(100 / row_length)}vh, {int(540 / row_length)}px",
+            **image_attributes
         )
     )
 
