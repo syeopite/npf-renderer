@@ -166,14 +166,19 @@ class Formatter(helpers.CursorIterator):
 
         video = None
 
-        if block.media and block.provider == "tumblr":
-            additional_attrs = {}
-            width, height = block.media[0].width, block.media[0].height
-
-            # Validate media URL is actually of a tumblr domain
+        # We'll only render the native media player if media exists
+        use_native_player_route = False
+        if block.media:
             media_url = urllib.parse.urlparse(block.media[0].url)
 
-            # If not then we fallback to a link block
+            # And provider is either tumblr or the media_url is from Tumblr
+            if block.provider == "tumblr" or media_url.hostname.endswith(".tumblr.com"):
+                use_native_player_route = True
+            # elif not self.forbid_external_iframes:
+            #     use_native_player_route = True
+
+        if use_native_player_route:
+            # Sometimes the provider will be tumblr but the actual media URL isn't from tumblr
             if not media_url.hostname.endswith(".tumblr.com"):
                 return self._audiovisual_link_block_fallback(
                     block,
@@ -181,11 +186,10 @@ class Formatter(helpers.CursorIterator):
                     description="Please click me to watch on the original site"
                 )
 
-            media_url = media_url.geturl()
+            additional_attrs = {}
+            width, height = block.media[0].width, block.media[0].height
 
-            # if self.reserve_space_for_images:
-            #     root_video_block_attrs["cls"] += " reserved-space-img"
-            #     video_container_attrs["style"] = f"padding-bottom: {round((height / width) * 100, 4)}%;"
+            media_url = media_url.geturl()
 
             if block.poster:
                 additional_attrs["poster"] = self.url_handler(block.poster[0].url)
@@ -243,10 +247,6 @@ class Formatter(helpers.CursorIterator):
         video_container.add(video)
         video_block.add(video_container)
 
-        # if self.reserve_space_for_images:
-        #     root_video_block_attrs["cls"] += " reserved-space-img"
-        #     video_container_attrs["style"] = f"padding-bottom: {round((height / 540) * 100, 4)}%;"
-
         return video_block
 
     def _format_audio(self, block):
@@ -257,23 +257,28 @@ class Formatter(helpers.CursorIterator):
         """
         audio = None
 
-        # use_native_player = False
-        # if block.media:
-        #     if self.forbid_external_media_sources and block.provider == "tumblr":
-        #         use_native_player = True
-        #     elif not self.forbid_external_media_sources:
-        #         use_native_player = True
+        # TODO 
+        # Logic for audio and video block is quite similar. Should be refactored.
 
-        if block.media and block.provider == "tumblr":
-            # Validate media URL is actually of a tumblr domain
+        # We'll only render the native media player if media exists
+        use_native_player_route = False
+        if block.media:
             media_url = urllib.parse.urlparse(block.media[0].url)
 
-            # If not then we fallback to a link block
+            # And provider is either tumblr or the media_url is from Tumblr
+            if block.provider == "tumblr" or media_url.hostname.endswith(".tumblr.com"):
+                use_native_player_route = True
+            # elif not self.forbid_external_iframes:
+            #     use_native_player_route = True
+
+        if use_native_player_route:
+            # Sometimes the provider will be tumblr.com but the actual media URL isn't from tumblr
             if not media_url.hostname.endswith(".tumblr.com"):
                 return self._audiovisual_link_block_fallback(
                     block,
                     title="Error: Cannot construct audio player",
-                    description="Please click me to listen on the original site"
+                    description="Please click me to listen on the original site",
+                    site_name=media_url.hostname
                 )
 
             media_url = media_url.geturl()
@@ -406,7 +411,7 @@ class Formatter(helpers.CursorIterator):
 
         return poll_block
 
-    def _audiovisual_link_block_fallback(self, block, title : str, description : str):
+    def _audiovisual_link_block_fallback(self, block, title : str, description : str, site_name : str = None):
         """Renders a link block from the given audio or video block
         
         Used as a fallback when the audio or video block cannot be 
@@ -418,6 +423,10 @@ class Formatter(helpers.CursorIterator):
             url = block.url
         elif block.media:
             url = block.media[0].url
+        else:
+            raise ValueError
+
+        site_name = site_name or block.provider
 
         if url:
             return self._format_link(
@@ -426,7 +435,7 @@ class Formatter(helpers.CursorIterator):
                     title=title,
                     description=description,
                     poster=block.poster,
-                    site_name=block.provider,
+                    site_name=site_name,
                     display_url=block.url
                 )
             )

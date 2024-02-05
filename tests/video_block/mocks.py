@@ -77,7 +77,6 @@ basic_video = (
 simplest_possible_video = (
     [{
         "type": "video",
-        "provider": "tumblr",
         "url": "https://va.media.tumblr.com/tumblr_some_id_720.mp4",
         "media": [{
             "url": "https://va.media.tumblr.com/tumblr_some_id_720.mp4",
@@ -90,7 +89,6 @@ simplest_possible_video = (
     [
         objects.video_block.VideoBlock(
             url="https://va.media.tumblr.com/tumblr_some_id_720.mp4",
-            provider="tumblr",
             media=[objects.media_objects.MediaObject(
                 url="https://va.media.tumblr.com/tumblr_some_id_720.mp4",
                 type="video/mp4",
@@ -274,22 +272,10 @@ embedded_forbid_external_iframes_fallback = (
 video_block_fallbacks_to_link_block = (
     ({
         "type": "video",
-        "media": [{
-            "url": "https://example.com/somevideo.mp4",
-            "type": "video/mp4",
-            "width": 1080,
-            "height": 1920
-        }],
+        "url": "https://example.com/somevideo.mp4"
     },),
 
-    [objects.video_block.VideoBlock(
-        media=[objects.media_objects.MediaObject(
-            url="https://example.com/somevideo.mp4",
-            type="video/mp4",
-            width=1080,
-            height=1920
-        )],
-    )],
+    [objects.video_block.VideoBlock(url="https://example.com/somevideo.mp4")],
 
     dominate.tags.div(
         dominate.tags.div(
