@@ -24,9 +24,14 @@ def helper_function(raw, answer):
 
     assert parsed_results == answer
 
+
 def test_basic_expired_poll_block():
     return helper_function(mock_poll_blocks.simple_poll_expired[0], mock_poll_blocks.simple_poll_expired[1])
 
 
 def test_basic_ongoing_poll_block():
     return helper_function(mock_poll_blocks.simple_ongoing_poll[0], mock_poll_blocks.simple_ongoing_poll[1])
+
+
+def test_poll_with_a_extra_choice_without_any_results_attached():
+    return helper_function(mock_poll_blocks.poll_with_extra_choice_without_any_results_attached[0], mock_poll_blocks.poll_with_extra_choice_without_any_results_attached[1])

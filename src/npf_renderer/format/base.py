@@ -358,7 +358,8 @@ class Formatter(helpers.CursorIterator):
             poll_answer = dominate.tags.span(answer, cls="answer")
 
             if block.votes:
-                votes = block.votes.results[answer_id]
+                votes = block.votes.results.get(answer_id, [False, 0]) 
+
                 if votes[0] is True:
                     poll_choice["class"] += " poll-winner"
 

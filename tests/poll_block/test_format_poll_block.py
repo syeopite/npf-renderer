@@ -46,3 +46,12 @@ def test_basic_ongoing_poll_block_with_results():
         mock_poll_blocks.simple_ongoing_poll[3],
         callback=lambda _ : mock_poll_blocks.basic_poll_data[2]
     )
+
+
+@freeze_time("2024-01-25 00:00:00")
+def test_poll_with_a_extra_choice_without_any_results_attached():
+    return helper_function(
+        mock_poll_blocks.poll_with_extra_choice_without_any_results_attached[0], 
+        mock_poll_blocks.poll_with_extra_choice_without_any_results_attached[2],
+        callback=lambda _ : mock_poll_blocks.basic_poll_data[2]
+    )
