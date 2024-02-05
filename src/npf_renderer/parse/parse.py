@@ -364,14 +364,13 @@ class Parser(helpers.CursorIterator):
             votes_dict = {}
             total_votes = 0
 
+            winner_votes = processed_results[0][1]
+
             for index, results in enumerate(processed_results):
                 vote_count = results[1]
                 total_votes += vote_count
 
-                if index == 0:
-                    votes_dict[results[0]] = poll_block.PollResult(is_winner=True, vote_count=vote_count)
-                else:
-                    votes_dict[results[0]] = poll_block.PollResult(is_winner=False, vote_count=vote_count)
+                votes_dict[results[0]] = poll_block.PollResult(is_winner=(winner_votes==vote_count), vote_count=vote_count)
 
             votes = poll_block.PollResults(
                 timestamp=callback_response["timestamp"],
