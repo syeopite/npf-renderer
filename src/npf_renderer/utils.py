@@ -217,11 +217,6 @@ img.ab-poster {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  text-align: center;
-}
-
-.expired-poll > .poll-body {
-  text-align: unset;
 }
 
 .poll-block > footer {
