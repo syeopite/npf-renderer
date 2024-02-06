@@ -3,5 +3,5 @@ from .format_npf import format_npf
 
 from . import exceptions, parse, objects, format
 
-VERSION = "0.11.1"
+VERSION = "0.12.0"
 
