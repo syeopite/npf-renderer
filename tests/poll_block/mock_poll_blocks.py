@@ -4,6 +4,12 @@ import dominate
 
 from npf_renderer import objects
 
+
+# Dominate does not support the time tag
+class HTMLTimeTag(dominate.tags.html_tag):
+    tagname="time"
+
+
 basic_poll_data =  ({
     "type": "poll",
     "clientId": "0748f156-be02-4eaf-bbe4-5060d9992f93",
@@ -68,6 +74,7 @@ basic_poll_data =  ({
     )
 )
 
+
 simple_poll_expired = (
     {
         **basic_poll_data[0],
@@ -86,7 +93,10 @@ simple_poll_expired = (
             cls="poll-body"
         ),
         dominate.tags.footer(
-            dominate.tags.div(dominate.tags.span("Ended on 2023-01-08 00:00:20"), cls="poll-metadata"),
+            dominate.tags.div(
+                dominate.tags.span("Ended on: ", HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00")), 
+                cls="poll-metadata"
+            ),
         ),
         cls="poll-block expired-poll"
     ),
@@ -95,10 +105,11 @@ simple_poll_expired = (
         dominate.tags.header(dominate.tags.h3("This is a question")),
         basic_poll_data[3],   # Answers
         dominate.tags.footer(
+
             dominate.tags.div(
                 dominate.tags.span("810 votes"),
                 dominate.tags.span("•", cls="separator"),
-                dominate.tags.span("Ended on 2023-01-08 00:00:20"),
+                dominate.tags.span("Ended on: ", HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00")),
                 cls="poll-metadata"
             ),
         ),
@@ -127,7 +138,7 @@ simple_ongoing_poll = (
 
         dominate.tags.footer(
             dominate.tags.div(
-                dominate.tags.span("Remaining time: 7 days, 0:00:00"),
+                dominate.tags.span("Remaining time: ", HTMLTimeTag("7 days, 0:00:00", datetime="P7D")),
                 cls="poll-metadata"
             ),
         ),
@@ -141,7 +152,7 @@ simple_ongoing_poll = (
             dominate.tags.div(
                 dominate.tags.span("810 votes"),
                 dominate.tags.span("•", cls="separator"),
-                dominate.tags.span("Remaining time: 7 days, 0:00:00"),
+                dominate.tags.span("Remaining time: ", HTMLTimeTag("7 days, 0:00:00", datetime="P7D")),
                 cls="poll-metadata"
             ),
         ),
@@ -216,7 +227,7 @@ poll_with_extra_choice_without_any_results_attached = (
             dominate.tags.div(
                 dominate.tags.span("810 votes"),
                 dominate.tags.span("•", cls="separator"),
-                dominate.tags.span("Ended on 2023-01-08 00:00:20"),
+                dominate.tags.span("Ended on: ", HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00")),
                 cls="poll-metadata"
             ),
         ),
@@ -297,7 +308,7 @@ mock_tied_poll = (
             dominate.tags.div(
                 dominate.tags.span("1060 votes"),
                 dominate.tags.span("•", cls="separator"),
-                dominate.tags.span("Ended on 2023-01-08 00:00:20"),
+                dominate.tags.span("Ended on: ", HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00")),
                 cls="poll-metadata"
             ),
         ),
@@ -378,7 +389,7 @@ mock_multiple_winners_poll = (
             dominate.tags.div(
                 dominate.tags.span("2000 votes"),
                 dominate.tags.span("•", cls="separator"),
-                dominate.tags.span("Ended on 2023-01-08 00:00:20"),
+                dominate.tags.span("Ended on: ", HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00")),
                 cls="poll-metadata"
             ),
         ),

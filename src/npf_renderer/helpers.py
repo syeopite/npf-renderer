@@ -33,3 +33,24 @@ class CursorIterator:
             return False
 
         return self.__iterable[self.cursor]
+
+
+def build_duration_string(tdelta):
+    duration_string = ["P"]
+    units = []
+
+    days = tdelta.days
+    if days:
+        duration_string.append(f"{days}D")
+
+    hours, remainder = divmod(tdelta.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
+    if hours or minutes or seconds:
+        duration_string.append("T")
+
+        for num, unit in ((hours, "H"), (minutes, "M"), (seconds, "S")):
+            if num:
+                duration_string.append(f"{num}{unit}")
+
+    return ''.join(duration_string)

@@ -2,6 +2,7 @@ import datetime
 import urllib.parse
 
 import dominate.tags
+import dominate.util
 
 from . import text, image, misc
 from .. import objects, helpers, exceptions
@@ -21,6 +22,11 @@ def _calculate_amount_to_pad_from_nested(block, parent=True):
             amount_to_pad += _calculate_amount_to_pad_from_nested(child_block, parent=False)
 
     return amount_to_pad
+
+
+# Dominate does not support the time tag
+class HTMLTimeTag(dominate.tags.html_tag):
+    tagname="time"
 
 
 class Formatter(helpers.CursorIterator):
@@ -396,9 +402,13 @@ class Formatter(helpers.CursorIterator):
                     dominate.tags.span(f"{block.total_votes} votes")
                     dominate.tags.span("•", cls="separator")
                 if expiration > now:
-                    dominate.tags.span(f"Remaining time: {expiration - now}")
+                    # Build time duration string
+                    remaining_time = expiration - now
+                    duration_string = helpers.build_duration_string(remaining_time)
+                    dominate.tags.span(f"Remaining time: ", HTMLTimeTag(str(remaining_time), datetime=duration_string))
                 else:
-                    dominate.tags.span(f"Ended on {expiration}")
+                    formatted_expiration = expiration.strftime("%Y-%m-%dT%H:%M")
+                    dominate.tags.span(f"Ended on: ", HTMLTimeTag(str(expiration), datetime=formatted_expiration))
 
         poll_block.add(poll_body, footer)
 
