@@ -229,6 +229,13 @@ img.ab-poster {
   text-align: center;
 }
 
+.poll-metadata {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
 .poll-choice {
   display: flex;
   align-items: center;

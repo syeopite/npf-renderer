@@ -391,15 +391,14 @@ class Formatter(helpers.CursorIterator):
             now = datetime.datetime.utcnow()
 
             # If not expired we display how many days till expired
-            if expiration > now:
+            with dominate.tags.div(cls="poll-metadata"):
                 if block.votes:
-                    dominate.tags.p(f"{block.total_votes} votes")
-
-                dominate.tags.p(f"Poll ends in {expiration - now}")
-            else:
-                if block.votes:
-                    dominate.tags.p(f"Final result from {block.total_votes} votes")
-                dominate.tags.p(f"Poll ended on {expiration}")
+                    dominate.tags.span(f"{block.total_votes} votes")
+                    dominate.tags.span("•", cls="separator")
+                if expiration > now:
+                    dominate.tags.span(f"Remaining time: {expiration - now}")
+                else:
+                    dominate.tags.span(f"Ended on {expiration}")
 
         poll_block.add(poll_body, footer)
 

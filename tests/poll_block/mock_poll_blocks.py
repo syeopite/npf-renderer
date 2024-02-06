@@ -85,7 +85,9 @@ simple_poll_expired = (
             dominate.tags.div(dominate.tags.span("answer 4", cls="answer"), cls="poll-choice"),
             cls="poll-body"
         ),
-        dominate.tags.footer(dominate.tags.p(str("Poll ended on 2023-01-08 00:00:20"))),
+        dominate.tags.footer(
+            dominate.tags.div(dominate.tags.span("Ended on 2023-01-08 00:00:20"), cls="poll-metadata"),
+        ),
         cls="poll-block expired-poll"
     ),
 
@@ -93,9 +95,13 @@ simple_poll_expired = (
         dominate.tags.header(dominate.tags.h3("This is a question")),
         basic_poll_data[3],   # Answers
         dominate.tags.footer(
-            dominate.tags.p(str("Final result from 810 votes")),
-            dominate.tags.p(str("Poll ended on 2023-01-08 00:00:20"),
-        )),
+            dominate.tags.div(
+                dominate.tags.span("810 votes"),
+                dominate.tags.span("•", cls="separator"),
+                dominate.tags.span("Ended on 2023-01-08 00:00:20"),
+                cls="poll-metadata"
+            ),
+        ),
         cls="poll-block expired-poll populated"
     ),
 )
@@ -119,7 +125,12 @@ simple_ongoing_poll = (
             cls="poll-body"
         ),
 
-        dominate.tags.footer(dominate.tags.p(str("Poll ends in 7 days, 0:00:00"))),
+        dominate.tags.footer(
+            dominate.tags.div(
+                dominate.tags.span("Remaining time: 7 days, 0:00:00"),
+                cls="poll-metadata"
+            ),
+        ),
         cls="poll-block"
     ),
 
@@ -127,9 +138,13 @@ simple_ongoing_poll = (
         dominate.tags.header(dominate.tags.h3("This is a question")),
         basic_poll_data[3],   # Answers
         dominate.tags.footer(
-            dominate.tags.p(str("810 votes")),
-            dominate.tags.p(str("Poll ends in 7 days, 0:00:00"),
-        )),
+            dominate.tags.div(
+                dominate.tags.span("810 votes"),
+                dominate.tags.span("•", cls="separator"),
+                dominate.tags.span("Remaining time: 7 days, 0:00:00"),
+                cls="poll-metadata"
+            ),
+        ),
         cls="poll-block populated"
     ),
 )
@@ -198,9 +213,13 @@ poll_with_extra_choice_without_any_results_attached = (
                 cls="poll-body"
             ),
         dominate.tags.footer(
-            dominate.tags.p(str("Final result from 810 votes")),
-            dominate.tags.p(str("Poll ended on 2023-01-08 00:00:20"),
-        )),
+            dominate.tags.div(
+                dominate.tags.span("810 votes"),
+                dominate.tags.span("•", cls="separator"),
+                dominate.tags.span("Ended on 2023-01-08 00:00:20"),
+                cls="poll-metadata"
+            ),
+        ),
         cls="poll-block expired-poll populated"
     ),
 )
@@ -275,12 +294,17 @@ mock_tied_poll = (
                 cls="poll-body"
             ),
         dominate.tags.footer(
-            dominate.tags.p(str("Final result from 1060 votes")),
-            dominate.tags.p(str("Poll ended on 2023-01-08 00:00:20"),
-        )),
+            dominate.tags.div(
+                dominate.tags.span("1060 votes"),
+                dominate.tags.span("•", cls="separator"),
+                dominate.tags.span("Ended on 2023-01-08 00:00:20"),
+                cls="poll-metadata"
+            ),
+        ),
         cls="poll-block expired-poll populated"
     ),
 )
+
 
 mock_multiple_winners_poll = (
     simple_poll_expired[0],
@@ -351,9 +375,13 @@ mock_multiple_winners_poll = (
                 cls="poll-body"
             ),
         dominate.tags.footer(
-            dominate.tags.p(str("Final result from 2000 votes")),
-            dominate.tags.p(str("Poll ended on 2023-01-08 00:00:20"),
-        )),
+            dominate.tags.div(
+                dominate.tags.span("2000 votes"),
+                dominate.tags.span("•", cls="separator"),
+                dominate.tags.span("Ended on 2023-01-08 00:00:20"),
+                cls="poll-metadata"
+            ),
+        ),
         cls="poll-block expired-poll populated"
     ),
 )
