@@ -4,7 +4,7 @@ import urllib.parse
 import dominate.tags
 import dominate.util
 
-from . import text, image, misc
+from . import text, image, misc, attribution
 from .. import objects, helpers, exceptions
 
 
@@ -93,6 +93,19 @@ class Formatter(helpers.CursorIterator):
 
         if block.caption:
             figure.add(dominate.tags.figcaption(block.caption, cls="image-caption"))
+
+        # Add attribution HTML
+        if attr := block.attribution:
+            if isinstance(attr, objects.attribution.LinkAttribution):
+                figure.add(attribution.format_link_attribution(attr, self.url_handler))
+            elif isinstance(attr, objects.attribution.PostAttribution):
+                figure.add(attribution.format_post_attribution(attr, self.url_handler))
+            elif isinstance(attr, objects.attribution.AppAttribution):
+                figure.add(attribution.format_app_attribution(attr, self.url_handler))
+            else:
+                # TODO Add "Unsupported Attribution HTML"
+                raise ValueError(f"Unable to format unsupported attribution: \"{attr}\" ")
+
 
         return figure
 
