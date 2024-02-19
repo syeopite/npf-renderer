@@ -1,6 +1,5 @@
 import dominate.tags
 
-from . import attribution
 from .. import objects
 
 
@@ -90,18 +89,6 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url,
             **image_attributes
         )
     )
-
-    # Add attribution HTML
-    if attr := image_block.attribution:
-        if isinstance(attr, objects.attribution.LinkAttribution):
-            container.add(attribution.format_link_attribution(attr, url_handler))
-        elif isinstance(attr, objects.attribution.PostAttribution):
-            container.add(attribution.format_post_attribution(attr, url_handler))
-        elif isinstance(attr, objects.attribution.AppAttribution):
-            container.add(attribution.format_app_attribution(attr, url_handler))
-        else:
-            # TODO Add "Unsupported Attribution HTML"
-            raise ValueError(f"Unable to format unsupported attribution: \"{attr}\" ")
 
     # Similar to the reason above, we won't be able to hide the poster image once the main content loads.
     # if poster_srcset:

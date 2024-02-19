@@ -3,10 +3,16 @@ import dominate.tags
 from npf_renderer import objects
 
 
-def format_constructor(*children, container_style=""):
-    return dominate.tags.div(
-        dominate.tags.figure(dominate.tags.div(*children, cls="image-container", style=container_style), cls="image-block"), cls="post-body"
-    )
+def format_constructor(*children, container_style="", **kwargs):
+    
+    figure_element = dominate.tags.figure(cls="image-block")
+    container = dominate.tags.div(*children, cls="image-container", style=container_style)
+    
+    figure_element.add(container)
+    if kwargs.get("figure_children"):
+        figure_element.add(*kwargs["figure_children"])
+    
+    return dominate.tags.div(figure_element, cls="post-body")
 
 
 basic_image_block = (
@@ -297,19 +303,19 @@ gif_image_block_with_post_attribution = (
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
-
-        dominate.tags.div(
-            dominate.tags.a(
-                "From ",
-                dominate.tags.b(
-                    "example-blog",
+        container_style="padding-bottom: 48.7395%;",
+        figure_children=(
+            dominate.tags.div(
+                dominate.tags.a(
+                    "From ",
+                    dominate.tags.b(
+                        "example-blog",
+                    ),
+                    href="https://example-blog.tumblr.com/post/1234567890/example-gif-post",
                 ),
-                href="https://example-blog.tumblr.com/post/1234567890/example-gif-post",
+                cls="post-attribution"
             ),
-            cls="post-attribution"
-        ),
-
-        container_style="padding-bottom: 48.7395%;"
+        )
     ),
 )
 
@@ -370,16 +376,16 @@ gif_image_block_with_link_attribution = (
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
-
-        dominate.tags.div(
-            dominate.tags.a(
-                "davidragifs.com",
-                href="https://davidragifs.com",
+        container_style="padding-bottom: 140.0%;",
+        figure_children=(
+            dominate.tags.div(
+                dominate.tags.a(
+                    "davidragifs.com",
+                    href="https://davidragifs.com",
+                ),
+                cls="link-attribution"
             ),
-            cls="link-attribution"
-        ),
-
-        container_style="padding-bottom: 140.0%;"
+        )
     ),
 )
 
@@ -536,18 +542,18 @@ image_block_with_app_attribution = (
                     alt="image"
                 ),
 
-                dominate.tags.div(
-                    dominate.tags.a(
-                        "View on ",
-                        dominate.tags.b(
-                            "Twitter"
-                        ),
-                        href="https://twitter.com/example/status/1234567"
-                    ),
-                    cls="post-attribution"
-                ),
-
                 cls="image-container", style="padding-bottom: 130.292%;"
+            ),
+
+            dominate.tags.div(
+                dominate.tags.a(
+                    "View on ",
+                    dominate.tags.b(
+                        "Twitter"
+                    ),
+                    href="https://twitter.com/example/status/1234567"
+                ),
+                cls="post-attribution"
             ),
             cls="image-block"
         ),
