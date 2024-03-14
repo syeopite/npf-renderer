@@ -114,17 +114,17 @@ font-size: 1.3em
   width: 100%;
   height: 100%;
 
+  color: #f1f1f1;
   background: rgba(0,0,0,0.4);
+
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .link-block-title {
   margin: 20px 15px;
   font-size: 1.5em;
-}
-
-.poster-overlay-text {
-  margin: 0;
-  color: #f1f1f1;
 }
 
 .link-block-description-container {
