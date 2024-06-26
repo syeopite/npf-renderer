@@ -500,6 +500,12 @@ class Formatter(helpers.CursorIterator):
 
         return row_items
 
+    def create_truncation_details_box(self, ):
+        return dominate.tags.details(
+            dominate.tags.summary("Read more"),
+            cls="layout-truncated"
+        )
+
     def format(self):
         """Renders the list of content blocks into HTML"""
         while self.next():
@@ -511,6 +517,11 @@ class Formatter(helpers.CursorIterator):
             # List to keep track of blocks that have been added to layouts
             # this is used to handle the edge case in which only certain blocks have specified layouts but not others.
             blocks_in_layouts = []
+
+            # Location of which to attach the row
+            # Typically this would be directly onto the post but after
+            # the truncation point it would be under a details element
+            row_attachment_point = self.post
 
             for layout in self.layout:
                 if isinstance(layout, objects.layouts.Rows):
@@ -535,8 +546,8 @@ class Formatter(helpers.CursorIterator):
 
                         has_image = False
 
-                        for index in row.ranges:
-                            render_instructions = self.render_instructions[index]
+                        for block_index in row.ranges:
+                            render_instructions = self.render_instructions[block_index]
                             if not render_instructions:
                                 continue
 
@@ -576,7 +587,13 @@ class Formatter(helpers.CursorIterator):
                                 row_items[index] = self._format_image(*render_instruction_args, len(images_in_row), override_padding=padding_ratio)
 
                         row_tag = dominate.tags.div(cls="layout-row")
-                        self.post.add(row_tag)
+
+                        if layout.truncate_after and (block_index > layout.truncate_after):
+                            if row_attachment_point == self.post:
+                                row_attachment_point = self.create_truncation_details_box()
+                                self.post.add(row_attachment_point)
+
+                        row_attachment_point.add(row_tag)
 
                         [row_tag.add(i) for i in row_items]
                 elif isinstance(layout, objects.layouts.AskLayout):
