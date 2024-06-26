@@ -100,6 +100,24 @@ basic_rows_layout_with_truncate_example = (
     ]
 )
 
+basic_rows_layout_with_camel_case_truncate_example = (
+    {
+        "layouts": [
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [1, 2, 3]},
+                    {"blocks": [4, 5]},
+                ],
+
+                "truncateAfter": 3,
+            }
+        ]
+    },
+
+    basic_rows_layout_with_truncate_example[1]
+)
+
 
 rows_with_carousel_and_weighted = (
     {
