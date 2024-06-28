@@ -20,8 +20,20 @@ def test_basic_layout_format():
     helper_function(data.basic_rows_layout_example[0], data.basic_rows_layout_example[2])
 
 
+def test_basic_layout_with_truncate_format():
+    helper_function(data.basic_rows_layout_with_truncate_example[0], data.basic_rows_layout_with_truncate_example[2])
+
+
+def test_basic_layout_with_truncate_at_start_format():
+    helper_function(data.basic_rows_layout_with_truncate_at_start_example[0], data.basic_rows_layout_with_truncate_at_start_example[2])
+
+
 def test_ask_layout_format():
     helper_function(data.layouts_with_ask_section[0], data.layouts_with_ask_section[2])
+
+
+def test_layouts_with_ask_section_and_truncation_format():
+    helper_function(data.layouts_with_ask_section_and_truncation[0], data.layouts_with_ask_section_and_truncation[2])
 
 
 def test_layouts_with_only_ask_section_format():

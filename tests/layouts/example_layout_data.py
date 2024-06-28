@@ -97,7 +97,100 @@ basic_rows_layout_with_truncate_example = (
 
             truncate_after=3
         )
-    ]
+    ],
+
+    (
+        dominate.tags.div(
+            dominate.tags.div(
+                generate_image_block_html(1, 3),
+                generate_image_block_html(2, 3),
+                generate_image_block_html(3, 3),
+                cls="layout-row"
+            ),
+
+            dominate.tags.details(
+                dominate.tags.summary("Read more"),
+                dominate.tags.div(
+                    generate_image_block_html(4, 2),
+                    generate_image_block_html(5, 2),
+                    cls="layout-row"
+                ),
+                cls="layout-truncated"
+            ),
+
+            cls="post-body")
+    )
+)
+
+
+basic_rows_layout_with_camel_case_truncate_example = (
+    {
+        "layouts": [
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [1, 2, 3]},
+                    {"blocks": [4, 5]},
+                ],
+
+                "truncateAfter": 3,
+            }
+        ]
+    },
+
+    basic_rows_layout_with_truncate_example[1]
+)
+
+
+basic_rows_layout_with_truncate_at_start_example = (
+    {
+        "layouts": [
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [1, 2, 3]},
+                    {"blocks": [4, 5]},
+                ],
+
+                "truncate_after": -1,
+            }
+        ]
+    },
+    [
+        layouts.Rows(
+            rows=[
+                layouts.RowLayout(
+                    [1, 2, 3]
+                ),
+                layouts.RowLayout(
+                    [4, 5]
+                )
+            ],
+
+            truncate_after = -1
+        )
+    ],
+
+    (
+        dominate.tags.div(
+            dominate.tags.details(
+                dominate.tags.summary("Read more"),
+                dominate.tags.div(
+                    generate_image_block_html(1, 3),
+                    generate_image_block_html(2, 3),
+                    generate_image_block_html(3, 3),
+                    cls="layout-row"
+                ),
+                dominate.tags.div(
+                    generate_image_block_html(4, 2),
+                    generate_image_block_html(5, 2),
+                    cls="layout-row"
+                ),
+                cls="layout-truncated"
+            ),
+
+            cls="post-body")
+    )
 )
 
 
@@ -155,8 +248,212 @@ layouts_with_ask_section = (
                     {"blocks": [3]},
                     {"blocks": [4, 5]},
                 ],
+            }
+        ]
+    },
 
-                "truncate_after": 3
+    [
+        layouts.AskLayout(
+            ranges=[0, 1, 2],
+            attribution=attribution.BlogAttribution(
+                name="example",
+                url="https://example.tumblr.com",
+                uuid="t:SN32hxaWHi312_32_df"
+            )
+
+        ),
+
+        layouts.Rows(
+            rows=[
+                layouts.RowLayout(
+                    [3],
+                ),
+                layouts.RowLayout(
+                    [4, 5]
+                )
+            ],
+        )
+    ],
+
+    dominate.tags.div(
+        # Ask
+        dominate.tags.div(
+            dominate.tags.div(
+                dominate.tags.div(
+                    dominate.tags.div(
+                        dominate.tags.p(
+                            dominate.tags.a(
+                                dominate.tags.strong("example", cls="asker-name"),
+                                href="https://example.tumblr.com/",
+                                cls="asker-attribution"
+                            ),
+                            " asked:",
+                            cls="asker"
+                        ),
+                        cls="ask-header"
+                    ),
+
+                    dominate.tags.div(
+                        dominate.tags.p("Hi there", cls="text-block"),
+                        generate_image_block_html(1, 1),
+                        generate_image_block_html(2, 1),
+                        cls="ask-content"
+                    ),
+
+                    cls="ask-body"
+                ),
+
+                cls="ask"
+            ),
+            cls="layout-ask"
+        ),
+
+        dominate.tags.div(
+            generate_image_block_html(3, 1),
+            cls="layout-row"
+        ),
+
+        dominate.tags.div(
+            generate_image_block_html(4, 2),
+            generate_image_block_html(5, 2),
+            cls="layout-row"
+        ),
+
+        cls="post-body"
+    )
+)
+
+
+layouts_with_ask_section = (
+    {
+        "layouts": [
+            {
+                "type": "ask",
+                "blocks": [0, 1, 2],
+                "attribution": {
+                    "type": "blog",
+                    "url": "https://example.tumblr.com",
+                    "blog": {
+                        "name": "example",
+                        "url": "https://example.tumblr.com",
+                        "uuid": "t:SN32hxaWHi312_32_df"
+                    }
+                }
+            },
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [0]},
+                    {"blocks": [1]},
+                    {"blocks": [2]},
+
+                    {"blocks": [3]},
+                    {"blocks": [4, 5]},
+                ],
+            }
+        ]
+    },
+
+    [
+        layouts.AskLayout(
+            ranges=[0, 1, 2],
+            attribution=attribution.BlogAttribution(
+                name="example",
+                url="https://example.tumblr.com",
+                uuid="t:SN32hxaWHi312_32_df"
+            )
+
+        ),
+
+        layouts.Rows(
+            rows=[
+                layouts.RowLayout(
+                    [3],
+                ),
+                layouts.RowLayout(
+                    [4, 5]
+                )
+            ],
+        )
+    ],
+
+    dominate.tags.div(
+        # Ask
+        dominate.tags.div(
+            dominate.tags.div(
+                dominate.tags.div(
+                    dominate.tags.div(
+                        dominate.tags.p(
+                            dominate.tags.a(
+                                dominate.tags.strong("example", cls="asker-name"),
+                                href="https://example.tumblr.com/",
+                                cls="asker-attribution"
+                            ),
+                            " asked:",
+                            cls="asker"
+                        ),
+                        cls="ask-header"
+                    ),
+
+                    dominate.tags.div(
+                        dominate.tags.p("Hi there", cls="text-block"),
+                        generate_image_block_html(1, 1),
+                        generate_image_block_html(2, 1),
+                        cls="ask-content"
+                    ),
+
+                    cls="ask-body"
+                ),
+
+                cls="ask"
+            ),
+            cls="layout-ask"
+        ),
+
+        dominate.tags.div(
+            generate_image_block_html(3, 1),
+            cls="layout-row"
+        ),
+
+        dominate.tags.div(
+            generate_image_block_html(4, 2),
+            generate_image_block_html(5, 2),
+            cls="layout-row"
+        ),
+
+        cls="post-body"
+    )
+)
+
+
+layouts_with_ask_section_and_truncation = (
+    {
+        "layouts": [
+            {
+                "type": "ask",
+                "blocks": [0, 1, 2],
+                "attribution": {
+                    "type": "blog",
+                    "url": "https://example.tumblr.com",
+                    "blog": {
+                        "name": "example",
+                        "url": "https://example.tumblr.com",
+                        "uuid": "t:SN32hxaWHi312_32_df"
+                    }
+                }
+            },
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [0]},
+                    {"blocks": [1]},
+                    {"blocks": [2]},
+
+                    {"blocks": [3]},
+                    {"blocks": [4, 5]},
+                ],
+
+                "truncate_after": 3,
             }
         ]
     },
@@ -224,10 +521,14 @@ layouts_with_ask_section = (
             cls="layout-row"
         ),
 
-        dominate.tags.div(
-            generate_image_block_html(4, 2),
-            generate_image_block_html(5, 2),
-            cls="layout-row"
+        dominate.tags.details(
+            dominate.tags.summary("Read more"),
+            dominate.tags.div(
+                generate_image_block_html(4, 2),
+                generate_image_block_html(5, 2),
+                cls="layout-row"
+            ),
+            cls="layout-truncated"
         ),
 
         cls="post-body"
