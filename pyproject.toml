@@ -1,7 +1,7 @@
 [project]
 name = "npf_renderer"
 description="A Python Based Renderer for Tumblr's Neue Post Format (NPF) "
-version = "0.12.1"
+version = "0.12.2"
 readme = "README.md"
 classifiers = [
     "Development Status :: 4 - Beta",
