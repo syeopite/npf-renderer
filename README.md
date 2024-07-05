@@ -134,7 +134,7 @@ with open("basic_layout.css", "w") as file:
   <div class="unsupported-content-block">
     <div class="unsupported-content-block-message">
       <h1>Unsupported content placeholder</h1>
-      <p>Hello! I'm a placeholder for the unsupported "poll" type NPF content block. Please report me!</p>
+      <p>Hello! I'm a placeholder for the unsupported "unsupported" type NPF content block. Please report me!</p>
     </div>
   </div>
 </div>
