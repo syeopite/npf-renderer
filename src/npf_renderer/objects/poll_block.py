@@ -3,13 +3,13 @@ from typing import NamedTuple, Sequence, Optional, Dict
 
 
 class PollResult(NamedTuple):
-    is_winner : bool
-    vote_count : int
+    is_winner: bool
+    vote_count: int
 
 
 class PollResults(NamedTuple):
-    timestamp : int
-    results : Dict[str, PollResult]
+    timestamp: int
+    results: Dict[str, PollResult]
 
 
 class PollBlock(NamedTuple):
@@ -24,8 +24,8 @@ class PollBlock(NamedTuple):
     expires_after: int
 
     # TODO
-    #source : str 
-    #multipleChoice : bool
+    # source : str
+    # multipleChoice : bool
 
     # Mapping of answer id to vote count
     votes: Optional[PollResults] = None
