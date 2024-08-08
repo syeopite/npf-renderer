@@ -88,13 +88,19 @@ subtype_string_test_2 = (
         ]
     },
     [
-        objects.text_block.TextBlock(text="Sward's Shopping List", subtype=objects.text_block.Subtypes.HEADING1),
+        objects.text_block.TextBlock(
+            text="Sward's Shopping List", subtype=objects.text_block.Subtypes.HEADING1
+        ),
         objects.text_block.ListGrouping(
             type=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
             group=[
-                objects.text_block.TextBlock(text="Sword", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM),
-                objects.text_block.TextBlock(text="Candy", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM),
-            ]
+                objects.text_block.TextBlock(
+                    text="Sword", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM
+                ),
+                objects.text_block.TextBlock(
+                    text="Candy", subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM
+                ),
+            ],
         ),
         objects.text_block.TextBlock(text="But especially don't forget:"),
         objects.text_block.ListGrouping(
@@ -104,9 +110,8 @@ subtype_string_test_2 = (
                     text="Death, which is uncountable on this list.",
                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
                 ),
-            ]
+            ],
         ),
-
     ],
     tags.div(
         tags.h1("Sward's Shopping List", cls="text-block heading1"),
@@ -117,7 +122,9 @@ subtype_string_test_2 = (
         ),
         tags.p("But especially don't forget:", cls="text-block"),
         tags.ul(
-            tags.li("Death, which is uncountable on this list.", cls="text-block unordered-list-item"),
+            tags.li(
+                "Death, which is uncountable on this list.", cls="text-block unordered-list-item"
+            ),
             cls="unordered-list",
         ),
         cls="post-body",
@@ -159,7 +166,9 @@ subtype_and_indent_level_test = (
         ]
     },
     [
-        objects.text_block.TextBlock(text="Sward's Shopping List", subtype=objects.text_block.Subtypes.HEADING1),
+        objects.text_block.TextBlock(
+            text="Sward's Shopping List", subtype=objects.text_block.Subtypes.HEADING1
+        ),
         objects.text_block.ListGrouping(
             type=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
             group=[
@@ -181,7 +190,7 @@ subtype_and_indent_level_test = (
                                                     text="Third Level: Green",
                                                     subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
                                                 ),
-                                            ]
+                                            ],
                                         )
                                     ],
                                 ),
@@ -189,7 +198,7 @@ subtype_and_indent_level_test = (
                                     text="Second level: Pears",
                                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
                                 ),
-                            ]
+                            ],
                         ),
                     ],
                 ),
@@ -197,8 +206,8 @@ subtype_and_indent_level_test = (
                     text="First level: Pears",
                     subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
                 ),
-            ]
-        )
+            ],
+        ),
     ],
     tags.div(
         tags.h1("Sward's Shopping List", cls="text-block heading1"),
@@ -229,46 +238,41 @@ subtype_and_indent_level_test = (
 mixed_block_quote_list_test = (
     {
         "content": [
-            {
-                "type": "text",
-                "subtype": "indented",
-                "text": "1: blockquote, not nested"
-            },
+            {"type": "text", "subtype": "indented", "text": "1: blockquote, not nested"},
             {
                 "type": "text",
                 "subtype": "indented",
                 "text": "2: blockquote, nested",
-                "indent_level": 1
+                "indent_level": 1,
             },
             {
                 "type": "text",
                 "subtype": "unordered-list-item",
                 "text": "3: nested in two blockquotes",
-                "indent_level": 2
+                "indent_level": 2,
             },
             {
                 "type": "text",
                 "subtype": "ordered-list-item",
                 "text": "4: nested in two blockquotes and a list",
-                "indent_level": 3
+                "indent_level": 3,
             },
             {
                 "type": "text",
                 "subtype": "unordered-list-item",
                 "text": "3: back to level 3, double nesting",
-                "indent_level": 2
+                "indent_level": 2,
             },
             {
                 "type": "text",
                 "subtype": "indented",
                 "text": "1: back to level 1, no nesting",
-            }
+            },
         ]
     },
-
     [
         objects.text_block.TextBlock(
-            text="1: blockquote, not nested", 
+            text="1: blockquote, not nested",
             subtype=objects.text_block.Subtypes.INDENTED,
             nest=[
                 objects.text_block.TextBlock(
@@ -289,28 +293,24 @@ mixed_block_quote_list_test = (
                                                     text="4: nested in two blockquotes and a list",
                                                     subtype=objects.text_block.Subtypes.ORDERED_LIST_ITEM,
                                                 )
-                                            ]
+                                            ],
                                         )
                                     ],
                                 ),
-
                                 objects.text_block.TextBlock(
                                     text="3: back to level 3, double nesting",
-                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,        
-                                )
-                            ]
+                                    subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
+                                ),
+                            ],
                         )
-                    ]
+                    ],
                 )
-            ]
+            ],
         ),
-
         objects.text_block.TextBlock(
-            text="1: back to level 1, no nesting",
-            subtype= objects.text_block.Subtypes.INDENTED
-        )
+            text="1: back to level 1, no nesting", subtype=objects.text_block.Subtypes.INDENTED
+        ),
     ],
-
     tags.div(
         tags.blockquote(
             "1: blockquote, not nested",
@@ -322,32 +322,24 @@ mixed_block_quote_list_test = (
                         tags.ol(
                             tags.li(
                                 "4: nested in two blockquotes and a list",
-                                cls="text-block ordered-list-item"
+                                cls="text-block ordered-list-item",
                             ),
                             cls="ordered-list",
                         ),
                         cls="text-block unordered-list-item",
                     ),
-
                     tags.li(
-                        "3: back to level 3, double nesting",
-                        cls="text-block unordered-list-item"
+                        "3: back to level 3, double nesting", cls="text-block unordered-list-item"
                     ),
-
                     cls="unordered-list",
                 ),
-                cls="text-block indented"
+                cls="text-block indented",
             ),
-            cls="text-block indented"
+            cls="text-block indented",
         ),
-
-        tags.blockquote(
-            "1: back to level 1, no nesting",
-            cls="text-block indented"
-        ),
-
-        cls="post-body"
-    )
+        tags.blockquote("1: back to level 1, no nesting", cls="text-block indented"),
+        cls="post-body",
+    ),
 )
 
 top_level_list_with_children_merging_test_data = (
@@ -357,23 +349,18 @@ top_level_list_with_children_merging_test_data = (
                 "type": "text",
                 "text": "I've got a bunch of links for you!",
                 "subtype": "heading1",
-                "formatting": [
-                    {"start": 0, "end": 34, "type": "bold"}
-                ],
+                "formatting": [{"start": 0, "end": 34, "type": "bold"}],
             },
-
             {
                 "type": "text",
                 "subtype": "heading2",
                 "text": "Interesting stuff",
             },
-
             {
                 "type": "text",
                 "subtype": "unordered-list-item",
                 "text": "Space",
             },
-
             {
                 "type": "text",
                 "subtype": "unordered-list-item",
@@ -383,7 +370,6 @@ top_level_list_with_children_merging_test_data = (
                     {"start": 0, "end": 4, "type": "link", "url": "https://www.nasa.gov"}
                 ],
             },
-
             {
                 "type": "text",
                 "subtype": "unordered-list-item",
@@ -393,7 +379,6 @@ top_level_list_with_children_merging_test_data = (
                     {"start": 0, "end": 3, "type": "link", "url": "https://www.esa.int/"}
                 ],
             },
-
             {
                 "type": "text",
                 "subtype": "unordered-list-item",
@@ -403,13 +388,11 @@ top_level_list_with_children_merging_test_data = (
                     {"start": 0, "end": 6, "type": "link", "url": "https://www.spacex.com/"}
                 ],
             },
-
             {
                 "type": "text",
                 "subtype": "unordered-list-item",
                 "text": "Code",
             },
-
             {
                 "type": "text",
                 "subtype": "unordered-list-item",
@@ -419,7 +402,6 @@ top_level_list_with_children_merging_test_data = (
                     {"start": 0, "end": 6, "type": "link", "url": "https://www.github.com/"}
                 ],
             },
-
             {
                 "type": "text",
                 "subtype": "unordered-list-item",
@@ -437,13 +419,15 @@ top_level_list_with_children_merging_test_data = (
             subtype=objects.text_block.Subtypes.HEADING1,
             inline_formatting=[
                 objects.inline.StyleInterval(
-                    start=0, end=34, instructions=[objects.inline.Instruction(objects.inline.FMTTypes.BOLD)]
+                    start=0,
+                    end=34,
+                    instructions=[objects.inline.Instruction(objects.inline.FMTTypes.BOLD)],
                 )
             ],
         ),
-        objects.text_block.TextBlock(text="Interesting stuff",
-                                     subtype=objects.text_block.Subtypes.HEADING2),
-
+        objects.text_block.TextBlock(
+            text="Interesting stuff", subtype=objects.text_block.Subtypes.HEADING2
+        ),
         objects.text_block.ListGrouping(
             type=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
             group=[
@@ -483,7 +467,7 @@ top_level_list_with_children_merging_test_data = (
                                                 )
                                             ],
                                         )
-                                    ],                                    
+                                    ],
                                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
                                 ),
                                 objects.text_block.TextBlock(
@@ -502,7 +486,7 @@ top_level_list_with_children_merging_test_data = (
                                     ],
                                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
                                 ),
-                            ]
+                            ],
                         )
                     ],
                 ),
@@ -545,31 +529,22 @@ top_level_list_with_children_merging_test_data = (
                                     ],
                                     subtype=objects.text_block.Subtypes.UNORDERED_LIST_ITEM,
                                 ),
-                            ]
+                            ],
                         )
                     ],
                 ),
-            ]
-        )
-
+            ],
+        ),
     ],
     tags.div(
         tags.h1(
             tags.span(
-                tags.b(
-                    "I've got a bunch of links for you!",
-                    cls="inline-bold"
-                ),
-                cls="inline-formatted-content"
+                tags.b("I've got a bunch of links for you!", cls="inline-bold"),
+                cls="inline-formatted-content",
             ),
-            cls="text-block heading1 inline-formatted-block"
+            cls="text-block heading1 inline-formatted-block",
         ),
-
-        tags.h2(
-            "Interesting stuff",
-            cls="text-block heading2"
-        ),
-
+        tags.h2("Interesting stuff", cls="text-block heading2"),
         tags.ul(
             tags.li(
                 "Space",
@@ -581,11 +556,10 @@ top_level_list_with_children_merging_test_data = (
                                 href="https://www.nasa.gov",
                                 cls="inline-link",
                             ),
-                            cls="inline-formatted-content"
+                            cls="inline-formatted-content",
                         ),
-                        cls="text-block unordered-list-item inline-formatted-block"
+                        cls="text-block unordered-list-item inline-formatted-block",
                     ),
-
                     tags.li(
                         tags.span(
                             tags.a(
@@ -593,11 +567,10 @@ top_level_list_with_children_merging_test_data = (
                                 href="https://www.esa.int/",
                                 cls="inline-link",
                             ),
-                            cls="inline-formatted-content"
+                            cls="inline-formatted-content",
                         ),
-                        cls="text-block unordered-list-item inline-formatted-block"
+                        cls="text-block unordered-list-item inline-formatted-block",
                     ),
-
                     tags.li(
                         tags.span(
                             tags.a(
@@ -605,16 +578,14 @@ top_level_list_with_children_merging_test_data = (
                                 href="https://www.spacex.com/",
                                 cls="inline-link",
                             ),
-                            cls="inline-formatted-content"
+                            cls="inline-formatted-content",
                         ),
-                        cls="text-block unordered-list-item inline-formatted-block"
+                        cls="text-block unordered-list-item inline-formatted-block",
                     ),
-
-                    cls="unordered-list"
+                    cls="unordered-list",
                 ),
-                cls="text-block unordered-list-item"
+                cls="text-block unordered-list-item",
             ),
-
             tags.li(
                 "Code",
                 tags.ul(
@@ -625,11 +596,10 @@ top_level_list_with_children_merging_test_data = (
                                 href="https://www.github.com/",
                                 cls="inline-link",
                             ),
-                            cls="inline-formatted-content"
+                            cls="inline-formatted-content",
                         ),
-                        cls="text-block unordered-list-item inline-formatted-block"
+                        cls="text-block unordered-list-item inline-formatted-block",
                     ),
-
                     tags.li(
                         tags.span(
                             tags.a(
@@ -637,17 +607,16 @@ top_level_list_with_children_merging_test_data = (
                                 href="https://about.gitlab.com/",
                                 cls="inline-link",
                             ),
-                            cls="inline-formatted-content"
+                            cls="inline-formatted-content",
                         ),
-                        cls="text-block unordered-list-item inline-formatted-block"
+                        cls="text-block unordered-list-item inline-formatted-block",
                     ),
-                    cls="unordered-list"
+                    cls="unordered-list",
                 ),
-                cls="text-block unordered-list-item"
+                cls="text-block unordered-list-item",
             ),
-
-            cls="unordered-list"
+            cls="unordered-list",
         ),
-        cls="post-body"
+        cls="post-body",
     ),
 )

@@ -9,14 +9,22 @@ import intervaltree
 
 from . import misc
 from .. import helpers
-from ..objects import (inline, text_block, image, link_block, video_block,
-                       audio_block, poll_block, unsupported)
+from ..objects import (
+    inline,
+    text_block,
+    image,
+    link_block,
+    video_block,
+    audio_block,
+    poll_block,
+    unsupported,
+)
 
 
 class Parser(helpers.CursorIterator):
     """All-in-one parser to process NPF content types"""
 
-    def __init__(self, content, poll_result_callback = None):
+    def __init__(self, content, poll_result_callback=None):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
         self.parsed_result = []
@@ -65,7 +73,9 @@ class Parser(helpers.CursorIterator):
             #
             # When an indent_level attr is set, we should also probably either be one of the list subtypes or a indented
             # block quote subtype. This check shouldn't be needed, however.
-            if peek["type"] != "text" or not (indent_level := (peek.get("indent_level") or peek.get("indentLevel"))):
+            if peek["type"] != "text" or not (
+                indent_level := (peek.get("indent_level") or peek.get("indentLevel"))
+            ):
                 break
 
             # If the next element's indent level is higher than ours (stored as nest_level), they are our children.
@@ -87,10 +97,12 @@ class Parser(helpers.CursorIterator):
             list_grouping = [create_text_block(text, subtype, inline_formats, nest_=nest_array)]
             while peek := self.peek():
                 if peek_subtype := peek.get("subtype"):
-                    peek_subtype = getattr(text_block.Subtypes, peek_subtype.upper().replace("-", "_"))
+                    peek_subtype = getattr(
+                        text_block.Subtypes, peek_subtype.upper().replace("-", "_")
+                    )
 
                 # Make sure we are at the same nest level and that we are the same list type
-                indent_level = (peek.get("indent_level") or peek.get("indentLevel"))
+                indent_level = peek.get("indent_level") or peek.get("indentLevel")
                 indent_level = indent_level or 0
 
                 if peek_subtype != subtype or indent_level != nest_level:
@@ -112,24 +124,22 @@ class Parser(helpers.CursorIterator):
         inline_type = getattr(inline.FMTTypes, inline_format["type"].upper())
 
         match inline_type:
-            case (inline.FMTTypes.BOLD | inline.FMTTypes.ITALIC |
-                  inline.FMTTypes.STRIKETHROUGH | inline.FMTTypes.SMALL):
-                return inline.Instruction(
-                    type_=inline_type
-                )
+            case (
+                inline.FMTTypes.BOLD
+                | inline.FMTTypes.ITALIC
+                | inline.FMTTypes.STRIKETHROUGH
+                | inline.FMTTypes.SMALL
+            ):
+                return inline.Instruction(type_=inline_type)
             case inline.FMTTypes.LINK:
-                return inline.LinkInstruction(
-                    type_=inline_type,
-                    url=inline_format["url"]
-                )
+                return inline.LinkInstruction(type_=inline_type, url=inline_format["url"])
             case inline.FMTTypes.MENTION:
                 blog = inline_format["blog"]
                 return inline.MentionInstruction(
                     type_=inline_type,
-
                     blog_name=blog["name"],
                     blog_uuid=blog["uuid"],
-                    blog_url=blog["url"]
+                    blog_url=blog["url"],
                 )
             case inline.FMTTypes.COLOR:
                 return inline.ColorInstruction(
@@ -184,11 +194,17 @@ class Parser(helpers.CursorIterator):
             last_raw_style = inline_format_intervals[-1]
             last_processed_style = discrete_formatting_instructions[-1]
 
-            if last_raw_style.begin != last_processed_style[0] and last_raw_style.end != last_processed_style[1]:
+            if (
+                last_raw_style.begin != last_processed_style[0]
+                and last_raw_style.end != last_processed_style[1]
+            ):
                 discrete_formatting_instructions.append(latch)
 
         # Package
-        inline_formats = [inline.StyleInterval(interval[0], interval[1], sorted(interval[2])) for interval in discrete_formatting_instructions]
+        inline_formats = [
+            inline.StyleInterval(interval[0], interval[1], sorted(interval[2]))
+            for interval in discrete_formatting_instructions
+        ]
         return inline_formats
 
     def _parse_image_block(self):
@@ -212,12 +228,10 @@ class Parser(helpers.CursorIterator):
 
         return image.ImageBlock(
             media=media_list,
-
             alt_text=alt_text,
             caption=caption,
             colors=colors,
-
-            attribution=attribution
+            attribution=attribution,
         )
 
     def _parse_link_block(self):
@@ -232,22 +246,20 @@ class Parser(helpers.CursorIterator):
         if not site_name:  # Try snake case
             site_name = self.current.get("site_name")
 
-
         display_url = self.current.get("displayUrl")
         if not display_url:  # Try snake case
             display_url = self.current.get("display_url")
-        
+
         poster_media_object = self._parse_media_object(self.current.get("poster"))
 
         return link_block.LinkBlock(
             url=url,
-
             title=title,
             description=description,
             author=author,
             site_name=site_name,
             display_url=display_url,
-            poster=poster_media_object
+            poster=poster_media_object,
         )
 
     def _fetch_audiovisual(self):
@@ -258,7 +270,7 @@ class Parser(helpers.CursorIterator):
         embed_html = self.current.get("embedHtml") or self.current.get("embed_html")
         embed_url = self.current.get("embedUrl") or self.current.get("embed_url")
         embed_iframe = self.current.get("embedIframe") or self.current.get("embed_iframe")
-        
+
         if embed_iframe:
             embed_iframe = video_block.EmbedIframeObject(
                 embed_iframe["url"],
@@ -271,7 +283,16 @@ class Parser(helpers.CursorIterator):
         if attribution := self.current.get("attribution"):
             attribution = misc.parse_attribution(attribution)
 
-        return url, media, poster_media_object, provider, embed_html, embed_url, embed_iframe, attribution
+        return (
+            url,
+            media,
+            poster_media_object,
+            provider,
+            embed_html,
+            embed_url,
+            embed_iframe,
+            attribution,
+        )
 
     def _parse_video_block(self):
         (
@@ -323,10 +344,9 @@ class Parser(helpers.CursorIterator):
             embed_url=embed_url,
             poster=poster_media_object,
             attribution=attribution,
-
             title=title,
             artist=artist,
-            album=album
+            album=album,
         )
 
     def _parse_poll_block(self):
@@ -357,7 +377,7 @@ class Parser(helpers.CursorIterator):
         if self.poll_result_callback:
             callback_response = self.poll_result_callback(poll_id)
 
-            #{answer_id: vote_count}
+            # {answer_id: vote_count}
             raw_results = callback_response["results"].items()
             processed_results = sorted(raw_results, key=lambda item: -item[1])
 
@@ -370,13 +390,13 @@ class Parser(helpers.CursorIterator):
                 vote_count = results[1]
                 total_votes += vote_count
 
-                votes_dict[results[0]] = poll_block.PollResult(is_winner=(winner_votes==vote_count), vote_count=vote_count)
+                votes_dict[results[0]] = poll_block.PollResult(
+                    is_winner=(winner_votes == vote_count), vote_count=vote_count
+                )
 
             votes = poll_block.PollResults(
-                timestamp=callback_response["timestamp"],
-                results=votes_dict
+                timestamp=callback_response["timestamp"], results=votes_dict
             )
-
 
         creation_timestamp = self.current["timestamp"]
         expires_after = self.current["settings"]["expireAfter"]
@@ -385,10 +405,8 @@ class Parser(helpers.CursorIterator):
             poll_id=poll_id,
             question=question,
             answers=answers,
-
             creation_timestamp=int(creation_timestamp),
             expires_after=int(expires_after),
-
             votes=votes,
             total_votes=total_votes,
         )
@@ -406,7 +424,7 @@ class Parser(helpers.CursorIterator):
                 media_objects.append(misc.parse_media_block(poster))
         else:
             media_objects = None
-        
+
         return media_objects
 
     def __parse_block(self):

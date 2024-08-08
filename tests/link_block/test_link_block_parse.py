@@ -5,6 +5,7 @@ import logging
 
 try:
     import prettyprinter
+
     pprinter = prettyprinter.PrettyPrinter()
 except ImportError:
     pprinter = None
@@ -37,7 +38,9 @@ def test_link_block_with_description_parse():
 
 
 def test_link_block_with_title_and_description_parse():
-    helper_function(link_block_with_title_and_description[0], link_block_with_title_and_description[1])
+    helper_function(
+        link_block_with_title_and_description[0], link_block_with_title_and_description[1]
+    )
 
 
 def test_link_block_with_site_name_parse():
@@ -45,7 +48,9 @@ def test_link_block_with_site_name_parse():
 
 
 def test_link_block_with_site_name_and_author_parse():
-    helper_function(link_block_with_site_name_and_author[0], link_block_with_site_name_and_author[1])
+    helper_function(
+        link_block_with_site_name_and_author[0], link_block_with_site_name_and_author[1]
+    )
 
 
 def test_link_block_with_poster_parse():

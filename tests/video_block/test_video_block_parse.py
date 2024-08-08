@@ -6,6 +6,7 @@ import mocks
 
 try:
     import prettyprinter
+
     pprinter = prettyprinter.PrettyPrinter()
 except ImportError:
     pprinter = None
@@ -42,12 +43,20 @@ def test_simple_embedded_youtube_video_format():
 
 
 def test_video_block_fallbacks_to_link_block():
-    return helper_function(mocks.video_block_fallbacks_to_link_block[0], mocks.video_block_fallbacks_to_link_block[1])
+    return helper_function(
+        mocks.video_block_fallbacks_to_link_block[0], mocks.video_block_fallbacks_to_link_block[1]
+    )
 
 
 def test_video_block_fallbacks_to_link_block_when_invalid_media_source():
-    return helper_function(mocks.video_block_fallbacks_to_link_block_when_invalid_media_source[0], mocks.video_block_fallbacks_to_link_block_when_invalid_media_source[1])
+    return helper_function(
+        mocks.video_block_fallbacks_to_link_block_when_invalid_media_source[0],
+        mocks.video_block_fallbacks_to_link_block_when_invalid_media_source[1],
+    )
 
 
 def test_video_block_raises_when_all_else_fails():
-    return helper_function(mocks.video_block_raises_when_all_else_fails[0], mocks.video_block_raises_when_all_else_fails[1])
+    return helper_function(
+        mocks.video_block_raises_when_all_else_fails[0],
+        mocks.video_block_raises_when_all_else_fails[1],
+    )

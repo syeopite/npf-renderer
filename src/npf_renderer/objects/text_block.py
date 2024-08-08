@@ -11,6 +11,7 @@ from .inline import INLINE_FMT_TYPES
 
 class Subtypes(enum.Enum):
     """Enum representing NPF's Text Block's subtype values"""
+
     HEADING1 = 0
     HEADING2 = 1
     QUIRKY = 2
@@ -26,9 +27,10 @@ ListsSubtype = (Subtypes.ORDERED_LIST_ITEM, Subtypes.UNORDERED_LIST_ITEM)
 
 class TextBlock(NamedTuple):
     """Object representing Tumblr's NPF's Text Block"""
+
     text: str
     subtype: Subtypes = None
-    nest: 'Sequence[Union[TextBlock, ListGrouping]]' = None
+    nest: "Sequence[Union[TextBlock, ListGrouping]]" = None
 
     inline_formatting: Sequence[INLINE_FMT_TYPES] = None
 

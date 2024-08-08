@@ -12,7 +12,7 @@ def format_link_attribution(attr: objects.attribution.LinkAttribution, url_handl
             urllib.parse.urlparse(attr.url).hostname,
             href=url_handler(attr.url),
         ),
-        cls="link-attribution"
+        cls="link-attribution",
     )
 
 
@@ -20,24 +20,21 @@ def format_post_attribution(attr: objects.attribution.PostAttribution, url_handl
     return dominate.tags.div(
         dominate.tags.a(
             f"From ",
-            dominate.tags.b(
-                attr.blog.name
-            ),
+            dominate.tags.b(attr.blog.name),
             href=url_handler(attr.url),
         ),
-        cls="post-attribution"
+        cls="post-attribution",
     )
+
 
 def format_app_attribution(attr: objects.attribution.AppAttribution, url_handler: Callable):
     return dominate.tags.div(
         dominate.tags.a(
             f"View on ",
-            dominate.tags.b(
-                attr.app_name
-            ),
+            dominate.tags.b(attr.app_name),
             href=url_handler(attr.url),
         ),
-        cls="post-attribution"
+        cls="post-attribution",
     )
 
 

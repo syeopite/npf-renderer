@@ -17,8 +17,13 @@ from .. import objects
 class TextFormatter:
     """An HTML renderer for the TextBlock object"""
 
-    def __init__(self, text_block: objects.text_block.TextBlock, url_handler: Callable,
-                 layout=None, create_list_element=True):
+    def __init__(
+        self,
+        text_block: objects.text_block.TextBlock,
+        url_handler: Callable,
+        layout=None,
+        create_list_element=True,
+    ):
         """Renders a TextBlock object into HTML
 
         You should probably not be using this class directly!
@@ -41,7 +46,9 @@ class TextFormatter:
         self.additional_classes = ""
 
         if self.text_block.inline_formatting:
-            formatter = inline.InlineFormatter(self.text_block.text, self.text_block.inline_formatting, url_handler)
+            formatter = inline.InlineFormatter(
+                self.text_block.text, self.text_block.inline_formatting, url_handler
+            )
             self.text_tag = formatter.format()
 
             self.additional_classes += " inline-formatted-block"
@@ -79,9 +86,13 @@ class TextFormatter:
             case objects.text_block.Subtypes.CHAT:
                 return dominate.tags.p(cls="text-block chat" + self.additional_classes)
             case objects.text_block.Subtypes.ORDERED_LIST_ITEM:
-                return dominate.tags.li(cls="text-block ordered-list-item" + self.additional_classes)
+                return dominate.tags.li(
+                    cls="text-block ordered-list-item" + self.additional_classes
+                )
             case objects.text_block.Subtypes.UNORDERED_LIST_ITEM:
-                return dominate.tags.li(cls="text-block unordered-list-item" + self.additional_classes)
+                return dominate.tags.li(
+                    cls="text-block unordered-list-item" + self.additional_classes
+                )
 
     def format(self):
 
