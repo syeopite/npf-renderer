@@ -4,6 +4,7 @@ from npf_renderer import format_npf
 
 from example_link_block_data import *
 
+
 def helper_function(raw, answer):
     has_error, formatted_result = format_npf(raw["content"], pretty_html=True)
 
@@ -28,7 +29,9 @@ def test_link_block_with_description_format():
 
 
 def test_link_block_with_title_and_description_format():
-    helper_function(link_block_with_title_and_description[0], link_block_with_title_and_description[2])
+    helper_function(
+        link_block_with_title_and_description[0], link_block_with_title_and_description[2]
+    )
 
 
 def test_link_block_with_site_name_format():
@@ -36,7 +39,9 @@ def test_link_block_with_site_name_format():
 
 
 def test_link_block_with_site_name_and_author_format():
-    helper_function(link_block_with_site_name_and_author[0], link_block_with_site_name_and_author[2])
+    helper_function(
+        link_block_with_site_name_and_author[0], link_block_with_site_name_and_author[2]
+    )
 
 
 def test_link_block_with_poster_format():
