@@ -35,4 +35,4 @@ jobs:
 
     - name: Check Black compliance
       run : |
-        black --check src
+        black --check src tests
