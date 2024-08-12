@@ -13,7 +13,7 @@ def _calculate_amount_to_pad_from_nested(block, parent=True):
         amount_to_pad = len(block.nest)
     elif container := getattr(block, "group", None):
         # See commit 2e8953d0081ffbe777579fab95a2b98c99d01177 as to why we subtract one
-        amount_to_pad = (len(block.group) - 1)
+        amount_to_pad = len(block.group) - 1
     else:
         return 0
 
@@ -26,7 +26,7 @@ def _calculate_amount_to_pad_from_nested(block, parent=True):
 
 # Dominate does not support the time tag
 class HTMLTimeTag(dominate.tags.html_tag):
-    tagname="time"
+    tagname = "time"
 
 
 class Formatter(helpers.CursorIterator):
@@ -35,6 +35,7 @@ class Formatter(helpers.CursorIterator):
         super().__init__(content)
 
         if not url_handler:
+
             def url_handler(url):
                 return url
 
@@ -73,8 +74,10 @@ class Formatter(helpers.CursorIterator):
         with dominate.tags.div(cls="unsupported-content-block") as unsupported:
             with dominate.tags.div(cls="unsupported-content-block-message"):
                 dominate.tags.h1("Unsupported content placeholder")
-                dominate.tags.p(f"Hello! I'm a placeholder for the unsupported \"{block.type}\" type NPF content block."
-                                f" Please report me!")
+                dominate.tags.p(
+                    f'Hello! I\'m a placeholder for the unsupported "{block.type}" type NPF content block.'
+                    f" Please report me!"
+                )
 
         return unsupported
 
@@ -104,8 +107,7 @@ class Formatter(helpers.CursorIterator):
                 figure.add(attribution.format_app_attribution(attr, self.url_handler))
             else:
                 # TODO Add "Unsupported Attribution HTML"
-                raise ValueError(f"Unable to format unsupported attribution: \"{attr}\" ")
-
+                raise ValueError(f'Unable to format unsupported attribution: "{attr}" ')
 
         return figure
 
@@ -136,9 +138,7 @@ class Formatter(helpers.CursorIterator):
                 )
         elif block.title:
             anchor_content_wrapper.add(
-                dominate.tags.div(
-                    dominate.tags.span(dominate.util.text(block.title)), cls="link-block-title"
-                )
+                dominate.tags.div(dominate.tags.span(dominate.util.text(block.title)), cls="link-block-title")
             )
 
         link_block_description_container = dominate.tags.div(cls="link-block-description-container")
@@ -202,7 +202,7 @@ class Formatter(helpers.CursorIterator):
                 return self._audiovisual_link_block_fallback(
                     block,
                     title="Error: Cannot construct video player",
-                    description="Please click me to watch on the original site"
+                    description="Please click me to watch on the original site",
                 )
 
             additional_attrs = {}
@@ -214,13 +214,11 @@ class Formatter(helpers.CursorIterator):
                 additional_attrs["poster"] = self.url_handler(block.poster[0].url)
 
             video = dominate.tags.video(
-                dominate.tags.source(
-                    src=self.url_handler(media_url), type=block.media[0].type
-                ),
+                dominate.tags.source(src=self.url_handler(media_url), type=block.media[0].type),
                 width=width,
                 height=height,
                 controls=True,
-                **additional_attrs
+                **additional_attrs,
             )
         if not video and not self.forbid_external_iframes:
             if block.embed_iframe:
@@ -240,7 +238,7 @@ class Formatter(helpers.CursorIterator):
                     height=f"{height}",
                     scrolling="no",
                     frameborder="0",
-                    **additional_attrs
+                    **additional_attrs,
                 )
             elif block.embed_html:
                 video = dominate.util.raw(block.embed_html)
@@ -250,15 +248,11 @@ class Formatter(helpers.CursorIterator):
         if not video:
             if self.forbid_external_iframes and (block.embed_html or block.embed_url or block.embed_iframe):
                 return self._audiovisual_link_block_fallback(
-                    block,
-                    "Embeds are disabled",
-                    f"Please click me to watch on the original site"
+                    block, "Embeds are disabled", f"Please click me to watch on the original site"
                 )
             else:
                 return self._audiovisual_link_block_fallback(
-                    block,
-                    "Error: unable to render video block",
-                    f"Please click me to watch on the original site"
+                    block, "Error: unable to render video block", f"Please click me to watch on the original site"
                 )
 
         video_block = dominate.tags.div(**root_video_block_attrs)
@@ -276,7 +270,7 @@ class Formatter(helpers.CursorIterator):
         """
         audio = None
 
-        # TODO 
+        # TODO
         # Logic for audio and video block is quite similar. Should be refactored.
 
         # We'll only render the native media player if media exists
@@ -297,7 +291,7 @@ class Formatter(helpers.CursorIterator):
                     block,
                     title="Error: Cannot construct audio player",
                     description="Please click me to listen on the original site",
-                    site_name=media_url.hostname
+                    site_name=media_url.hostname,
                 )
 
             media_url = media_url.geturl()
@@ -326,7 +320,7 @@ class Formatter(helpers.CursorIterator):
                         srcset=", ".join(image.create_srcset(block.poster, self.url_handler)),
                         alt=block.title or "Audio block poster",
                         sizes="(max-width: 540px) 100vh, 540px",
-                        cls="ab-poster"
+                        cls="ab-poster",
                     )
                 )
 
@@ -335,10 +329,9 @@ class Formatter(helpers.CursorIterator):
 
             audio_container.add(
                 dominate.tags.audio(
-                    dominate.tags.source(src=self.url_handler(media_url), type=block.media[0].type),
-                    controls=True
-                    )
+                    dominate.tags.source(src=self.url_handler(media_url), type=block.media[0].type), controls=True
                 )
+            )
 
             audio = audio_container
 
@@ -353,15 +346,11 @@ class Formatter(helpers.CursorIterator):
         if not audio:
             if self.forbid_external_iframes and (block.embed_html or block.embed_url):
                 return self._audiovisual_link_block_fallback(
-                    block,
-                    "Embeds are disabled",
-                    f"Please click me to listen on the original site"
+                    block, "Embeds are disabled", f"Please click me to listen on the original site"
                 )
             else:
                 return self._audiovisual_link_block_fallback(
-                    block,
-                    "Error: unable to render audio block",
-                    f"Please click me to listen on the original site"
+                    block, "Error: unable to render audio block", f"Please click me to listen on the original site"
                 )
 
         audio_block = dominate.tags.div(cls="audio-block")
@@ -382,7 +371,7 @@ class Formatter(helpers.CursorIterator):
             poll_answer = dominate.tags.span(answer, cls="answer")
 
             if block.votes:
-                votes = block.votes.results.get(answer_id, [False, 0]) 
+                votes = block.votes.results.get(answer_id, [False, 0])
 
                 if votes[0] is True:
                     poll_choice["class"] += " poll-winner"
@@ -393,11 +382,7 @@ class Formatter(helpers.CursorIterator):
 
                 poll_vote_count = dominate.tags.span(votes[1], cls="vote-count")
 
-                poll_choice.add(
-                    poll_vote_proportion_element,
-                    poll_answer,
-                    poll_vote_count
-                )
+                poll_choice.add(poll_vote_proportion_element, poll_answer, poll_vote_count)
             else:
                 poll_choice.add(poll_answer)
 
@@ -433,10 +418,10 @@ class Formatter(helpers.CursorIterator):
 
         return poll_block
 
-    def _audiovisual_link_block_fallback(self, block, title : str, description : str, site_name : str = None):
+    def _audiovisual_link_block_fallback(self, block, title: str, description: str, site_name: str = None):
         """Renders a link block from the given audio or video block
-        
-        Used as a fallback when the audio or video block cannot be 
+
+        Used as a fallback when the audio or video block cannot be
         rendered successfully into HTML
         """
 
@@ -458,12 +443,12 @@ class Formatter(helpers.CursorIterator):
                     description=description,
                     poster=block.poster,
                     site_name=site_name,
-                    display_url=block.url
+                    display_url=block.url,
                 )
             )
         else:
             raise RuntimeError("Unable to render")
-    
+
     def __prepare_instruction_for_current_block(self):
         """Finds and returns the instruction (method) necessary to render a content block"""
         match self.current:
@@ -488,7 +473,9 @@ class Formatter(helpers.CursorIterator):
             case objects.unsupported.Unsupported():
                 return self.format_unsupported, (self.current,)
             case _:  # Unreachable
-                raise ValueError("Unable to format unsupported block. This block should've been replaced with the \"Unsupported\" during the parsing stage. Something has gone wrong.")
+                raise ValueError(
+                    'Unable to format unsupported block. This block should\'ve been replaced with the "Unsupported" during the parsing stage. Something has gone wrong.'
+                )
 
     def _pad(self):
         [self.render_instructions.append(None) for _ in range(self.current_context_padding)]
@@ -500,11 +487,10 @@ class Formatter(helpers.CursorIterator):
 
         return row_items
 
-    def create_truncation_details_box(self, ):
-        return dominate.tags.details(
-            dominate.tags.summary("Read more"),
-            cls="layout-truncated"
-        )
+    def create_truncation_details_box(
+        self,
+    ):
+        return dominate.tags.details(dominate.tags.summary("Read more"), cls="layout-truncated")
 
     def format(self):
         """Renders the list of content blocks into HTML"""
@@ -530,17 +516,17 @@ class Formatter(helpers.CursorIterator):
                         row_items = []
 
                         # Arrange blocks into layouts.
-                        # The process works in two phrases. 
-                        # 
-                        # The first phrase produces a list of rows, with each item (save for images) 
-                        # in the row rendered in their final html form. 
-                        # 
-                        # Images in the row however will be stored as a tuple of the render instruction, 
-                        # and the original dimensions of the image. 
+                        # The process works in two phrases.
+                        #
+                        # The first phrase produces a list of rows, with each item (save for images)
+                        # in the row rendered in their final html form.
+                        #
+                        # Images in the row however will be stored as a tuple of the render instruction,
+                        # and the original dimensions of the image.
                         # This is so the image with the smallest aspect ratio  can be used to arrange the rest of the images.
                         #
                         # The second phrase will then iterate through rows with images, select the smallest aspect ratio,
-                        # and render each image block into their html forms according to the selected aspect ratio to use 
+                        # and render each image block into their html forms according to the selected aspect ratio to use
                         #
                         # TODO rephrase the above
 
@@ -559,18 +545,18 @@ class Formatter(helpers.CursorIterator):
                                     image_block = arguments[0]
 
                                     # TODO add tests for image blocks missing hasOriginalDimensions attr
-                                    original_media = [media for media in image_block.media if media.has_original_dimensions]
+                                    original_media = [
+                                        media for media in image_block.media if media.has_original_dimensions
+                                    ]
                                     original_media = original_media[0] if original_media else image_block.media[0]
 
-                                    row_items.append((
-                                        arguments, original_media
-                                    ))
+                                    row_items.append((arguments, original_media))
                                 case _:
                                     row_items.append(render_method(*arguments))
 
                         if not row_items:
                             continue
-                    
+
                         if has_image:
                             original_media_ratios = []
                             images_in_row = []
@@ -579,12 +565,14 @@ class Formatter(helpers.CursorIterator):
                                 if not isinstance(item, tuple):
                                     continue
 
-                                images_in_row.append((item_index, item[0])) 
+                                images_in_row.append((item_index, item[0]))
                                 original_media_ratios.append(round((item[1].height / item[1].width) * 100, 4))
-                            
+
                             padding_ratio = min(original_media_ratios)
                             for index, render_instruction_args in images_in_row:
-                                row_items[index] = self._format_image(*render_instruction_args, len(images_in_row), override_padding=padding_ratio)
+                                row_items[index] = self._format_image(
+                                    *render_instruction_args, len(images_in_row), override_padding=padding_ratio
+                                )
 
                         row_tag = dominate.tags.div(cls="layout-row")
 
@@ -611,7 +599,8 @@ class Formatter(helpers.CursorIterator):
                     self.post.add(
                         dominate.tags.div(
                             misc.format_ask(self.url_handler, *layout_items, blog_attribution=layout.attribution),
-                            cls="layout-ask")
+                            cls="layout-ask",
+                        )
                     )
 
                 else:
@@ -640,4 +629,3 @@ class Formatter(helpers.CursorIterator):
             raise exceptions.RenderErrorDisclaimerError("Rendered post contains errors", rendered_result=self.post)
 
         return self.post
-

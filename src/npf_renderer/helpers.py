@@ -2,7 +2,7 @@
 
 
 class CursorIterator:
-    """Allows iterating through some iterable one-by-one with an extra peek() method """
+    """Allows iterating through some iterable one-by-one with an extra peek() method"""
 
     def __init__(self, iterable):
         self.__iterable = iterable
@@ -53,4 +53,4 @@ def build_duration_string(tdelta):
             if num:
                 duration_string.append(f"{num}{unit}")
 
-    return ''.join(duration_string)
+    return "".join(duration_string)

@@ -11,6 +11,7 @@ def helper_function(raw, answer, url_handler=None):
     parsed_results = misc.parse_attribution(raw)
 
     if not url_handler:
+
         def url_handler(url):
             return url
 
@@ -43,6 +44,7 @@ def test_post_attribution_format():
 # More of an ask layouts test than blog attribution.
 def test_blog_attribution_format():
     helper_function(attribution_test_data.blog_attribution[0], attribution_test_data.blog_attribution[2])
+
 
 def test_app_attribution_format():
     helper_function(attribution_test_data.app_attribution[0], attribution_test_data.app_attribution[2])

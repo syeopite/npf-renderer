@@ -4,6 +4,7 @@ from npf_renderer import format_npf
 
 from example_link_block_data import *
 
+
 def helper_function(raw, answer):
     has_error, formatted_result = format_npf(raw["content"], pretty_html=True)
 

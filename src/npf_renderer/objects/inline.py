@@ -16,6 +16,7 @@ class FMTTypes(enum.Enum):
 
 class Instruction(NamedTuple):
     """A tuple storing data on various inline formatting options"""
+
     type_: FMTTypes
 
     def __lt__(self, other):
@@ -24,14 +25,17 @@ class Instruction(NamedTuple):
 
 class LinkInstruction(NamedTuple):
     """A tuple storing data on formatting an inline link"""
+
     type_: FMTTypes
     url: str
 
     def __lt__(self, other):
         return self.type_.value < other.type_.value
 
+
 class MentionInstruction(NamedTuple):
     """A tuple storing data on formatting an inline mention of a blog"""
+
     type_: FMTTypes
 
     blog_name: str
@@ -44,6 +48,7 @@ class MentionInstruction(NamedTuple):
 
 class ColorInstruction(NamedTuple):
     """A tuple storing data on formatting colored text"""
+
     type_: FMTTypes
     hex: str
 

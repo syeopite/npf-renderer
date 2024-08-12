@@ -37,13 +37,11 @@ def parse_media_block(media_block):
         type=mime,
         width=width,
         height=height,
-
         original_dimensions_missing=original_dimensions_missing,
         cropped=cropped,
         has_original_dimensions=has_original_dimensions,
-
         poster=poster,
-        video=video
+        video=video,
     )
 
 
@@ -57,11 +55,7 @@ def parse_attribution(attribution_block):
             return attribution.PostAttribution(
                 url=attribution_block["url"],
                 post=attribution_block["post"]["id"],
-                blog=attribution.BlogAttribution(
-                    uuid=blog["uuid"],
-                    url=blog.get("url"),
-                    name=blog.get("name")
-                )
+                blog=attribution.BlogAttribution(uuid=blog["uuid"], url=blog.get("url"), name=blog.get("name")),
             )
 
         case "link":
@@ -76,11 +70,7 @@ def parse_attribution(attribution_block):
                 avatars = None
 
             return attribution.BlogAttribution(
-                uuid=blog["uuid"],
-                url=attribution_block.get("url"),
-                name=blog.get("name"),
-
-                avatar=avatars
+                uuid=blog["uuid"], url=attribution_block.get("url"), name=blog.get("name"), avatar=avatars
             )
         case "app":
             if logo := attribution_block.get("logo"):
@@ -96,9 +86,4 @@ def parse_attribution(attribution_block):
             if not display_text:
                 display_text = attribution_block.get("displayText")
 
-            return attribution.AppAttribution(
-                url=url,
-                app_name=name,
-                display_text=display_text,
-                logo=logo
-            )
+            return attribution.AppAttribution(url=url, app_name=name, display_text=display_text, logo=logo)

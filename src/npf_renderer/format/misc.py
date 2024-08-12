@@ -6,20 +6,17 @@ import dominate.util
 from ..objects import attribution
 
 
-def format_ask(url_handler: Callable, *args: dominate.tags.dom_tag,
-               blog_attribution: attribution.BlogAttribution = None):
+def format_ask(
+    url_handler: Callable, *args: dominate.tags.dom_tag, blog_attribution: attribution.BlogAttribution = None
+):
     """Renders an "ask" in HTML with the given data"""
     if not blog_attribution:
-        asker_attribution = dominate.tags.p(
-            dominate.tags.strong("Anonymous", cls="asker-name"),
-            " asked:",
-            cls="asker"
-        )
+        asker_attribution = dominate.tags.p(dominate.tags.strong("Anonymous", cls="asker-name"), " asked:", cls="asker")
 
         asker_avatar = dominate.tags.img(
             src=url_handler("https://assets.tumblr.com/images/anonymous_avatar_96.gif"),
             loading="lazy",
-            cls="avatar asker-avatar image"
+            cls="avatar asker-avatar image",
         )
 
     else:
@@ -27,17 +24,15 @@ def format_ask(url_handler: Callable, *args: dominate.tags.dom_tag,
             dominate.tags.a(
                 dominate.tags.strong(blog_attribution.name, cls="asker-name"),
                 href=url_handler(f"https://{blog_attribution.name}.tumblr.com/"),
-                cls="asker-attribution"
+                cls="asker-attribution",
             ),
             " asked:",
-            cls="asker"
+            cls="asker",
         )
 
         if blog_attribution.avatar:
             asker_avatar = dominate.tags.img(
-                src=url_handler(blog_attribution.avatar[0].url),
-                loading="lazy",
-                cls="avatar asker-avatar image"
+                src=url_handler(blog_attribution.avatar[0].url), loading="lazy", cls="avatar asker-avatar image"
             )
         else:
             asker_avatar = None
@@ -55,5 +50,3 @@ def format_ask(url_handler: Callable, *args: dominate.tags.dom_tag,
         ask.add(asker_avatar)
 
     return ask
-
-

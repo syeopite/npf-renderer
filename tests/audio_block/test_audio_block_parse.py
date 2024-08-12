@@ -6,6 +6,7 @@ import mock_audio_blocks
 
 try:
     import prettyprinter
+
     pprinter = prettyprinter.PrettyPrinter()
 except ImportError:
     pprinter = None
@@ -24,6 +25,7 @@ def helper_function(raw, answer):
 
     assert parsed_results == answer
 
+
 def test_can_parse_basic_audio_block():
     return helper_function(mock_audio_blocks.basic_audio_block[0], mock_audio_blocks.basic_audio_block[1])
 
@@ -33,7 +35,9 @@ def test_can_parse_audio_block_with_title():
 
 
 def test_can_parse_audio_block_with_metadata():
-    return helper_function(mock_audio_blocks.audio_block_with_metadata[0], mock_audio_blocks.audio_block_with_metadata[1])
+    return helper_function(
+        mock_audio_blocks.audio_block_with_metadata[0], mock_audio_blocks.audio_block_with_metadata[1]
+    )
 
 
 def test_can_parse_audio_block_with_poster():
@@ -41,11 +45,16 @@ def test_can_parse_audio_block_with_poster():
 
 
 def test_can_parse_audio_block_with_metadata_and_poster():
-    return helper_function(mock_audio_blocks.audio_block_with_metadata_and_poster[0], mock_audio_blocks.audio_block_with_metadata_and_poster[1])
+    return helper_function(
+        mock_audio_blocks.audio_block_with_metadata_and_poster[0],
+        mock_audio_blocks.audio_block_with_metadata_and_poster[1],
+    )
 
 
 def test_can_parse_embedded_audio_block():
-    return helper_function(mock_audio_blocks.audio_block_embed_spotify_test[0], mock_audio_blocks.audio_block_embed_spotify_test[1])
+    return helper_function(
+        mock_audio_blocks.audio_block_embed_spotify_test[0], mock_audio_blocks.audio_block_embed_spotify_test[1]
+    )
 
 
 # def test_can_parse_external_embedded_but_with_media_object_audio_block():

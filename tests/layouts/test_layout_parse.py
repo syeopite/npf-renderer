@@ -5,6 +5,7 @@ from npf_renderer.parse.layout_parse import LayoutParser
 
 try:
     import prettyprinter
+
     pprinter = prettyprinter.PrettyPrinter()
 except ImportError:
     pprinter = None
@@ -32,11 +33,17 @@ def test_basic_layout_with_truncate_parse():
 
 
 def test_basic_layout_with_truncate_at_start_parse():
-    helper_function(data.basic_rows_layout_with_truncate_at_start_example[0], data.basic_rows_layout_with_truncate_at_start_example[1])
+    helper_function(
+        data.basic_rows_layout_with_truncate_at_start_example[0],
+        data.basic_rows_layout_with_truncate_at_start_example[1],
+    )
 
 
 def basic_rows_layout_with_camel_case_truncate_parse():
-    helper_function(data.basic_rows_layout_with_camel_case_truncate_example[0], data.basic_rows_layout_with_camel_case_truncate_example[1])
+    helper_function(
+        data.basic_rows_layout_with_camel_case_truncate_example[0],
+        data.basic_rows_layout_with_camel_case_truncate_example[1],
+    )
 
 
 def test_rows_with_carousel_and_weighted_parse():

@@ -44,7 +44,7 @@ class InlineFormatter(helpers.CursorIterator):
     """Formatter for NPF's TextBlock's inline formatting"""
 
     def __init__(self, string: str, inline_formats: Sequence[objects.inline.INLINE_FMT_TYPES], url_handler: Callable):
-        """Initializes InlineFormatter with some string and the formats to apply to it """
+        """Initializes InlineFormatter with some string and the formats to apply to it"""
         super().__init__(string)
         self.parent_tag = dominate.tags.span(cls="inline-formatted-content")
 
@@ -143,7 +143,7 @@ class InlineFormatter(helpers.CursorIterator):
 
     def dump_accumulator_to_tag(self, tag):
         """Dumps and clears everything from the accumulator to the given tag as text."""
-        tag.add(dominate.util.text(''.join(self._accumulator)))
+        tag.add(dominate.util.text("".join(self._accumulator)))
         self._accumulator = []
 
     def format(self):
