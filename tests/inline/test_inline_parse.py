@@ -5,6 +5,7 @@ import logging
 
 try:
     import prettyprinter
+
     pprinter = prettyprinter.PrettyPrinter()
 except ImportError:
     pprinter = None

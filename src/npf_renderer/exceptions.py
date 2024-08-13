@@ -5,6 +5,7 @@ class RenderErrorDisclaimerError(Exception):
     passed along and can be retrieved.
 
     """
+
     def __init__(self, message, rendered_result):
         super().__init__(message)
 

@@ -16,20 +16,18 @@ def create_srcset(media_blocks, url_handler):
 
     return main_srcset
 
-def format_image(image_block, row_length=1, url_handler=lambda url: url, 
-                 override_padding=None, original_media=None):
+
+def format_image(image_block, row_length=1, url_handler=lambda url: url, override_padding=None, original_media=None):
     """Renders a ImageBlock into HTML"""
 
-    container_attributes = {
-        "cls": "image-container"
-    }
+    container_attributes = {"cls": "image-container"}
 
     image_attributes = {}
 
     # Disabled. We cannot generate a gradient background that takes up the same amount of space as the browser-selected
     # responsive image as the image doesn't really have a size until its loaded and as such neither will the background.
     #
-    # In addition some images do not have a colors attribute even though a consistent gradient image is still being 
+    # In addition some images do not have a colors attribute even though a consistent gradient image is still being
     # generated on Tumblr's UI, and it is also consistent across reloads. Some investigation is needed on this part
 
     # if image_block.colors:
@@ -83,10 +81,11 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url,
         dominate.tags.img(
             src=url_handler(original_media.url),
             srcset=", ".join(create_srcset(processed_media_blocks, url_handler)),
-            cls="image", loading="lazy",
+            cls="image",
+            loading="lazy",
             alt=image_block.alt_text or "image",
             sizes=f"(max-width: 540px) {int(100 / row_length)}vh, {int(540 / row_length)}px",
-            **image_attributes
+            **image_attributes,
         )
     )
 

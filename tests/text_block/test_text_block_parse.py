@@ -5,6 +5,7 @@ import logging
 
 try:
     import prettyprinter
+
     pprinter = prettyprinter.PrettyPrinter()
 except ImportError:
     pprinter = None
@@ -49,5 +50,6 @@ def test_mixed_block_quote_list_parse():
 
 
 def test_top_level_list_with_children_merging_parse():
-    helper_function(top_level_list_with_children_merging_test_data[0],
-                    top_level_list_with_children_merging_test_data[1])
+    helper_function(
+        top_level_list_with_children_merging_test_data[0], top_level_list_with_children_merging_test_data[1]
+    )

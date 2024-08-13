@@ -49,11 +49,6 @@ class LayoutParser(helpers.CursorIterator):
                             )
                         )
 
-                self.layouts.append(
-                    objects.layouts.Rows(
-                        rows=rows,
-                        truncate_after=truncate_after
-                    )
-                )
+                self.layouts.append(objects.layouts.Rows(rows=rows, truncate_after=truncate_after))
 
         return self.layouts

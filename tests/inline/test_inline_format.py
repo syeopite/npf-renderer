@@ -38,6 +38,7 @@ def test_color_formatting_render():
 # -------------------------------------------------------------
 #
 
+
 def test_back_to_back_render():
     helper_function({"content": back_to_back_format_test[0]}, back_to_back_format_test[1])
 
@@ -63,8 +64,9 @@ def test_overlapping_same_area():
 
 
 def test_overlapping_same_start_different_end_data():
-    helper_function({"content": overlapping_same_start_different_end_data[0]},
-                    overlapping_same_start_different_end_data[1])
+    helper_function(
+        {"content": overlapping_same_start_different_end_data[0]}, overlapping_same_start_different_end_data[1]
+    )
 
 
 def test_interrupted_same_indices_overlapping():
@@ -118,16 +120,26 @@ def test_link_url_handler_replaced():
 
 
 def test_excessively_out_of_bounds_end_single_op():
-    helper_function({"content": excessively_out_of_bounds_end_single_op_test[0]}, excessively_out_of_bounds_end_single_op_test[1])
+    helper_function(
+        {"content": excessively_out_of_bounds_end_single_op_test[0]}, excessively_out_of_bounds_end_single_op_test[1]
+    )
 
 
 def test_excessively_out_of_bounds_end_multiple_op():
-    helper_function({"content": excessively_out_of_bounds_end_multiple_op_test[0]}, excessively_out_of_bounds_end_multiple_op_test[1])
+    helper_function(
+        {"content": excessively_out_of_bounds_end_multiple_op_test[0]},
+        excessively_out_of_bounds_end_multiple_op_test[1],
+    )
 
 
 def test_excessively_out_of_bounds_end_overlap():
-    helper_function({"content": excessively_out_of_bounds_end_overlap_test[0]}, excessively_out_of_bounds_end_overlap_test[1])
+    helper_function(
+        {"content": excessively_out_of_bounds_end_overlap_test[0]}, excessively_out_of_bounds_end_overlap_test[1]
+    )
 
 
 def test_excessively_out_of_bounds_end_multiple_op_differing_start():
-    helper_function({"content": excessively_out_of_bounds_end_multiple_op_differing_start_test[0]}, excessively_out_of_bounds_end_multiple_op_differing_start_test[1])
+    helper_function(
+        {"content": excessively_out_of_bounds_end_multiple_op_differing_start_test[0]},
+        excessively_out_of_bounds_end_multiple_op_differing_start_test[1],
+    )

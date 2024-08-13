@@ -18,7 +18,7 @@ requires-python = ">=3.10"
 dependencies = ["dominate>=2.8.0", "intervaltree>=3.1.0"]
 
 [project.optional-dependencies]
-dev = ["pytest==8.3.2", "prettyprinter==0.18.0", "freezegun==1.5.1"]
+dev = ["pytest==8.3.2", "prettyprinter==0.18.0", "freezegun==1.5.1", "black==24.8.0"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
@@ -27,3 +27,7 @@ testpaths = "tests"
 [project.urls]
 Homepage = "https://github.com/syeopite/npf-renderer"
 Source = "https://github.com/syeopite/npf-renderer"
+
+[tool.black]
+line-length = 120
+target-version = ["py310", "py311", "py312"]

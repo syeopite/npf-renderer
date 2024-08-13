@@ -42,6 +42,6 @@ def test_mixed_block_quote_list_render():
 
 
 def test_top_level_list_with_children_merging():
-    helper_function(top_level_list_with_children_merging_test_data[0],
-                    top_level_list_with_children_merging_test_data[2])
-
+    helper_function(
+        top_level_list_with_children_merging_test_data[0], top_level_list_with_children_merging_test_data[2]
+    )

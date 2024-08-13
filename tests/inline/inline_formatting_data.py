@@ -16,7 +16,11 @@ standard_test = (
     [
         objects.text_block.TextBlock(
             text="some small text",
-            inline_formatting=[objects.inline.StyleInterval(start=5, end=10, instructions=[objects.inline.Instruction(objects.inline.FMTTypes.SMALL)])],
+            inline_formatting=[
+                objects.inline.StyleInterval(
+                    start=5, end=10, instructions=[objects.inline.Instruction(objects.inline.FMTTypes.SMALL)]
+                )
+            ],
         )
     ],
     tags.div(
@@ -150,14 +154,9 @@ color_test = (
                 objects.inline.StyleInterval(
                     start=10,
                     end=15,
-                    instructions=[
-                        objects.inline.ColorInstruction(
-                            type_=objects.inline.FMTTypes.COLOR,
-                            hex="#ff492f"
-                        )
-                    ],
+                    instructions=[objects.inline.ColorInstruction(type_=objects.inline.FMTTypes.COLOR, hex="#ff492f")],
                 )
-            ]
+            ],
         )
     ],
     tags.div(
@@ -173,4 +172,3 @@ color_test = (
         cls="post-body",
     ),
 )
-

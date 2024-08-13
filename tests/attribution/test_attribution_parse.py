@@ -6,6 +6,7 @@ import attribution_test_data
 
 try:
     import prettyprinter
+
     pprinter = prettyprinter.PrettyPrinter()
 except ImportError:
     pprinter = None
