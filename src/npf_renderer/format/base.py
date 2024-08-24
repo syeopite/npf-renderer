@@ -390,9 +390,15 @@ class Formatter(helpers.CursorIterator):
 
         footer = dominate.tags.footer()
         with footer:
-            creation = datetime.datetime.utcfromtimestamp(block.creation_timestamp)
-            expiration = datetime.datetime.utcfromtimestamp(block.creation_timestamp + block.expires_after)
-            now = datetime.datetime.utcnow()
+            creation = datetime.datetime.fromtimestamp(block.creation_timestamp, datetime.timezone.utc)
+            expiration = datetime.datetime.fromtimestamp(
+                block.creation_timestamp + block.expires_after, datetime.timezone.utc
+            )
+            now = datetime.datetime.now(datetime.timezone.utc)
+
+            # Timezone information is irrelevant
+            expiration = expiration.replace(tzinfo=None)
+            now = now.replace(tzinfo=None)
 
             # If not expired we display how many days till expired
             with dominate.tags.div(cls="poll-metadata"):
