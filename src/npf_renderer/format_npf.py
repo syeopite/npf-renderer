@@ -1,19 +1,23 @@
+from typing import Callable, Optional
+
 import dominate
 
 from .format import Formatter
 from .parse import Parser, LayoutParser
 from . import exceptions
 
+JSON = dict[str, "JSON"] | list["JSON"] | str | int | float | bool | None
+
 
 def format_npf(
-    contents,
-    layouts=None,
+    contents: JSON,
+    layouts: Optional[JSON] = None,
     *_,
-    url_handler=None,
-    forbid_external_iframes=False,
-    pretty_html=False,
-    poll_result_callback=None,
-):
+    url_handler: Optional[Callable[[str], str]] = None,
+    forbid_external_iframes: bool = False,
+    pretty_html: bool = False,
+    poll_result_callback: Optional[Callable[[int], JSON]] = None,
+) -> tuple[bool, str]:
     """Formats the given NPF blocks into HTML
 
     Parameters:
