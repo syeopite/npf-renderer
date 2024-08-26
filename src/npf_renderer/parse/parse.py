@@ -8,8 +8,7 @@ results = parser.parse()
 import intervaltree
 
 from . import misc
-from .. import helpers
-from ..objects import inline, text_block, image, link_block, video_block, audio_block, poll_block, unsupported
+from .. import helpers, objects
 
 
 class Parser(helpers.CursorIterator):
@@ -41,7 +40,7 @@ class Parser(helpers.CursorIterator):
             if not nest_:
                 nest_ = None
 
-            return text_block.TextBlock(
+            return objects.text_block.TextBlock(
                 text=text_,
                 subtype=subtype_,
                 nest=nest_,
@@ -50,7 +49,7 @@ class Parser(helpers.CursorIterator):
 
         text = self.current["text"]
         if subtype := self.current.get("subtype"):
-            subtype = getattr(text_block.Subtypes, subtype.upper().replace("-", "_"))
+            subtype = getattr(objects.text_block.Subtypes, subtype.upper().replace("-", "_"))
 
         inline_formats = None
         if inline_formatting := self.current.get("formatting"):
@@ -82,11 +81,11 @@ class Parser(helpers.CursorIterator):
 
         # Lists of the same type after to us should be merged into a ListGrouping, provided we aren't already in the
         # process of constructing one at our level.
-        if not in_list_grouping and subtype in text_block.ListsSubtype:
+        if not in_list_grouping and subtype in objects.text_block.ListsSubtype:
             list_grouping = [create_text_block(text, subtype, inline_formats, nest_=nest_array)]
             while peek := self.peek():
                 if peek_subtype := peek.get("subtype"):
-                    peek_subtype = getattr(text_block.Subtypes, peek_subtype.upper().replace("-", "_"))
+                    peek_subtype = getattr(objects.text_block.Subtypes, peek_subtype.upper().replace("-", "_"))
 
                 # Make sure we are at the same nest level and that we are the same list type
                 indent_level = peek.get("indent_level") or peek.get("indentLevel")
@@ -102,26 +101,31 @@ class Parser(helpers.CursorIterator):
             # If we're at the end then we don't have a peek() to compare to. Thus, we'll compare the
             # currently selected text block and the one that we have in the current context
             if list_grouping:
-                return text_block.ListGrouping(type=subtype, group=list_grouping)
+                return objects.text_block.ListGrouping(type=subtype, group=list_grouping)
 
         return create_text_block(text, subtype, inline_formats, nest_=nest_array)
 
     @staticmethod
     def route_inline_format(inline_format):
-        inline_type = getattr(inline.FMTTypes, inline_format["type"].upper())
+        inline_type = getattr(objects.inline.FMTTypes, inline_format["type"].upper())
 
         match inline_type:
-            case inline.FMTTypes.BOLD | inline.FMTTypes.ITALIC | inline.FMTTypes.STRIKETHROUGH | inline.FMTTypes.SMALL:
-                return inline.Instruction(type_=inline_type)
-            case inline.FMTTypes.LINK:
-                return inline.LinkInstruction(type_=inline_type, url=inline_format["url"])
-            case inline.FMTTypes.MENTION:
+            case (
+                objects.inline.FMTTypes.BOLD
+                | objects.inline.FMTTypes.ITALIC
+                | objects.inline.FMTTypes.STRIKETHROUGH
+                | objects.inline.FMTTypes.SMALL
+            ):
+                return objects.inline.Instruction(type_=inline_type)
+            case objects.inline.FMTTypes.LINK:
+                return objects.inline.LinkInstruction(type_=inline_type, url=inline_format["url"])
+            case objects.inline.FMTTypes.MENTION:
                 blog = inline_format["blog"]
-                return inline.MentionInstruction(
+                return objects.inline.MentionInstruction(
                     type_=inline_type, blog_name=blog["name"], blog_uuid=blog["uuid"], blog_url=blog["url"]
                 )
-            case inline.FMTTypes.COLOR:
-                return inline.ColorInstruction(
+            case objects.inline.FMTTypes.COLOR:
+                return objects.inline.ColorInstruction(
                     type_=inline_type,
                     hex=inline_format["hex"],
                 )
@@ -178,7 +182,7 @@ class Parser(helpers.CursorIterator):
 
         # Package
         inline_formats = [
-            inline.StyleInterval(interval[0], interval[1], sorted(interval[2]))
+            objects.inline.StyleInterval(interval[0], interval[1], sorted(interval[2]))
             for interval in discrete_formatting_instructions
         ]
         return inline_formats
@@ -202,7 +206,7 @@ class Parser(helpers.CursorIterator):
         if attribution := self.current.get("attribution"):
             attribution = misc.parse_attribution(attribution)
 
-        return image.ImageBlock(
+        return objects.image.ImageBlock(
             media=media_list, alt_text=alt_text, caption=caption, colors=colors, attribution=attribution
         )
 
@@ -224,7 +228,7 @@ class Parser(helpers.CursorIterator):
 
         poster_media_object = self._parse_media_object(self.current.get("poster"))
 
-        return link_block.LinkBlock(
+        return objects.link_block.LinkBlock(
             url=url,
             title=title,
             description=description,
@@ -244,7 +248,7 @@ class Parser(helpers.CursorIterator):
         embed_iframe = self.current.get("embedIframe") or self.current.get("embed_iframe")
 
         if embed_iframe:
-            embed_iframe = video_block.EmbedIframeObject(
+            embed_iframe = objects.video_block.EmbedIframeObject(
                 embed_iframe["url"],
                 embed_iframe["width"],
                 embed_iframe["height"],
@@ -271,7 +275,7 @@ class Parser(helpers.CursorIterator):
 
         filmstrip = self._parse_media_object(self.current.get("filmstrip"))
 
-        return video_block.VideoBlock(
+        return objects.video_block.VideoBlock(
             url=url,
             provider=provider,
             media=media,
@@ -299,7 +303,7 @@ class Parser(helpers.CursorIterator):
         artist = self.current.get("artist")
         album = self.current.get("album")
 
-        return audio_block.AudioBlock(
+        return objects.audio_block.AudioBlock(
             url=url,
             provider=provider,
             media=media,
@@ -353,16 +357,16 @@ class Parser(helpers.CursorIterator):
                 vote_count = results[1]
                 total_votes += vote_count
 
-                votes_dict[results[0]] = poll_block.PollResult(
+                votes_dict[results[0]] = objects.poll_block.PollResult(
                     is_winner=(winner_votes == vote_count), vote_count=vote_count
                 )
 
-            votes = poll_block.PollResults(timestamp=callback_response["timestamp"], results=votes_dict)
+            votes = objects.poll_block.PollResults(timestamp=callback_response["timestamp"], results=votes_dict)
 
         creation_timestamp = self.current["timestamp"]
         expires_after = self.current["settings"]["expireAfter"]
 
-        return poll_block.PollBlock(
+        return objects.poll_block.PollBlock(
             poll_id=poll_id,
             question=question,
             answers=answers,
@@ -408,7 +412,7 @@ class Parser(helpers.CursorIterator):
             case "poll":
                 block = self._parse_poll_block()
             case _:
-                block = unsupported.Unsupported(self.current["type"])
+                block = objects.unsupported.Unsupported(self.current["type"])
 
         self.parsed_result.append(block)
 
