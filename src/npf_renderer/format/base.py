@@ -103,6 +103,8 @@ class Formatter(helpers.CursorIterator):
                 figure.add(attribution.format_link_attribution(attr, self.url_handler))
             elif isinstance(attr, objects.attribution.PostAttribution):
                 figure.add(attribution.format_post_attribution(attr, self.url_handler))
+            elif isinstance(attr, objects.attribution.BlogAttribution):
+                figure.add(attribution.format_blog_attribution(attr, self.url_handler))
             elif isinstance(attr, objects.attribution.AppAttribution):
                 figure.add(attribution.format_app_attribution(attr, self.url_handler))
             else:

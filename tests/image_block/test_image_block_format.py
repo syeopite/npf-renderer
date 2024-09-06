@@ -66,5 +66,11 @@ def test_image_block_with_app_attribution_format():
     helper_function(test_data.image_block_with_app_attribution[0], test_data.image_block_with_app_attribution[2])
 
 
+def test_image_block_with_blog_attribution_format():
+    helper_function(
+        test_data.image_block_with_blog_attribution[0], test_data.image_block_with_blog_attribution[2]
+    )
+
+
 def test_if_cropped_images_are_skipped():
     helper_function(test_data.skips_cropped_image_block_test[0], test_data.skips_cropped_image_block_test[1])
