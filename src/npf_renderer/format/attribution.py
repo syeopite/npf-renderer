@@ -27,6 +27,17 @@ def format_post_attribution(attr: objects.attribution.PostAttribution, url_handl
     )
 
 
+def format_blog_attribution(attr: objects.attribution.BlogAttribution, url_handler: Callable):
+    return dominate.tags.div(
+        dominate.tags.a(
+            f"Created by ",
+            dominate.tags.b(attr.name or "Anonymous"),
+            href=url_handler(attr.url),
+        ),
+        cls="blog-attribution",
+    )
+
+
 def format_app_attribution(attr: objects.attribution.AppAttribution, url_handler: Callable):
     return dominate.tags.div(
         dominate.tags.a(

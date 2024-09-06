@@ -2,7 +2,6 @@ import logging
 
 from npf_renderer.parse import misc
 from npf_renderer.format import attribution as formatter
-from npf_renderer.format.misc import format_ask
 
 import attribution_test_data
 
@@ -17,7 +16,7 @@ def helper_function(raw, answer, url_handler=None):
 
     match attribution:
         case misc.attribution.BlogAttribution():
-            formatted_results = format_ask(attribution, url_handler=url_handler)
+            formatted_results = formatter.format_blog_attribution(attribution, url_handler=url_handler)
         case misc.attribution.AppAttribution():
             formatted_results = formatter.format_app_attribution(attribution, url_handler)
         case misc.attribution.LinkAttribution():
@@ -41,7 +40,6 @@ def test_post_attribution_format():
     helper_function(attribution_test_data.post_attribution[0], attribution_test_data.post_attribution[2])
 
 
-# More of an ask layouts test than blog attribution.
 def test_blog_attribution_format():
     helper_function(attribution_test_data.blog_attribution[0], attribution_test_data.blog_attribution[2])
 
