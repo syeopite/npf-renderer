@@ -604,7 +604,7 @@ class Formatter(helpers.CursorIterator):
 
                     self.post.add(
                         dominate.tags.div(
-                            misc.format_ask(self.url_handler, *layout_items, blog_attribution=layout.attribution),
+                            misc.format_ask(layout.attribution, *layout_items, url_handler=self.url_handler),
                             cls="layout-ask",
                         )
                     )

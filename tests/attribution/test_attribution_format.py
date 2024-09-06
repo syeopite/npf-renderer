@@ -8,22 +8,22 @@ import attribution_test_data
 
 
 def helper_function(raw, answer, url_handler=None):
-    parsed_results = misc.parse_attribution(raw)
+    attribution = misc.parse_attribution(raw)
 
     if not url_handler:
 
         def url_handler(url):
             return url
 
-    match parsed_results:
+    match attribution:
         case misc.attribution.BlogAttribution():
-            formatted_results = format_ask(url_handler, blog_attribution=parsed_results)
+            formatted_results = format_ask(attribution, url_handler=url_handler)
         case misc.attribution.AppAttribution():
-            formatted_results = formatter.format_app_attribution(parsed_results, url_handler)
+            formatted_results = formatter.format_app_attribution(attribution, url_handler)
         case misc.attribution.LinkAttribution():
-            formatted_results = formatter.format_link_attribution(parsed_results, url_handler)
+            formatted_results = formatter.format_link_attribution(attribution, url_handler)
         case misc.attribution.PostAttribution():
-            formatted_results = formatter.format_post_attribution(parsed_results, url_handler)
+            formatted_results = formatter.format_post_attribution(attribution, url_handler)
         case _:
             raise RuntimeError("Not possible")
 
