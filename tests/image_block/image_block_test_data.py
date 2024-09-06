@@ -682,9 +682,7 @@ image_block_with_blog_attribution = (
                 style="padding-bottom: 130.292%;",
             ),
             dominate.tags.div(
-                dominate.tags.a(
-                    "Created by ", dominate.tags.b("example"), href="https://example.tumblr.com"
-                ),
+                dominate.tags.a("Created by ", dominate.tags.b("example"), href="https://example.tumblr.com"),
                 cls="blog-attribution",
             ),
             cls="image-block",
@@ -839,7 +837,6 @@ image_block_with_unknown_attribution = (
         cls="post-body",
     ),
 )
-
 
 
 image_block_with_replaced_link = (

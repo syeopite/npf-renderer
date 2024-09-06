@@ -33,7 +33,8 @@ class AppAttribution(NamedTuple):
 
 class UnsupportedAttribution(NamedTuple):
     """An object representing an unsupported attribution type"""
-    type_ : str
+
+    type_: str
 
 
 AttributionTypes = Union[BlogAttribution, PostAttribution, LinkAttribution, AppAttribution, UnsupportedAttribution]

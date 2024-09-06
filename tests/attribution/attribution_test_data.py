@@ -119,15 +119,8 @@ app_attribution = (
 
 
 unsupported_attribution = (
-    {
-        "type": "unknown",
-        "attr": "1",
-        "attr2": "2",
-        "attr3": "3"
-    },
-    attribution.UnsupportedAttribution(
-        type_="unknown"
-    ),
+    {"type": "unknown", "attr": "1", "attr2": "2", "attr3": "3"},
+    attribution.UnsupportedAttribution(type_="unknown"),
     dominate.tags.div(
         dominate.tags.p(
             f"Attributed via unsupported 'unknown' attribution type. Please report me.",

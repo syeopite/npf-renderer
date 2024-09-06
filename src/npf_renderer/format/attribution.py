@@ -49,7 +49,7 @@ def format_app_attribution(attr: objects.attribution.AppAttribution, url_handler
     )
 
 
-def format_unsupported_attribution(attr : objects.attribution.UnsupportedAttribution):
+def format_unsupported_attribution(attr: objects.attribution.UnsupportedAttribution):
     return dominate.tags.div(
         dominate.tags.p(
             f"Attributed via unsupported '{attr.type_}' attribution type. Please report me.",
