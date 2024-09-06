@@ -24,7 +24,7 @@ def helper_function(raw, answer, url_handler=None):
         case misc.attribution.PostAttribution():
             formatted_results = formatter.format_post_attribution(attribution, url_handler)
         case _:
-            raise RuntimeError("Not possible")
+            formatted_results = formatter.format_unsupported_attribution(attribution)
 
     logging.info(f"Formatted: {formatted_results}")
     logging.info(f"Answer: {answer}")
@@ -46,3 +46,7 @@ def test_blog_attribution_format():
 
 def test_app_attribution_format():
     helper_function(attribution_test_data.app_attribution[0], attribution_test_data.app_attribution[2])
+
+
+def test_unknown_attribution_format():
+    helper_function(attribution_test_data.unsupported_attribution[0], attribution_test_data.unsupported_attribution[2])

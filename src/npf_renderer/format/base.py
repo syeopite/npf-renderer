@@ -108,8 +108,7 @@ class Formatter(helpers.CursorIterator):
             elif isinstance(attr, objects.attribution.AppAttribution):
                 figure.add(attribution.format_app_attribution(attr, self.url_handler))
             else:
-                # TODO Add "Unsupported Attribution HTML"
-                raise ValueError(f'Unable to format unsupported attribution: "{attr}" ')
+                figure.add(attribution.format_unsupported_attribution(attr))
 
         return figure
 

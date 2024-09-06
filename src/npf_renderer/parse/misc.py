@@ -87,3 +87,5 @@ def parse_attribution(attribution_block):
                 display_text = attribution_block.get("displayText")
 
             return attribution.AppAttribution(url=url, app_name=name, display_text=display_text, logo=logo)
+        case _:
+            return attribution.UnsupportedAttribution(type_=type_)

@@ -62,3 +62,9 @@ def test_image_block_with_blog_attribution():
     helper_function(
         test_data.image_block_with_blog_attribution[0], test_data.image_block_with_blog_attribution[1]
     )
+
+
+def test_image_block_with_unknown_attribution():
+    helper_function(
+        test_data.image_block_with_unknown_attribution[0], test_data.image_block_with_unknown_attribution[1]
+    )
