@@ -28,24 +28,12 @@ blog_attribution = (
         ],
     ),
     dominate.tags.div(
-        dominate.tags.div(
-            dominate.tags.div(
-                dominate.tags.p(
-                    dominate.tags.a(
-                        dominate.tags.strong("example", cls="asker-name"),
-                        href="https://example.tumblr.com/",
-                        cls="asker-attribution",
-                    ),
-                    " asked:",
-                    cls="asker",
-                ),
-                cls="ask-header",
-            ),
-            dominate.tags.div(cls="ask-content"),
-            cls="ask-body",
+        dominate.tags.a(
+            "Created by ",
+            dominate.tags.b("example"),
+            href="https://example.tumblr.com",
         ),
-        dominate.tags.img(src="https://example.com/512/example.png", cls="avatar asker-avatar image", loading="lazy"),
-        cls="ask",
+        cls="blog-attribution",
     ),
 )
 
@@ -126,5 +114,17 @@ app_attribution = (
             href="https://soundcloud.com/example/example-track",
         ),
         cls="post-attribution",
+    ),
+)
+
+
+unsupported_attribution = (
+    {"type": "unknown", "attr": "1", "attr2": "2", "attr3": "3"},
+    attribution.UnsupportedAttribution(type_="unknown"),
+    dominate.tags.div(
+        dominate.tags.p(
+            f"Attributed via unsupported 'unknown' attribution type. Please report me.",
+        ),
+        cls="unknown-attribution",
     ),
 )

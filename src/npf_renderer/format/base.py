@@ -103,11 +103,12 @@ class Formatter(helpers.CursorIterator):
                 figure.add(attribution.format_link_attribution(attr, self.url_handler))
             elif isinstance(attr, objects.attribution.PostAttribution):
                 figure.add(attribution.format_post_attribution(attr, self.url_handler))
+            elif isinstance(attr, objects.attribution.BlogAttribution):
+                figure.add(attribution.format_blog_attribution(attr, self.url_handler))
             elif isinstance(attr, objects.attribution.AppAttribution):
                 figure.add(attribution.format_app_attribution(attr, self.url_handler))
             else:
-                # TODO Add "Unsupported Attribution HTML"
-                raise ValueError(f'Unable to format unsupported attribution: "{attr}" ')
+                figure.add(attribution.format_unsupported_attribution(attr))
 
         return figure
 
@@ -604,7 +605,7 @@ class Formatter(helpers.CursorIterator):
 
                     self.post.add(
                         dominate.tags.div(
-                            misc.format_ask(self.url_handler, *layout_items, blog_attribution=layout.attribution),
+                            misc.format_ask(layout.attribution, *layout_items, url_handler=self.url_handler),
                             cls="layout-ask",
                         )
                     )

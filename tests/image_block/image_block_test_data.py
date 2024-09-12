@@ -528,6 +528,317 @@ image_block_with_app_attribution = (
 )
 
 
+image_block_with_blog_attribution = (
+    [
+        {
+            "type": "image",
+            "media": [
+                {
+                    "mediaKey": "23ca9c69bda0020ca4c91df05c8-c8",
+                    "type": "image/jpeg",
+                    "width": 780,
+                    "height": 724,
+                    "url": "https://example.com/image/s780x724.jpg",
+                    "hasOriginalDimensions": True,
+                },
+                {
+                    "mediaKey": "269bda0020ca4c91df05c8a00f5c8-c8",
+                    "type": "image/jpeg",
+                    "width": 390,
+                    "height": 362,
+                    "url": "https://example.com/image/s390x362.jpg",
+                },
+            ],
+        },
+        {
+            "type": "text",
+            "text": "Check out my commission from author! Please follow them here https://example.tumblr.com",
+            "formatting": [{"type": "link", "start": 61, "end": 88, "url": "https://example.tumblr.com"}],
+        },
+        {
+            "type": "image",
+            "media": [
+                {
+                    "mediaKey": "0655920c23ca997bf6145c32bda00cc5:14ab5a4c91df05c8-c8",
+                    "type": "image/jpeg",
+                    "width": 1096,
+                    "height": 1428,
+                    "url": "https://example.com/image/s1280x1920/2.jpg",
+                    "hasOriginalDimensions": True,
+                },
+            ],
+            "attribution": {
+                "type": "blog",
+                "url": "https://example.tumblr.com",
+                "blog": {
+                    "name": "example",
+                    "avatar": [
+                        {"width": 512, "height": 512, "url": "https://example.com/512/example.png"},
+                        {"width": 256, "height": 256, "url": "https://example.com/256/example.png"},
+                        {"width": 128, "height": 128, "url": "https://example.com/128/example.png"},
+                    ],
+                    "uuid": "t:SN32hxaWHi312_32_df",
+                },
+            },
+            "colors": {
+                "c0": "ff2ffe",
+                "c1": "424242",
+                "c2": "083808",
+                "c3": "b5b6b7",
+            },
+        },
+    ],
+    [
+        objects.image.ImageBlock(
+            media=[
+                objects.media_objects.MediaObject(
+                    url="https://example.com/image/s780x724.jpg",
+                    type="image/jpeg",
+                    width=780,
+                    height=724,
+                    has_original_dimensions=True,
+                ),
+                objects.media_objects.MediaObject(
+                    url="https://example.com/image/s390x362.jpg",
+                    type="image/jpeg",
+                    width=390,
+                    height=362,
+                ),
+            ],
+        ),
+        objects.text_block.TextBlock(
+            text="Check out my commission from author! Please follow them here https://example.tumblr.com",
+            inline_formatting=[
+                objects.inline.StyleInterval(
+                    start=61,
+                    end=88,
+                    instructions=[
+                        objects.inline.LinkInstruction(
+                            type_=objects.inline.FMTTypes.LINK, url="https://example.tumblr.com"
+                        )
+                    ],
+                )
+            ],
+        ),
+        objects.image.ImageBlock(
+            media=[
+                objects.media_objects.MediaObject(
+                    url="https://example.com/image/s1280x1920/2.jpg",
+                    type="image/jpeg",
+                    width=1096,
+                    height=1428,
+                    has_original_dimensions=True,
+                ),
+            ],
+            colors=["ff2ffe", "424242", "083808", "b5b6b7"],
+            attribution=objects.attribution.BlogAttribution(
+                uuid="t:SN32hxaWHi312_32_df",
+                url="https://example.tumblr.com",
+                name="example",
+                avatar=[
+                    objects.media_objects.MediaObject(width=512, height=512, url="https://example.com/512/example.png"),
+                    objects.media_objects.MediaObject(width=256, height=256, url="https://example.com/256/example.png"),
+                    objects.media_objects.MediaObject(width=128, height=128, url="https://example.com/128/example.png"),
+                ],
+            ),
+        ),
+    ],
+    dominate.tags.div(
+        dominate.tags.figure(
+            dominate.tags.div(
+                dominate.tags.img(
+                    src="https://example.com/image/s780x724.jpg",
+                    srcset="https://example.com/image/s780x724.jpg "
+                    "780w, https://example.com/image/s390x362.jpg 390w",
+                    cls="image",
+                    loading="lazy",
+                    sizes="(max-width: 540px) 100vh, 540px",
+                    alt="image",
+                ),
+                cls="image-container",
+                style="padding-bottom: 92.8205%;",
+            ),
+            cls="image-block",
+        ),
+        dominate.tags.p(
+            dominate.tags.span(
+                "Check out my commission from author! Please follow them here ",
+                dominate.tags.a("https://example.tumblr.com", href="https://example.tumblr.com", cls="inline-link"),
+                cls="inline-formatted-content",
+            ),
+            cls="text-block",
+        ),
+        dominate.tags.figure(
+            dominate.tags.div(
+                dominate.tags.img(
+                    src="https://example.com/image/s1280x1920/2.jpg",
+                    srcset="https://example.com/image/s1280x1920/2.jpg 1096w",
+                    cls="image",
+                    loading="lazy",
+                    sizes="(max-width: 540px) 100vh, 540px",
+                    alt="image",
+                ),
+                cls="image-container",
+                style="padding-bottom: 130.292%;",
+            ),
+            dominate.tags.div(
+                dominate.tags.a("Created by ", dominate.tags.b("example"), href="https://example.tumblr.com"),
+                cls="blog-attribution",
+            ),
+            cls="image-block",
+        ),
+        cls="post-body",
+    ),
+)
+
+
+image_block_with_unknown_attribution = (
+    [
+        {
+            "type": "image",
+            "media": [
+                {
+                    "mediaKey": "23ca9c69bda0020ca4c91df05c8-c8",
+                    "type": "image/jpeg",
+                    "width": 780,
+                    "height": 724,
+                    "url": "https://example.com/image/s780x724.jpg",
+                    "hasOriginalDimensions": True,
+                },
+                {
+                    "mediaKey": "269bda0020ca4c91df05c8a00f5c8-c8",
+                    "type": "image/jpeg",
+                    "width": 390,
+                    "height": 362,
+                    "url": "https://example.com/image/s390x362.jpg",
+                },
+            ],
+        },
+        {
+            "type": "text",
+            "text": "Check out my commission from author! Please follow them here https://example.tumblr.com",
+            "formatting": [{"type": "link", "start": 61, "end": 88, "url": "https://example.tumblr.com"}],
+        },
+        {
+            "type": "image",
+            "media": [
+                {
+                    "mediaKey": "0655920c23ca997bf6145c32bda00cc5:14ab5a4c91df05c8-c8",
+                    "type": "image/jpeg",
+                    "width": 1096,
+                    "height": 1428,
+                    "url": "https://example.com/image/s1280x1920/2.jpg",
+                    "hasOriginalDimensions": True,
+                },
+            ],
+            "attribution": {
+                "type": "unknown",
+            },
+            "colors": {
+                "c0": "ff2ffe",
+                "c1": "424242",
+                "c2": "083808",
+                "c3": "b5b6b7",
+            },
+        },
+    ],
+    [
+        objects.image.ImageBlock(
+            media=[
+                objects.media_objects.MediaObject(
+                    url="https://example.com/image/s780x724.jpg",
+                    type="image/jpeg",
+                    width=780,
+                    height=724,
+                    has_original_dimensions=True,
+                ),
+                objects.media_objects.MediaObject(
+                    url="https://example.com/image/s390x362.jpg",
+                    type="image/jpeg",
+                    width=390,
+                    height=362,
+                ),
+            ],
+        ),
+        objects.text_block.TextBlock(
+            text="Check out my commission from author! Please follow them here https://example.tumblr.com",
+            inline_formatting=[
+                objects.inline.StyleInterval(
+                    start=61,
+                    end=88,
+                    instructions=[
+                        objects.inline.LinkInstruction(
+                            type_=objects.inline.FMTTypes.LINK, url="https://example.tumblr.com"
+                        )
+                    ],
+                )
+            ],
+        ),
+        objects.image.ImageBlock(
+            media=[
+                objects.media_objects.MediaObject(
+                    url="https://example.com/image/s1280x1920/2.jpg",
+                    type="image/jpeg",
+                    width=1096,
+                    height=1428,
+                    has_original_dimensions=True,
+                ),
+            ],
+            colors=["ff2ffe", "424242", "083808", "b5b6b7"],
+            attribution=objects.attribution.UnsupportedAttribution(type_="unknown"),
+        ),
+    ],
+    dominate.tags.div(
+        dominate.tags.figure(
+            dominate.tags.div(
+                dominate.tags.img(
+                    src="https://example.com/image/s780x724.jpg",
+                    srcset="https://example.com/image/s780x724.jpg "
+                    "780w, https://example.com/image/s390x362.jpg 390w",
+                    cls="image",
+                    loading="lazy",
+                    sizes="(max-width: 540px) 100vh, 540px",
+                    alt="image",
+                ),
+                cls="image-container",
+                style="padding-bottom: 92.8205%;",
+            ),
+            cls="image-block",
+        ),
+        dominate.tags.p(
+            dominate.tags.span(
+                "Check out my commission from author! Please follow them here ",
+                dominate.tags.a("https://example.tumblr.com", href="https://example.tumblr.com", cls="inline-link"),
+                cls="inline-formatted-content",
+            ),
+            cls="text-block",
+        ),
+        dominate.tags.figure(
+            dominate.tags.div(
+                dominate.tags.img(
+                    src="https://example.com/image/s1280x1920/2.jpg",
+                    srcset="https://example.com/image/s1280x1920/2.jpg 1096w",
+                    cls="image",
+                    loading="lazy",
+                    sizes="(max-width: 540px) 100vh, 540px",
+                    alt="image",
+                ),
+                cls="image-container",
+                style="padding-bottom: 130.292%;",
+            ),
+            dominate.tags.div(
+                dominate.tags.p(
+                    f"Attributed via unsupported 'unknown' attribution type. Please report me.",
+                ),
+                cls="unknown-attribution",
+            ),
+            cls="image-block",
+        ),
+        cls="post-body",
+    ),
+)
+
+
 image_block_with_replaced_link = (
     [
         {

@@ -39,3 +39,7 @@ def test_link_attribution():
 
 def test_app_attribution():
     helper_function(attribution_test_data.app_attribution[0], attribution_test_data.app_attribution[1])
+
+
+def test_unknown_attribution_():
+    helper_function(attribution_test_data.unsupported_attribution[0], attribution_test_data.unsupported_attribution[1])

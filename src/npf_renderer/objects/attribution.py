@@ -31,4 +31,10 @@ class AppAttribution(NamedTuple):
     logo: Optional[MediaObject] = None
 
 
-AttributionTypes = Union[BlogAttribution, PostAttribution, LinkAttribution, AppAttribution]
+class UnsupportedAttribution(NamedTuple):
+    """An object representing an unsupported attribution type"""
+
+    type_: str
+
+
+AttributionTypes = Union[BlogAttribution, PostAttribution, LinkAttribution, AppAttribution, UnsupportedAttribution]

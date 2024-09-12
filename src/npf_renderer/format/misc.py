@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Optional
 
 import dominate.tags
 import dominate.util
@@ -7,9 +7,22 @@ from ..objects import attribution
 
 
 def format_ask(
-    url_handler: Callable, *args: dominate.tags.dom_tag, blog_attribution: attribution.BlogAttribution = None
+    blog_attribution: Optional[attribution.BlogAttribution],
+    *ask_contents: dominate.tags.dom_tag,
+    url_handler: Callable = lambda url: url,
 ):
-    """Renders an "ask" in HTML with the given data"""
+    """Renders an "ask" in HTML with the given data
+
+    Args:
+        blog_attribution:
+            The attribution data for the sender of the ask.
+            When none is provided the ask will be attributed to "Anonymous"
+        *ask_contents:
+            A sequential list of the asks's contents pre-rendered as HTML
+        url_handler:
+            A callable function used to process URLs.
+            By default the URL remains unchanged.
+    """
     if not blog_attribution:
         asker_attribution = dominate.tags.p(dominate.tags.strong("Anonymous", cls="asker-name"), " asked:", cls="asker")
 
@@ -43,7 +56,7 @@ def format_ask(
                 ask_header.add(asker_attribution)
 
             with dominate.tags.div(cls="ask-content") as ask_content:
-                for children in args:
+                for children in ask_contents:
                     ask_content.add(children)
 
     if asker_avatar:
