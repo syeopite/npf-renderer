@@ -98,6 +98,22 @@ basic_rows_layout_with_truncate_example = (
     ),
 )
 
+basic_rows_layout_with_truncate_example_disabled_truncation = (
+    basic_rows_layout_with_truncate_example[0],
+    (
+        dominate.tags.div(
+            dominate.tags.div(
+                generate_image_block_html(1, 3),
+                generate_image_block_html(2, 3),
+                generate_image_block_html(3, 3),
+                cls="layout-row",
+            ),
+            dominate.tags.div(generate_image_block_html(4, 2), generate_image_block_html(5, 2), cls="layout-row"),
+            cls="post-body",
+        )
+    ),
+)
+
 
 basic_rows_layout_with_camel_case_truncate_example = (
     {
@@ -143,6 +159,22 @@ basic_rows_layout_with_truncate_at_start_example = (
                 dominate.tags.div(generate_image_block_html(4, 2), generate_image_block_html(5, 2), cls="layout-row"),
                 cls="layout-truncated",
             ),
+            cls="post-body",
+        )
+    ),
+)
+
+basic_rows_layout_with_truncate_at_start_example_disabled_truncation = (
+    basic_rows_layout_with_truncate_at_start_example[0],
+    (
+        dominate.tags.div(
+            dominate.tags.div(
+                generate_image_block_html(1, 3),
+                generate_image_block_html(2, 3),
+                generate_image_block_html(3, 3),
+                cls="layout-row",
+            ),
+            dominate.tags.div(generate_image_block_html(4, 2), generate_image_block_html(5, 2), cls="layout-row"),
             cls="post-body",
         )
     ),
