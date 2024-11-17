@@ -49,6 +49,10 @@ def test_basic_layout_with_truncate_at_start_but_disabled_in_formatter_format():
     )
 
 
+def test_rows_layout_with_truncate_at_0th_block_format():
+    helper_function(data.rows_layout_truncate_after_0th_block[0], data.rows_layout_truncate_after_0th_block[2])
+
+
 def test_ask_layout_format():
     helper_function(data.layouts_with_ask_section[0], data.layouts_with_ask_section[2])
 
