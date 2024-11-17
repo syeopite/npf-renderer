@@ -1,9 +1,9 @@
-from . import misc
+from . import misc, base
 from .. import helpers
 from .. import objects
 
 
-class LayoutParser(helpers.CursorIterator):
+class LayoutParser(base.BaseParser):
     def __init__(self, layouts):
         super().__init__(layouts)
 
@@ -28,7 +28,7 @@ class LayoutParser(helpers.CursorIterator):
                 self._ask_indices.extend(indices)
             elif self.current["type"] == "rows":
                 rows = []
-                truncate_after = self.current.get("truncateAfter") or self.current.get("truncate_after")
+                truncate_after = self.get_or("truncateAfter", "truncate_after")
 
                 for row in self.current["display"]:
                     indices = [index for index in row["blocks"] if index not in self._ask_indices]

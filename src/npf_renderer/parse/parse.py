@@ -7,11 +7,11 @@ results = parser.parse()
 
 import intervaltree
 
-from . import misc
+from . import misc, base
 from .. import helpers, objects
 
 
-class Parser(helpers.CursorIterator):
+class Parser(base.BaseParser):
     """All-in-one parser to process NPF content types"""
 
     def __init__(self, content, poll_result_callback=None):
@@ -63,7 +63,9 @@ class Parser(helpers.CursorIterator):
             #
             # When an indent_level attr is set, we should also probably either be one of the list subtypes or a indented
             # block quote subtype. This check shouldn't be needed, however.
-            if peek["type"] != "text" or not (indent_level := (peek.get("indent_level") or peek.get("indentLevel"))):
+            indent_level = self.get_or("indent_level", "indentLevel", target=peek)
+
+            if peek["type"] != "text" or indent_level is None:
                 break
 
             # If the next element's indent level is higher than ours (stored as nest_level), they are our children.
@@ -88,8 +90,7 @@ class Parser(helpers.CursorIterator):
                     peek_subtype = getattr(objects.text_block.Subtypes, peek_subtype.upper().replace("-", "_"))
 
                 # Make sure we are at the same nest level and that we are the same list type
-                indent_level = peek.get("indent_level") or peek.get("indentLevel")
-                indent_level = indent_level or 0
+                indent_level = self.get_or("indent_level", "indentLevel", target=peek) or 0
 
                 if peek_subtype != subtype or indent_level != nest_level:
                     break
@@ -192,9 +193,7 @@ class Parser(helpers.CursorIterator):
         media_list = self._parse_media_object(self.current["media"])
         assert media_list
 
-        alt_text = self.current.get("alt_text")
-        if not alt_text:  # Try Camel Case Variant
-            alt_text = self.current.get("altText")
+        alt_text = self.get_or("alt_text", "altText")
 
         caption = self.current.get("caption")
 
@@ -218,13 +217,9 @@ class Parser(helpers.CursorIterator):
         title = self.current.get("title")
         description = self.current.get("description")
         author = self.current.get("author")
-        site_name = self.current.get("siteName")
-        if not site_name:  # Try snake case
-            site_name = self.current.get("site_name")
 
-        display_url = self.current.get("displayUrl")
-        if not display_url:  # Try snake case
-            display_url = self.current.get("display_url")
+        site_name = self.get_or("siteName", "site_name")
+        display_url = self.get_or("displayUrl", "display_url")
 
         poster_media_object = self._parse_media_object(self.current.get("poster"))
 
@@ -243,9 +238,9 @@ class Parser(helpers.CursorIterator):
         provider = self.current.get("provider")
         media = self._parse_media_object(self.current.get("media"))
 
-        embed_html = self.current.get("embedHtml") or self.current.get("embed_html")
-        embed_url = self.current.get("embedUrl") or self.current.get("embed_url")
-        embed_iframe = self.current.get("embedIframe") or self.current.get("embed_iframe")
+        embed_html = self.get_or("embedHtml", "embed_html")
+        embed_url = self.get_or("embedUrl", "embed_url")
+        embed_iframe = self.get_or("embedIframe", "embed_iframe")
 
         if embed_iframe:
             embed_iframe = objects.video_block.EmbedIframeObject(
@@ -322,7 +317,7 @@ class Parser(helpers.CursorIterator):
         Also fetches the poll results through self.poll_result_callback
         when it is defined.
         """
-        poll_id = self.current.get("clientId") or self.current.get("client_id")
+        poll_id = self.get_or("clientId", "client_id")
         if poll_id is None:
             raise ValueError("Invalid poll ID")
 
@@ -330,8 +325,8 @@ class Parser(helpers.CursorIterator):
 
         answers = {}
         for raw_ans in self.current["answers"]:
-            answer_id = raw_ans.get("clientId") or raw_ans.get("client_id")
-            answer_text = raw_ans.get("answerText") or raw_ans.get("answer_text")
+            answer_id = self.get_or("clientId", "client_id", target=raw_ans)
+            answer_text = self.get_or("answerText", "answer_text", target=raw_ans)
 
             if answer_id is None or answer_text is None:
                 raise ValueError("Invalid poll answer")

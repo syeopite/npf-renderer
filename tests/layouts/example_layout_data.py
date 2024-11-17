@@ -98,6 +98,7 @@ basic_rows_layout_with_truncate_example = (
     ),
 )
 
+
 basic_rows_layout_with_truncate_example_disabled_truncation = (
     basic_rows_layout_with_truncate_example[0],
     (
@@ -175,6 +176,48 @@ basic_rows_layout_with_truncate_at_start_example_disabled_truncation = (
                 cls="layout-row",
             ),
             dominate.tags.div(generate_image_block_html(4, 2), generate_image_block_html(5, 2), cls="layout-row"),
+            cls="post-body",
+        )
+    ),
+)
+
+
+rows_layout_truncate_after_0th_block = (
+    {
+        "layouts": [
+            {
+                "type": "rows",
+                "display": [
+                    {"blocks": [0]},
+                    {"blocks": [1, 2, 3]},
+                    {"blocks": [4, 5]},
+                ],
+                "truncate_after": 0,
+            }
+        ]
+    },
+    [
+        layouts.Rows(
+            rows=[layouts.RowLayout([0]), layouts.RowLayout([1, 2, 3]), layouts.RowLayout([4, 5])], truncate_after=0
+        )
+    ],
+    (
+        dominate.tags.div(
+            dominate.tags.div(
+                dominate.tags.p("Hi there", cls="text-block"),
+                cls="layout-row",
+            ),
+            dominate.tags.details(
+                dominate.tags.summary("Read more"),
+                dominate.tags.div(
+                    generate_image_block_html(1, 3),
+                    generate_image_block_html(2, 3),
+                    generate_image_block_html(3, 3),
+                    cls="layout-row",
+                ),
+                dominate.tags.div(generate_image_block_html(4, 2), generate_image_block_html(5, 2), cls="layout-row"),
+                cls="layout-truncated",
+            ),
             cls="post-body",
         )
     ),

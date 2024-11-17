@@ -584,7 +584,11 @@ class Formatter(helpers.CursorIterator):
 
                         row_tag = dominate.tags.div(cls="layout-row")
 
-                        if self.truncate_posts and layout.truncate_after and (block_index > layout.truncate_after):
+                        if (
+                            self.truncate_posts
+                            and layout.truncate_after is not None
+                            and (block_index > layout.truncate_after)
+                        ):
                             if row_attachment_point == self.post:
                                 row_attachment_point = self.create_truncation_details_box()
                                 self.post.add(row_attachment_point)

@@ -39,6 +39,10 @@ def test_basic_layout_with_truncate_at_start_parse():
     )
 
 
+def test_rows_layout_with_truncate_at_0th_block_parse():
+    helper_function(data.rows_layout_truncate_after_0th_block[0], data.rows_layout_truncate_after_0th_block[1])
+
+
 def basic_rows_layout_with_camel_case_truncate_parse():
     helper_function(
         data.basic_rows_layout_with_camel_case_truncate_example[0],
