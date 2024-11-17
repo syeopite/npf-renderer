@@ -30,7 +30,7 @@ class HTMLTimeTag(dominate.tags.html_tag):
 
 
 class Formatter(helpers.CursorIterator):
-    def __init__(self, content, layout=None, *, url_handler=None, forbid_external_iframes=False, truncate_posts=True):
+    def __init__(self, content, layout=None, *, url_handler=None, forbid_external_iframes=False, truncate=True):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
 
@@ -45,7 +45,7 @@ class Formatter(helpers.CursorIterator):
 
         self.url_handler = url_handler
         self.forbid_external_iframes = forbid_external_iframes
-        self.truncate_posts = truncate_posts
+        self.truncate = truncate
 
         self.has_render_error = False
 
@@ -585,7 +585,7 @@ class Formatter(helpers.CursorIterator):
                         row_tag = dominate.tags.div(cls="layout-row")
 
                         if (
-                            self.truncate_posts
+                            self.truncate
                             and layout.truncate_after is not None
                             and (block_index > layout.truncate_after)
                         ):

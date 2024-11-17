@@ -13,7 +13,7 @@ def format_npf(
     forbid_external_iframes=False,
     pretty_html=False,
     poll_result_callback=None,
-    truncate_posts=True,
+    truncate=True,
 ):
     """Formats the given NPF blocks into HTML
 
@@ -44,7 +44,7 @@ def format_npf(
             layouts,
             url_handler=url_handler,
             forbid_external_iframes=forbid_external_iframes,
-            truncate_posts=truncate_posts,
+            truncate=truncate,
         ).format()
 
     except exceptions.RenderErrorDisclaimerError as e:

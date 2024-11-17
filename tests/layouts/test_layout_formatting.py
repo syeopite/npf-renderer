@@ -5,9 +5,9 @@ from npf_renderer import format_npf
 import example_layout_data as data
 
 
-def helper_function(raw, answer, contents_list=data.content_list, truncate_posts=True):
+def helper_function(raw, answer, contents_list=data.content_list, truncate=True):
     has_error, formatted_result = format_npf(
-        contents_list, raw["layouts"], pretty_html=True, truncate_posts=truncate_posts
+        contents_list, raw["layouts"], pretty_html=True, truncate=truncate
     )
 
     assert not has_error
@@ -30,7 +30,7 @@ def test_basic_layout_with_truncate_but_disabled_in_formatter_format():
     helper_function(
         data.basic_rows_layout_with_truncate_example_disabled_truncation[0],
         data.basic_rows_layout_with_truncate_example_disabled_truncation[1],
-        truncate_posts=False,
+        truncate=False,
     )
 
 
@@ -45,7 +45,7 @@ def test_basic_layout_with_truncate_at_start_but_disabled_in_formatter_format():
     helper_function(
         data.basic_rows_layout_with_truncate_at_start_example_disabled_truncation[0],
         data.basic_rows_layout_with_truncate_at_start_example_disabled_truncation[1],
-        truncate_posts=False,
+        truncate=False,
     )
 
 
