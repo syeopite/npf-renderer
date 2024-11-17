@@ -13,7 +13,7 @@ def format_npf(
     forbid_external_iframes=False,
     pretty_html=False,
     poll_result_callback=None,
-    truncate_posts=True,
+    truncate=True,
 ):
     """Formats the given NPF blocks into HTML
 
@@ -31,6 +31,8 @@ def format_npf(
         poll_result_callback:
             A function that accepts a `poll_id` parameter to request and return
             poll results. If unset, no poll results will be fetched.
+        truncate:
+            Whether to truncate the post at the point requested by the layout data
     """
     contents = Parser(contents, poll_result_callback).parse()
     if layouts:
@@ -44,7 +46,7 @@ def format_npf(
             layouts,
             url_handler=url_handler,
             forbid_external_iframes=forbid_external_iframes,
-            truncate_posts=truncate_posts,
+            truncate=truncate,
         ).format()
 
     except exceptions.RenderErrorDisclaimerError as e:
