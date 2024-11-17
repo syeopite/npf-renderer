@@ -6,9 +6,7 @@ import example_layout_data as data
 
 
 def helper_function(raw, answer, contents_list=data.content_list, truncate=True):
-    has_error, formatted_result = format_npf(
-        contents_list, raw["layouts"], pretty_html=True, truncate=truncate
-    )
+    has_error, formatted_result = format_npf(contents_list, raw["layouts"], pretty_html=True, truncate=truncate)
 
     assert not has_error
 
