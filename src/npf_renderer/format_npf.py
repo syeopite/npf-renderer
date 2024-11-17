@@ -31,6 +31,8 @@ def format_npf(
         poll_result_callback:
             A function that accepts a `poll_id` parameter to request and return
             poll results. If unset, no poll results will be fetched.
+        truncate:
+            Whether to truncate the post at the point requested by the layout data
     """
     contents = Parser(contents, poll_result_callback).parse()
     if layouts:
