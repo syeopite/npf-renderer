@@ -53,7 +53,7 @@ class Formatter(helpers.CursorIterator):
         self.current_context_padding = 0
         self.render_instructions = []
 
-        self.localizer = localizer
+        self.localizer = localizer # type : ignore
         self.url_handler = url_handler
         self.forbid_external_iframes = forbid_external_iframes
         self.truncate = truncate
@@ -259,14 +259,14 @@ class Formatter(helpers.CursorIterator):
             if self.forbid_external_iframes and (block.embed_html or block.embed_url or block.embed_iframe):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    self.localizer["link_block_fallback_embeds_are_disabled"],
-                    self.localizer["video_link_block_fallback_description"],
+                    self.localizer["link_block_fallback_embeds_are_disabled"], # type: ignore
+                    self.localizer["video_link_block_fallback_description"], # type: ignore
                 )
             else:
                 return self._audiovisual_link_block_fallback(
                     block,
-                    self.localizer["error_video_link_block_fallback_heading"],
-                    self.localizer["video_link_block_fallback_description"],
+                    self.localizer["error_video_link_block_fallback_heading"], # type: ignore
+                    self.localizer["video_link_block_fallback_description"], # type: ignore
                 )
 
         video_block = dominate.tags.div(**root_video_block_attrs)
@@ -303,8 +303,8 @@ class Formatter(helpers.CursorIterator):
             if not media_url.hostname.endswith(".tumblr.com"):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    title=self.localizer["error_link_block_fallback_native_audio_player_non_tumblr_source"],
-                    description=self.localizer["audio_link_block_fallback_description"],
+                    title=self.localizer["error_link_block_fallback_native_audio_player_non_tumblr_source"], # type: ignore
+                    description=self.localizer["audio_link_block_fallback_description"], # type: ignore
                     site_name=media_url.hostname,
                 )
 
@@ -361,14 +361,14 @@ class Formatter(helpers.CursorIterator):
             if self.forbid_external_iframes and (block.embed_html or block.embed_url):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    self.localizer["link_block_fallback_embeds_are_disabled"],
-                    self.localizer["audio_link_block_fallback_description"],
+                    self.localizer["link_block_fallback_embeds_are_disabled"], # type: ignore
+                    self.localizer["audio_link_block_fallback_description"], # type: ignore
                 )
             else:
                 return self._audiovisual_link_block_fallback(
                     block,
-                    self.localizer["error_audio_link_block_fallback_heading"],
-                    self.localizer["audio_link_block_fallback_description"],
+                    self.localizer["error_audio_link_block_fallback_heading"], # type: ignore
+                    self.localizer["audio_link_block_fallback_description"], # type: ignore
                 )
 
         audio_block = dominate.tags.div(cls="audio-block")

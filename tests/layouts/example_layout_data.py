@@ -498,7 +498,7 @@ layouts_with_anon_ask_section = (
             dominate.tags.div(
                 dominate.tags.div(
                     dominate.tags.div(
-                        dominate.tags.p(dominate.tags.strong("Anonymous", cls="asker-name"), " asked:", cls="asker"),
+                        dominate.tags.p(dominate.util.raw(dominate.tags.strong("Anonymous", cls="asker-name").render(pretty=False)), " asked:", cls="asker"),
                         cls="ask-header",
                     ),
                     dominate.tags.div(dominate.tags.p("Hi there", cls="text-block"), cls="ask-content"),
