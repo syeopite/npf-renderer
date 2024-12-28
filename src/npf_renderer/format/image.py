@@ -23,8 +23,8 @@ def format_image(
     url_handler=lambda url: url,
     override_padding=None,
     original_media=None,
-    localizer : dict = {},
-    ):
+    localizer: dict = {},
+):
     """Renders a ImageBlock into HTML"""
 
     container_attributes = {"cls": "image-container"}
