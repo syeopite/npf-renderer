@@ -17,7 +17,14 @@ def create_srcset(media_blocks, url_handler):
     return main_srcset
 
 
-def format_image(image_block, row_length=1, url_handler=lambda url: url, override_padding=None, original_media=None):
+def format_image(
+    image_block,
+    row_length=1,
+    url_handler=lambda url: url,
+    override_padding=None,
+    original_media=None,
+    localizer : dict = {},
+    ):
     """Renders a ImageBlock into HTML"""
 
     container_attributes = {"cls": "image-container"}
@@ -83,7 +90,7 @@ def format_image(image_block, row_length=1, url_handler=lambda url: url, overrid
             srcset=", ".join(create_srcset(processed_media_blocks, url_handler)),
             cls="image",
             loading="lazy",
-            alt=image_block.alt_text or "image",
+            alt=image_block.alt_text or localizer["generic_image_alt_text"],
             sizes=f"(max-width: 540px) {int(100 / row_length)}vh, {int(540 / row_length)}px",
             **image_attributes,
         )

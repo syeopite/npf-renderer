@@ -8,6 +8,7 @@ DEFAULT_LOCALIZATION = {
     "unsupported_block_header": "Unsupported NPF block",
     "unsupported_block_description": 'Placeholder for the unsupported "{block}" type NPF block\
 Please report me over at https://github.com/syeopite/npf-renderer',
+    "generic_image_alt_text": "image",
     "link_block_poster_alt_text": 'Preview image for "{site}"',
     "link_block_fallback_embeds_are_disabled": "Embeds are disabled",
     "error_video_link_block_fallback_heading": "Error: unable to render video block",

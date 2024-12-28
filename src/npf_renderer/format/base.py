@@ -99,6 +99,7 @@ class Formatter(helpers.CursorIterator):
             row_length,
             url_handler=self.url_handler,
             override_padding=override_padding,
+            localizer=self.localizer
         )
 
         figure.add(image_container)
