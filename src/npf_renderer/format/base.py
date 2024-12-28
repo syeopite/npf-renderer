@@ -1,5 +1,6 @@
 import datetime
 import urllib.parse
+from typing import Callable
 
 import dominate.tags
 import dominate.util
@@ -35,7 +36,7 @@ class Formatter(helpers.CursorIterator):
         content,
         layout=None,
         *,
-        localizer: dict[str, str] = i18n.DEFAULT_LOCALIZATION,
+        localizer: dict[str, str | Callable] = i18n.DEFAULT_LOCALIZATION,
         url_handler=None,
         forbid_external_iframes=False,
         truncate=True,
@@ -263,7 +264,8 @@ class Formatter(helpers.CursorIterator):
                 )
             else:
                 return self._audiovisual_link_block_fallback(
-                    block, self.localizer["error_video_link_block_fallback_heading"],
+                    block,
+                    self.localizer["error_video_link_block_fallback_heading"],
                     self.localizer["video_link_block_fallback_description"],
                 )
 
@@ -405,31 +407,61 @@ class Formatter(helpers.CursorIterator):
             poll_body.add(poll_choice)
 
         footer = dominate.tags.footer()
-        with footer:
-            creation = datetime.datetime.fromtimestamp(block.creation_timestamp, datetime.timezone.utc)
-            expiration = datetime.datetime.fromtimestamp(
-                block.creation_timestamp + block.expires_after, datetime.timezone.utc
+
+        # creation = datetime.datetime.fromtimestamp(block.creation_timestamp, datetime.timezone.utc)
+
+        expiration = datetime.datetime.fromtimestamp(
+            block.creation_timestamp + block.expires_after, datetime.timezone.utc
+        )
+        now = datetime.datetime.now(datetime.timezone.utc)
+
+        # Timezone information is irrelevant
+        expiration = expiration.replace(tzinfo=None)
+        now = now.replace(tzinfo=None)
+
+        poll_metadata = dominate.tags.div(cls="poll-metadata")
+
+        if block.votes:
+            poll_metadata.add(
+                dominate.tags.span(f"{block.total_votes} votes"), dominate.tags.span("•", cls="separator")
             )
-            now = datetime.datetime.now(datetime.timezone.utc)
 
-            # Timezone information is irrelevant
-            expiration = expiration.replace(tzinfo=None)
-            now = now.replace(tzinfo=None)
+        # If not expired we display how many days till expired
 
-            # If not expired we display how many days till expired
-            with dominate.tags.div(cls="poll-metadata"):
-                if block.votes:
-                    dominate.tags.span(f"{block.total_votes} votes")
-                    dominate.tags.span("•", cls="separator")
-                if expiration > now:
-                    # Build time duration string
-                    remaining_time = expiration - now
-                    duration_string = helpers.build_duration_string(remaining_time)
-                    dominate.tags.span(f"Remaining time: ", HTMLTimeTag(str(remaining_time), datetime=duration_string))
-                else:
-                    formatted_expiration = expiration.strftime("%Y-%m-%dT%H:%M")
-                    dominate.tags.span(f"Ended on: ", HTMLTimeTag(str(expiration), datetime=formatted_expiration))
+        if expiration > now:
+            # Build time duration string
+            remaining_time = expiration - now
+            duration_string = self.localizer["format_duration_func"](remaining_time)  # type: ignore
 
+            poll_metadata.add(
+                dominate.tags.span(
+                    dominate.util.raw(
+                        self.localizer["poll_remaining_time"].format(  # type: ignore
+                            duration=HTMLTimeTag(
+                                duration_string, datetime=helpers.build_duration_string(remaining_time)
+                            ).render(pretty=False)
+                        )
+                    )
+                )
+            )
+
+        else:
+            human_readable_expiration = self.localizer["format_datetime_func"](expiration)  # type: ignore
+            formatted_expiration = expiration.strftime("%Y-%m-%dT%H:%M")
+
+            poll_metadata.add(
+                dominate.tags.span(
+                    dominate.util.raw(
+                        self.localizer["poll_ended_on"].format(  # type: ignore
+                            ended_date=HTMLTimeTag(human_readable_expiration, datetime=formatted_expiration).render(
+                                pretty=False
+                            )
+                        )
+                    )
+                )
+            )
+
+        footer.add(poll_metadata)
         poll_block.add(poll_body, footer)
 
         if now > expiration:
