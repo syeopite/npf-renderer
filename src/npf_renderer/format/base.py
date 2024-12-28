@@ -4,7 +4,7 @@ import urllib.parse
 import dominate.tags
 import dominate.util
 
-from . import text, image, misc, attribution
+from . import text, image, misc, attribution, i18n
 from .. import objects, helpers, exceptions
 
 
@@ -30,7 +30,16 @@ class HTMLTimeTag(dominate.tags.html_tag):
 
 
 class Formatter(helpers.CursorIterator):
-    def __init__(self, content, layout=None, *, url_handler=None, forbid_external_iframes=False, truncate=True):
+    def __init__(
+        self,
+        content,
+        layout=None,
+        *,
+        localizer: dict[str, str] = i18n.DEFAULT_LOCALIZATION,
+        url_handler=None,
+        forbid_external_iframes=False,
+        truncate=True,
+    ):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
 
@@ -43,6 +52,7 @@ class Formatter(helpers.CursorIterator):
         self.current_context_padding = 0
         self.render_instructions = []
 
+        self.localizer = localizer
         self.url_handler = url_handler
         self.forbid_external_iframes = forbid_external_iframes
         self.truncate = truncate
@@ -610,7 +620,12 @@ class Formatter(helpers.CursorIterator):
 
                     self.post.add(
                         dominate.tags.div(
-                            misc.format_ask(layout.attribution, *layout_items, url_handler=self.url_handler),
+                            misc.format_ask(
+                                layout.attribution,
+                                *layout_items,
+                                url_handler=self.url_handler,
+                                localizer=self.localizer,
+                            ),
                             cls="layout-ask",
                         )
                     )
