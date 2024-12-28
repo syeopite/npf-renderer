@@ -134,7 +134,7 @@ class Formatter(helpers.CursorIterator):
             poster_container.add(
                 dominate.tags.img(
                     srcset=srcset,
-                    alt=block.site_name or "Link block poster",
+                    alt=block.site_name or self.localizer["link_block_poster_alt_text"].format(site=block.url),
                     sizes="(max-width: 540px) 100vh, 540px",
                 )
             )
@@ -210,8 +210,8 @@ class Formatter(helpers.CursorIterator):
             if not media_url.hostname.endswith(".tumblr.com"):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    title="Error: Cannot construct video player",
-                    description="Please click me to watch on the original site",
+                    title=self.localizer["error_link_block_fallback_native_video_player_non_tumblr_source"],
+                    description=self.localizer["video_link_block_fallback_description"],
                 )
 
             additional_attrs = {}
@@ -257,11 +257,14 @@ class Formatter(helpers.CursorIterator):
         if not video:
             if self.forbid_external_iframes and (block.embed_html or block.embed_url or block.embed_iframe):
                 return self._audiovisual_link_block_fallback(
-                    block, "Embeds are disabled", f"Please click me to watch on the original site"
+                    block,
+                    self.localizer["link_block_fallback_embeds_are_disabled"],
+                    self.localizer["video_link_block_fallback_description"],
                 )
             else:
                 return self._audiovisual_link_block_fallback(
-                    block, "Error: unable to render video block", f"Please click me to watch on the original site"
+                    block, self.localizer["error_video_link_block_fallback_heading"],
+                    self.localizer["video_link_block_fallback_description"],
                 )
 
         video_block = dominate.tags.div(**root_video_block_attrs)
