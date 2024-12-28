@@ -84,11 +84,8 @@ class Formatter(helpers.CursorIterator):
 
         with dominate.tags.div(cls="unsupported-content-block") as unsupported:
             with dominate.tags.div(cls="unsupported-content-block-message"):
-                dominate.tags.h1("Unsupported content placeholder")
-                dominate.tags.p(
-                    f'Hello! I\'m a placeholder for the unsupported "{block.type}" type NPF content block.'
-                    f" Please report me!"
-                )
+                dominate.tags.h1(self.localizer["unsupported_block_header"])
+                dominate.tags.p(self.localizer["unsupported_block_description"])
 
         return unsupported
 
