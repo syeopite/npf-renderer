@@ -424,7 +424,7 @@ class Formatter(helpers.CursorIterator):
 
         if block.votes:
             poll_metadata.add(
-                dominate.tags.span(f"{block.total_votes} votes"), dominate.tags.span("•", cls="separator")
+                dominate.tags.span(self.localizer["poll_total_vote_amount_func"](block.total_votes)), dominate.tags.span("•", cls="separator")
             )
 
         # If not expired we display how many days till expired
