@@ -301,8 +301,8 @@ class Formatter(helpers.CursorIterator):
             if not media_url.hostname.endswith(".tumblr.com"):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    title="Error: Cannot construct audio player",
-                    description="Please click me to listen on the original site",
+                    title=self.localizer["error_link_block_fallback_native_audio_player_non_tumblr_source"],
+                    description=self.localizer["audio_link_block_fallback_description"],
                     site_name=media_url.hostname,
                 )
 
@@ -330,7 +330,7 @@ class Formatter(helpers.CursorIterator):
                     dominate.tags.img(
                         src=self.url_handler(block.poster[0].url),
                         srcset=", ".join(image.create_srcset(block.poster, self.url_handler)),
-                        alt=block.title or "Audio block poster",
+                        alt=block.title or self.localizer["fallback_audio_block_thumbnail_alt_text"],
                         sizes="(max-width: 540px) 100vh, 540px",
                         cls="ab-poster",
                     )
@@ -358,11 +358,15 @@ class Formatter(helpers.CursorIterator):
         if not audio:
             if self.forbid_external_iframes and (block.embed_html or block.embed_url):
                 return self._audiovisual_link_block_fallback(
-                    block, "Embeds are disabled", f"Please click me to listen on the original site"
+                    block,
+                    self.localizer["link_block_fallback_embeds_are_disabled"],
+                    self.localizer["audio_link_block_fallback_description"],
                 )
             else:
                 return self._audiovisual_link_block_fallback(
-                    block, "Error: unable to render audio block", f"Please click me to listen on the original site"
+                    block,
+                    self.localizer["error_audio_link_block_fallback_heading"],
+                    self.localizer["audio_link_block_fallback_description"],
                 )
 
         audio_block = dominate.tags.div(cls="audio-block")
