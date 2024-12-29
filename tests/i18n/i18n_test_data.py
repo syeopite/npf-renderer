@@ -265,7 +265,7 @@ can_format_duration = {
 can_format_datetime = {
     "contents": can_format_plurals["contents"],
     "localizer": {
-        "format_datetime_func": lambda datetime: f"{datetime.strftime("Ended on %Y-%m-%d")}",
+        "format_datetime_func": lambda datetime: f"{datetime.strftime('Ended on %Y-%m-%d')}",
     },
     "poll_footer": dominate.tags.footer(
         dominate.tags.div(
