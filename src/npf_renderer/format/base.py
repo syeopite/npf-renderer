@@ -420,7 +420,7 @@ class Formatter(helpers.CursorIterator):
 
         if block.votes:
             poll_metadata.add(
-                dominate.tags.span(self.localizer["poll_total_vote_amount_func"](block.total_votes)),
+                dominate.tags.span(self.localizer["plural_poll_total_votes"](block.total_votes)),
                 dominate.tags.span("•", cls="separator"),
             )
 

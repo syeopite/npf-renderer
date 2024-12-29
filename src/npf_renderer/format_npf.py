@@ -27,7 +27,7 @@ def format_npf(
         localizer:
             A scriptable object that contains translated strings for whatever locale you want
             for the text npf-renderer writes, and also functions for formatting data in the locale
-            such as duration and datetimes. See npf_renderer.DEFAULT_LOCALIZATION for the default dict 
+            such as duration and datetimes. See npf_renderer.DEFAULT_LOCALIZATION for the default dict
         forbid_external_iframes:
             When True embeds to external services won't be added
             in the final output. This can change the resulting HTML of certain

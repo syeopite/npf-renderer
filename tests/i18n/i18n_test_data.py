@@ -238,7 +238,7 @@ can_format_plurals = {
         },
     ),
     "localizer": {
-        "poll_total_vote_amount_func": lambda votes: f"{votes} ({sample_plural_handler(votes)})",
+        "plural_poll_total_votes": lambda votes: f"{votes} ({sample_plural_handler(votes)})",
     },
 }
 
