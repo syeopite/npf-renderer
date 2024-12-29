@@ -172,7 +172,7 @@ link_block_with_poster = (
         "https://example.com",
         dominate.tags.div(
             dominate.tags.img(
-                alt="Link block poster",
+                alt='Preview image for "https://example.com"',
                 sizes="(max-width: 540px) 100vh, 540px",
                 srcset="https://example.com/image 1280w",
             ),

@@ -101,7 +101,7 @@ audio_block_with_poster = (
                 src="https://media.tumblr.com/someimage.png",
                 srcset="https://media.tumblr.com/someimage.png 540w",
                 sizes="(max-width: 540px) 100vh, 540px",
-                alt="Audio block poster",
+                alt="Album art",
                 cls="ab-poster",
             ),
             cls="ab-heading",
@@ -223,7 +223,9 @@ audio_block_with_tumblr_as_provider_but_non_tumblr_media_link = (
     dominate.tags.div(
         dominate.tags.div(
             dominate.tags.a(
-                dominate.tags.div(dominate.tags.span("Error: Cannot construct audio player"), cls="link-block-title"),
+                dominate.tags.div(
+                    dominate.tags.span("Error: non-tumblr source for audio player"), cls="link-block-title"
+                ),
                 dominate.tags.div(
                     dominate.tags.p("Please click me to listen on the original site", cls="link-block-description"),
                     dominate.tags.div(
@@ -282,7 +284,9 @@ audio_block_fallback_with_only_media_url_and_provider = (
     dominate.tags.div(
         dominate.tags.div(
             dominate.tags.a(
-                dominate.tags.div(dominate.tags.span("Error: Cannot construct audio player"), cls="link-block-title"),
+                dominate.tags.div(
+                    dominate.tags.span("Error: non-tumblr source for audio player"), cls="link-block-title"
+                ),
                 dominate.tags.div(
                     dominate.tags.p("Please click me to listen on the original site", cls="link-block-description"),
                     dominate.tags.div(

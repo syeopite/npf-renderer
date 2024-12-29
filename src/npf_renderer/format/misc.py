@@ -9,6 +9,7 @@ from ..objects import attribution
 def format_ask(
     blog_attribution: Optional[attribution.BlogAttribution],
     *ask_contents: dominate.tags.dom_tag,
+    localizer: dict[str, str | Callable],
     url_handler: Callable = lambda url: url,
 ):
     """Renders an "ask" in HTML with the given data
@@ -19,12 +20,18 @@ def format_ask(
             When none is provided the ask will be attributed to "Anonymous"
         *ask_contents:
             A sequential list of the asks's contents pre-rendered as HTML
+        localizer:
+            A dictionary to provide human friendly translated strings
         url_handler:
             A callable function used to process URLs.
             By default the URL remains unchanged.
     """
     if not blog_attribution:
-        asker_attribution = dominate.tags.p(dominate.tags.strong("Anonymous", cls="asker-name"), " asked:", cls="asker")
+        asked_sentence = localizer["asker_and_ask_verb"].format(
+            name=dominate.tags.strong(localizer["asker_with_no_attribution"], cls="asker-name").render(pretty=False)
+        )
+
+        asker_attribution = dominate.tags.p(dominate.util.raw(asked_sentence), cls="asker")
 
         asker_avatar = dominate.tags.img(
             src=url_handler("https://assets.tumblr.com/images/anonymous_avatar_96.gif"),
@@ -33,13 +40,16 @@ def format_ask(
         )
 
     else:
+        asker_name_html = dominate.tags.a(
+            dominate.tags.strong(blog_attribution.name, cls="asker-name"),
+            href=url_handler(f"https://{blog_attribution.name}.tumblr.com/"),
+            cls="asker-attribution",
+        ).render(pretty=False)
+
+        asked_sentence = localizer["asker_and_ask_verb"].format(name=asker_name_html)
+
         asker_attribution = dominate.tags.p(
-            dominate.tags.a(
-                dominate.tags.strong(blog_attribution.name, cls="asker-name"),
-                href=url_handler(f"https://{blog_attribution.name}.tumblr.com/"),
-                cls="asker-attribution",
-            ),
-            " asked:",
+            dominate.util.raw(asked_sentence),
             cls="asker",
         )
 

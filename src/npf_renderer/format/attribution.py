@@ -6,7 +6,7 @@ import dominate.tags
 from .. import objects
 
 
-def format_link_attribution(attr: objects.attribution.LinkAttribution, url_handler: Callable):
+def format_link_attribution(attr: objects.attribution.LinkAttribution, url_handler: Callable, localizer):
     return dominate.tags.div(
         dominate.tags.a(
             urllib.parse.urlparse(attr.url).hostname,
@@ -16,43 +16,46 @@ def format_link_attribution(attr: objects.attribution.LinkAttribution, url_handl
     )
 
 
-def format_post_attribution(attr: objects.attribution.PostAttribution, url_handler: Callable):
+def format_post_attribution(attr: objects.attribution.PostAttribution, url_handler: Callable, localizer):
     return dominate.tags.div(
         dominate.tags.a(
-            f"From ",
-            dominate.tags.b(attr.blog.name),
+            dominate.util.raw(
+                localizer["post_attribution"].format(dominate.tags.b(attr.blog.name).render(pretty=False))
+            ),
             href=url_handler(attr.url),
         ),
         cls="post-attribution",
     )
 
 
-def format_blog_attribution(attr: objects.attribution.BlogAttribution, url_handler: Callable):
-    return dominate.tags.div(
+def format_blog_attribution(attr: objects.attribution.BlogAttribution, url_handler: Callable, localizer):
+    result = dominate.tags.div(
         dominate.tags.a(
-            f"Created by ",
-            dominate.tags.b(attr.name or "Anonymous"),
+            dominate.util.raw(
+                localizer["blog_attribution"].format(dominate.tags.b(attr.name or "Anonymous").render(pretty=False))
+            ),
             href=url_handler(attr.url),
         ),
         cls="blog-attribution",
     )
 
+    return result
 
-def format_app_attribution(attr: objects.attribution.AppAttribution, url_handler: Callable):
+
+def format_app_attribution(attr: objects.attribution.AppAttribution, url_handler: Callable, localizer):
     return dominate.tags.div(
         dominate.tags.a(
-            f"View on ",
-            dominate.tags.b(attr.app_name),
+            dominate.util.raw(localizer["app_attribution"].format(dominate.tags.b(attr.app_name).render(pretty=False))),
             href=url_handler(attr.url),
         ),
         cls="post-attribution",
     )
 
 
-def format_unsupported_attribution(attr: objects.attribution.UnsupportedAttribution):
+def format_unsupported_attribution(attr: objects.attribution.UnsupportedAttribution, localizer):
     return dominate.tags.div(
         dominate.tags.p(
-            f"Attributed via unsupported '{attr.type_}' attribution type. Please report me.",
+            localizer["unsupported_attribution"].format(attr.type_),
         ),
         cls="unknown-attribution",
     )

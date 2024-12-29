@@ -1,1 +1,1 @@
-from .base import Formatter
+from .base import Formatter, i18n

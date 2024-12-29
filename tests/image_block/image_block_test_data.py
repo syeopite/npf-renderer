@@ -298,9 +298,7 @@ gif_image_block_with_post_attribution = (
             dominate.tags.div(
                 dominate.tags.a(
                     "From ",
-                    dominate.tags.b(
-                        "example-blog",
-                    ),
+                    dominate.util.raw(dominate.tags.b("example-blog").render(pretty=False)),
                     href="https://example-blog.tumblr.com/post/1234567890/example-gif-post",
                 ),
                 cls="post-attribution",
@@ -517,7 +515,9 @@ image_block_with_app_attribution = (
             ),
             dominate.tags.div(
                 dominate.tags.a(
-                    "View on ", dominate.tags.b("Twitter"), href="https://twitter.com/example/status/1234567"
+                    "View on ",
+                    dominate.util.raw(dominate.tags.b("Twitter").render(pretty=False)),
+                    href="https://twitter.com/example/status/1234567",
                 ),
                 cls="post-attribution",
             ),
@@ -682,7 +682,11 @@ image_block_with_blog_attribution = (
                 style="padding-bottom: 130.292%;",
             ),
             dominate.tags.div(
-                dominate.tags.a("Created by ", dominate.tags.b("example"), href="https://example.tumblr.com"),
+                dominate.tags.a(
+                    "Created by ",
+                    dominate.util.raw(dominate.tags.b("example").render(pretty=False)),
+                    href="https://example.tumblr.com",
+                ),
                 cls="blog-attribution",
             ),
             cls="image-block",
@@ -828,7 +832,7 @@ image_block_with_unknown_attribution = (
             ),
             dominate.tags.div(
                 dominate.tags.p(
-                    f"Attributed via unsupported 'unknown' attribution type. Please report me.",
+                    f'Attributed via an unsupported ("unknown") attribution type. Please report this over at https://github.com/syeopite/npf-renderer',
                 ),
                 cls="unknown-attribution",
             ),

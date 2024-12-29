@@ -30,7 +30,7 @@ blog_attribution = (
     dominate.tags.div(
         dominate.tags.a(
             "Created by ",
-            dominate.tags.b("example"),
+            dominate.util.raw(dominate.tags.b("example").render(pretty=False)),
             href="https://example.tumblr.com",
         ),
         cls="blog-attribution",
@@ -55,7 +55,7 @@ post_attribution = (
     dominate.tags.div(
         dominate.tags.a(
             "From ",
-            dominate.tags.b("example"),
+            dominate.util.raw(dominate.tags.b("example").render(pretty=False)),
             href="https://example.tumblr.com/post/123456789123/example-post-slug-here",
         ),
         cls="post-attribution",
@@ -110,7 +110,7 @@ app_attribution = (
     dominate.tags.div(
         dominate.tags.a(
             f"View on ",
-            dominate.tags.b("SoundCloud"),
+            dominate.util.raw(dominate.tags.b("SoundCloud").render(pretty=False)),
             href="https://soundcloud.com/example/example-track",
         ),
         cls="post-attribution",
@@ -123,7 +123,7 @@ unsupported_attribution = (
     attribution.UnsupportedAttribution(type_="unknown"),
     dominate.tags.div(
         dominate.tags.p(
-            f"Attributed via unsupported 'unknown' attribution type. Please report me.",
+            f'Attributed via an unsupported ("unknown") attribution type. Please report this over at https://github.com/syeopite/npf-renderer',
         ),
         cls="unknown-attribution",
     ),

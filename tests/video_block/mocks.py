@@ -323,7 +323,9 @@ video_block_fallbacks_to_link_block_when_invalid_media_source = (
     dominate.tags.div(
         dominate.tags.div(
             dominate.tags.a(
-                dominate.tags.div(dominate.tags.span("Error: Cannot construct video player"), cls="link-block-title"),
+                dominate.tags.div(
+                    dominate.tags.span("Error: non-tumblr source for video player"), cls="link-block-title"
+                ),
                 dominate.tags.div(
                     dominate.tags.p("Please click me to watch on the original site", cls="link-block-description"),
                     dominate.tags.div(dominate.tags.span(dominate.tags.span("tumblr")), cls="link-block-subtitles"),

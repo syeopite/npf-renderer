@@ -1,6 +1,6 @@
 import dominate
 
-from .format import Formatter
+from .format import Formatter, i18n
 from .parse import Parser, LayoutParser
 from . import exceptions
 
@@ -10,6 +10,7 @@ def format_npf(
     layouts=None,
     *_,
     url_handler=None,
+    localizer=i18n.DEFAULT_LOCALIZATION,
     forbid_external_iframes=False,
     pretty_html=False,
     poll_result_callback=None,
@@ -23,6 +24,10 @@ def format_npf(
         url_handler:
             A function in which all URLs are passed into. Expects a string in return.
             By default the internal logic will default to lambda url : url
+        localizer:
+            A scriptable object that contains translated strings for whatever locale you want
+            for the text npf-renderer writes, and also functions for formatting data in the locale
+            such as duration and datetimes. See npf_renderer.DEFAULT_LOCALIZATION for the default dict
         forbid_external_iframes:
             When True embeds to external services won't be added
             in the final output. This can change the resulting HTML of certain
@@ -45,6 +50,7 @@ def format_npf(
             contents,
             layouts,
             url_handler=url_handler,
+            localizer=localizer,
             forbid_external_iframes=forbid_external_iframes,
             truncate=truncate,
         ).format()

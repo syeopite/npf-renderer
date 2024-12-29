@@ -291,86 +291,12 @@ layouts_with_ask_section = (
                 dominate.tags.div(
                     dominate.tags.div(
                         dominate.tags.p(
-                            dominate.tags.a(
-                                dominate.tags.strong("example", cls="asker-name"),
-                                href="https://example.tumblr.com/",
-                                cls="asker-attribution",
-                            ),
-                            " asked:",
-                            cls="asker",
-                        ),
-                        cls="ask-header",
-                    ),
-                    dominate.tags.div(
-                        dominate.tags.p("Hi there", cls="text-block"),
-                        generate_image_block_html(1, 1),
-                        generate_image_block_html(2, 1),
-                        cls="ask-content",
-                    ),
-                    cls="ask-body",
-                ),
-                cls="ask",
-            ),
-            cls="layout-ask",
-        ),
-        dominate.tags.div(generate_image_block_html(3, 1), cls="layout-row"),
-        dominate.tags.div(generate_image_block_html(4, 2), generate_image_block_html(5, 2), cls="layout-row"),
-        cls="post-body",
-    ),
-)
-
-
-layouts_with_ask_section = (
-    {
-        "layouts": [
-            {
-                "type": "ask",
-                "blocks": [0, 1, 2],
-                "attribution": {
-                    "type": "blog",
-                    "url": "https://example.tumblr.com",
-                    "blog": {"name": "example", "url": "https://example.tumblr.com", "uuid": "t:SN32hxaWHi312_32_df"},
-                },
-            },
-            {
-                "type": "rows",
-                "display": [
-                    {"blocks": [0]},
-                    {"blocks": [1]},
-                    {"blocks": [2]},
-                    {"blocks": [3]},
-                    {"blocks": [4, 5]},
-                ],
-            },
-        ]
-    },
-    [
-        layouts.AskLayout(
-            ranges=[0, 1, 2],
-            attribution=attribution.BlogAttribution(
-                name="example", url="https://example.tumblr.com", uuid="t:SN32hxaWHi312_32_df"
-            ),
-        ),
-        layouts.Rows(
-            rows=[
-                layouts.RowLayout(
-                    [3],
-                ),
-                layouts.RowLayout([4, 5]),
-            ],
-        ),
-    ],
-    dominate.tags.div(
-        # Ask
-        dominate.tags.div(
-            dominate.tags.div(
-                dominate.tags.div(
-                    dominate.tags.div(
-                        dominate.tags.p(
-                            dominate.tags.a(
-                                dominate.tags.strong("example", cls="asker-name"),
-                                href="https://example.tumblr.com/",
-                                cls="asker-attribution",
+                            dominate.util.raw(
+                                dominate.tags.a(
+                                    dominate.tags.strong("example", cls="asker-name"),
+                                    href="https://example.tumblr.com/",
+                                    cls="asker-attribution",
+                                ).render(pretty=False)
                             ),
                             " asked:",
                             cls="asker",
@@ -445,10 +371,12 @@ layouts_with_ask_section_and_truncation = (
                 dominate.tags.div(
                     dominate.tags.div(
                         dominate.tags.p(
-                            dominate.tags.a(
-                                dominate.tags.strong("example", cls="asker-name"),
-                                href="https://example.tumblr.com/",
-                                cls="asker-attribution",
+                            dominate.util.raw(
+                                dominate.tags.a(
+                                    dominate.tags.strong("example", cls="asker-name"),
+                                    href="https://example.tumblr.com/",
+                                    cls="asker-attribution",
+                                ).render(pretty=False),
                             ),
                             " asked:",
                             cls="asker",
@@ -507,10 +435,12 @@ layouts_with_only_ask_section = (
                 dominate.tags.div(
                     dominate.tags.div(
                         dominate.tags.p(
-                            dominate.tags.a(
-                                dominate.tags.strong("example", cls="asker-name"),
-                                href="https://example.tumblr.com/",
-                                cls="asker-attribution",
+                            dominate.util.raw(
+                                dominate.tags.a(
+                                    dominate.tags.strong("example", cls="asker-name"),
+                                    href="https://example.tumblr.com/",
+                                    cls="asker-attribution",
+                                ).render(pretty=False)
                             ),
                             " asked:",
                             cls="asker",
@@ -568,7 +498,11 @@ layouts_with_anon_ask_section = (
             dominate.tags.div(
                 dominate.tags.div(
                     dominate.tags.div(
-                        dominate.tags.p(dominate.tags.strong("Anonymous", cls="asker-name"), " asked:", cls="asker"),
+                        dominate.tags.p(
+                            dominate.util.raw(dominate.tags.strong("Anonymous", cls="asker-name").render(pretty=False)),
+                            " asked:",
+                            cls="asker",
+                        ),
                         cls="ask-header",
                     ),
                     dominate.tags.div(dominate.tags.p("Hi there", cls="text-block"), cls="ask-content"),

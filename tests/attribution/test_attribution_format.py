@@ -2,6 +2,7 @@ import logging
 
 from npf_renderer.parse import misc
 from npf_renderer.format import attribution as formatter
+from npf_renderer.format.i18n import DEFAULT_LOCALIZATION
 
 import attribution_test_data
 
@@ -16,15 +17,15 @@ def helper_function(raw, answer, url_handler=None):
 
     match attribution:
         case misc.attribution.BlogAttribution():
-            formatted_results = formatter.format_blog_attribution(attribution, url_handler=url_handler)
+            formatted_results = formatter.format_blog_attribution(attribution, url_handler, DEFAULT_LOCALIZATION)
         case misc.attribution.AppAttribution():
-            formatted_results = formatter.format_app_attribution(attribution, url_handler)
+            formatted_results = formatter.format_app_attribution(attribution, url_handler, DEFAULT_LOCALIZATION)
         case misc.attribution.LinkAttribution():
-            formatted_results = formatter.format_link_attribution(attribution, url_handler)
+            formatted_results = formatter.format_link_attribution(attribution, url_handler, DEFAULT_LOCALIZATION)
         case misc.attribution.PostAttribution():
-            formatted_results = formatter.format_post_attribution(attribution, url_handler)
+            formatted_results = formatter.format_post_attribution(attribution, url_handler, DEFAULT_LOCALIZATION)
         case _:
-            formatted_results = formatter.format_unsupported_attribution(attribution)
+            formatted_results = formatter.format_unsupported_attribution(attribution, DEFAULT_LOCALIZATION)
 
     logging.info(f"Formatted: {formatted_results}")
     logging.info(f"Answer: {answer}")

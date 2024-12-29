@@ -89,7 +89,12 @@ simple_poll_expired = (
         ),
         dominate.tags.footer(
             dominate.tags.div(
-                dominate.tags.span("Ended on: ", HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00")),
+                dominate.tags.span(
+                    "Ended on: ",
+                    dominate.util.raw(
+                        HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00").render(pretty=False)
+                    ),
+                ),
                 cls="poll-metadata",
             ),
         ),
@@ -102,7 +107,12 @@ simple_poll_expired = (
             dominate.tags.div(
                 dominate.tags.span("810 votes"),
                 dominate.tags.span("•", cls="separator"),
-                dominate.tags.span("Ended on: ", HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00")),
+                dominate.tags.span(
+                    "Ended on: ",
+                    dominate.util.raw(
+                        HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00").render(pretty=False)
+                    ),
+                ),
                 cls="poll-metadata",
             ),
         ),
@@ -125,7 +135,10 @@ simple_ongoing_poll = (
         ),
         dominate.tags.footer(
             dominate.tags.div(
-                dominate.tags.span("Remaining time: ", HTMLTimeTag("7 days, 0:00:00", datetime="P7D")),
+                dominate.tags.span(
+                    "Remaining time: ",
+                    dominate.util.raw(HTMLTimeTag("7 days, 0:00:00", datetime="P7D").render(pretty=False)),
+                ),
                 cls="poll-metadata",
             ),
         ),
@@ -138,7 +151,10 @@ simple_ongoing_poll = (
             dominate.tags.div(
                 dominate.tags.span("810 votes"),
                 dominate.tags.span("•", cls="separator"),
-                dominate.tags.span("Remaining time: ", HTMLTimeTag("7 days, 0:00:00", datetime="P7D")),
+                dominate.tags.span(
+                    "Remaining time: ",
+                    dominate.util.raw(HTMLTimeTag("7 days, 0:00:00", datetime="P7D").render(pretty=False)),
+                ),
                 cls="poll-metadata",
             ),
         ),
@@ -213,7 +229,12 @@ poll_with_extra_choice_without_any_results_attached = (
             dominate.tags.div(
                 dominate.tags.span("810 votes"),
                 dominate.tags.span("•", cls="separator"),
-                dominate.tags.span("Ended on: ", HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00")),
+                dominate.tags.span(
+                    "Ended on: ",
+                    dominate.util.raw(
+                        HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00").render(pretty=False)
+                    ),
+                ),
                 cls="poll-metadata",
             ),
         ),
@@ -289,7 +310,12 @@ mock_tied_poll = (
             dominate.tags.div(
                 dominate.tags.span("1060 votes"),
                 dominate.tags.span("•", cls="separator"),
-                dominate.tags.span("Ended on: ", HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00")),
+                dominate.tags.span(
+                    "Ended on: ",
+                    dominate.util.raw(
+                        HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00").render(pretty=False)
+                    ),
+                ),
                 cls="poll-metadata",
             ),
         ),
@@ -365,7 +391,12 @@ mock_multiple_winners_poll = (
             dominate.tags.div(
                 dominate.tags.span("2000 votes"),
                 dominate.tags.span("•", cls="separator"),
-                dominate.tags.span("Ended on: ", HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00")),
+                dominate.tags.span(
+                    "Ended on: ",
+                    dominate.util.raw(
+                        HTMLTimeTag("2023-01-08 00:00:20", datetime="2023-01-08T00:00").render(pretty=False)
+                    ),
+                ),
                 cls="poll-metadata",
             ),
         ),

@@ -1,10 +1,11 @@
 import datetime
 import urllib.parse
+from typing import Callable
 
 import dominate.tags
 import dominate.util
 
-from . import text, image, misc, attribution
+from . import text, image, misc, attribution, i18n
 from .. import objects, helpers, exceptions
 
 
@@ -30,7 +31,16 @@ class HTMLTimeTag(dominate.tags.html_tag):
 
 
 class Formatter(helpers.CursorIterator):
-    def __init__(self, content, layout=None, *, url_handler=None, forbid_external_iframes=False, truncate=True):
+    def __init__(
+        self,
+        content,
+        layout=None,
+        *,
+        localizer: dict[str, str | Callable] = i18n.DEFAULT_LOCALIZATION,
+        url_handler=None,
+        forbid_external_iframes=False,
+        truncate=True,
+    ):
         """Initializes the parser with a list of content blocks (json objects) to parse"""
         super().__init__(content)
 
@@ -43,6 +53,7 @@ class Formatter(helpers.CursorIterator):
         self.current_context_padding = 0
         self.render_instructions = []
 
+        self.localizer = localizer  # type : ignore
         self.url_handler = url_handler
         self.forbid_external_iframes = forbid_external_iframes
         self.truncate = truncate
@@ -74,11 +85,8 @@ class Formatter(helpers.CursorIterator):
 
         with dominate.tags.div(cls="unsupported-content-block") as unsupported:
             with dominate.tags.div(cls="unsupported-content-block-message"):
-                dominate.tags.h1("Unsupported content placeholder")
-                dominate.tags.p(
-                    f'Hello! I\'m a placeholder for the unsupported "{block.type}" type NPF content block.'
-                    f" Please report me!"
-                )
+                dominate.tags.h1(self.localizer["unsupported_block_header"])
+                dominate.tags.p(self.localizer["unsupported_block_description"])
 
         return unsupported
 
@@ -87,10 +95,7 @@ class Formatter(helpers.CursorIterator):
         figure = dominate.tags.figure(cls="image-block")
 
         image_container = image.format_image(
-            block,
-            row_length,
-            url_handler=self.url_handler,
-            override_padding=override_padding,
+            block, row_length, url_handler=self.url_handler, override_padding=override_padding, localizer=self.localizer
         )
 
         figure.add(image_container)
@@ -101,15 +106,15 @@ class Formatter(helpers.CursorIterator):
         # Add attribution HTML
         if attr := block.attribution:
             if isinstance(attr, objects.attribution.LinkAttribution):
-                figure.add(attribution.format_link_attribution(attr, self.url_handler))
+                figure.add(attribution.format_link_attribution(attr, self.url_handler, self.localizer))
             elif isinstance(attr, objects.attribution.PostAttribution):
-                figure.add(attribution.format_post_attribution(attr, self.url_handler))
+                figure.add(attribution.format_post_attribution(attr, self.url_handler, self.localizer))
             elif isinstance(attr, objects.attribution.BlogAttribution):
-                figure.add(attribution.format_blog_attribution(attr, self.url_handler))
+                figure.add(attribution.format_blog_attribution(attr, self.url_handler, self.localizer))
             elif isinstance(attr, objects.attribution.AppAttribution):
-                figure.add(attribution.format_app_attribution(attr, self.url_handler))
+                figure.add(attribution.format_app_attribution(attr, self.url_handler, self.localizer))
             else:
-                figure.add(attribution.format_unsupported_attribution(attr))
+                figure.add(attribution.format_unsupported_attribution(attr, self.localizer))
 
         return figure
 
@@ -127,7 +132,7 @@ class Formatter(helpers.CursorIterator):
             poster_container.add(
                 dominate.tags.img(
                     srcset=srcset,
-                    alt=block.site_name or "Link block poster",
+                    alt=block.site_name or self.localizer["link_block_poster_alt_text"].format(site=block.url),
                     sizes="(max-width: 540px) 100vh, 540px",
                 )
             )
@@ -203,8 +208,8 @@ class Formatter(helpers.CursorIterator):
             if not media_url.hostname.endswith(".tumblr.com"):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    title="Error: Cannot construct video player",
-                    description="Please click me to watch on the original site",
+                    title=self.localizer["error_link_block_fallback_native_video_player_non_tumblr_source"],
+                    description=self.localizer["video_link_block_fallback_description"],
                 )
 
             additional_attrs = {}
@@ -250,11 +255,15 @@ class Formatter(helpers.CursorIterator):
         if not video:
             if self.forbid_external_iframes and (block.embed_html or block.embed_url or block.embed_iframe):
                 return self._audiovisual_link_block_fallback(
-                    block, "Embeds are disabled", f"Please click me to watch on the original site"
+                    block,
+                    self.localizer["link_block_fallback_embeds_are_disabled"],  # type: ignore
+                    self.localizer["video_link_block_fallback_description"],  # type: ignore
                 )
             else:
                 return self._audiovisual_link_block_fallback(
-                    block, "Error: unable to render video block", f"Please click me to watch on the original site"
+                    block,
+                    self.localizer["error_video_link_block_fallback_heading"],  # type: ignore
+                    self.localizer["video_link_block_fallback_description"],  # type: ignore
                 )
 
         video_block = dominate.tags.div(**root_video_block_attrs)
@@ -291,8 +300,8 @@ class Formatter(helpers.CursorIterator):
             if not media_url.hostname.endswith(".tumblr.com"):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    title="Error: Cannot construct audio player",
-                    description="Please click me to listen on the original site",
+                    title=self.localizer["error_link_block_fallback_native_audio_player_non_tumblr_source"],  # type: ignore
+                    description=self.localizer["audio_link_block_fallback_description"],  # type: ignore
                     site_name=media_url.hostname,
                 )
 
@@ -320,7 +329,7 @@ class Formatter(helpers.CursorIterator):
                     dominate.tags.img(
                         src=self.url_handler(block.poster[0].url),
                         srcset=", ".join(image.create_srcset(block.poster, self.url_handler)),
-                        alt=block.title or "Audio block poster",
+                        alt=block.title or self.localizer["fallback_audio_block_thumbnail_alt_text"],
                         sizes="(max-width: 540px) 100vh, 540px",
                         cls="ab-poster",
                     )
@@ -348,11 +357,15 @@ class Formatter(helpers.CursorIterator):
         if not audio:
             if self.forbid_external_iframes and (block.embed_html or block.embed_url):
                 return self._audiovisual_link_block_fallback(
-                    block, "Embeds are disabled", f"Please click me to listen on the original site"
+                    block,
+                    self.localizer["link_block_fallback_embeds_are_disabled"],  # type: ignore
+                    self.localizer["audio_link_block_fallback_description"],  # type: ignore
                 )
             else:
                 return self._audiovisual_link_block_fallback(
-                    block, "Error: unable to render audio block", f"Please click me to listen on the original site"
+                    block,
+                    self.localizer["error_audio_link_block_fallback_heading"],  # type: ignore
+                    self.localizer["audio_link_block_fallback_description"],  # type: ignore
                 )
 
         audio_block = dominate.tags.div(cls="audio-block")
@@ -391,31 +404,62 @@ class Formatter(helpers.CursorIterator):
             poll_body.add(poll_choice)
 
         footer = dominate.tags.footer()
-        with footer:
-            creation = datetime.datetime.fromtimestamp(block.creation_timestamp, datetime.timezone.utc)
-            expiration = datetime.datetime.fromtimestamp(
-                block.creation_timestamp + block.expires_after, datetime.timezone.utc
+
+        # creation = datetime.datetime.fromtimestamp(block.creation_timestamp, datetime.timezone.utc)
+
+        expiration = datetime.datetime.fromtimestamp(
+            block.creation_timestamp + block.expires_after, datetime.timezone.utc
+        )
+        now = datetime.datetime.now(datetime.timezone.utc)
+
+        # Timezone information is irrelevant
+        expiration = expiration.replace(tzinfo=None)
+        now = now.replace(tzinfo=None)
+
+        poll_metadata = dominate.tags.div(cls="poll-metadata")
+
+        if block.votes:
+            poll_metadata.add(
+                dominate.tags.span(self.localizer["plural_poll_total_votes"](block.total_votes)),
+                dominate.tags.span("•", cls="separator"),
             )
-            now = datetime.datetime.now(datetime.timezone.utc)
 
-            # Timezone information is irrelevant
-            expiration = expiration.replace(tzinfo=None)
-            now = now.replace(tzinfo=None)
+        # If not expired we display how many days till expired
 
-            # If not expired we display how many days till expired
-            with dominate.tags.div(cls="poll-metadata"):
-                if block.votes:
-                    dominate.tags.span(f"{block.total_votes} votes")
-                    dominate.tags.span("•", cls="separator")
-                if expiration > now:
-                    # Build time duration string
-                    remaining_time = expiration - now
-                    duration_string = helpers.build_duration_string(remaining_time)
-                    dominate.tags.span(f"Remaining time: ", HTMLTimeTag(str(remaining_time), datetime=duration_string))
-                else:
-                    formatted_expiration = expiration.strftime("%Y-%m-%dT%H:%M")
-                    dominate.tags.span(f"Ended on: ", HTMLTimeTag(str(expiration), datetime=formatted_expiration))
+        if expiration > now:
+            # Build time duration string
+            remaining_time = expiration - now
+            duration_string = self.localizer["format_duration_func"](remaining_time)  # type: ignore
 
+            poll_metadata.add(
+                dominate.tags.span(
+                    dominate.util.raw(
+                        self.localizer["poll_remaining_time"].format(  # type: ignore
+                            duration=HTMLTimeTag(
+                                duration_string, datetime=helpers.build_duration_string(remaining_time)
+                            ).render(pretty=False)
+                        )
+                    )
+                )
+            )
+
+        else:
+            human_readable_expiration = self.localizer["format_datetime_func"](expiration)  # type: ignore
+            formatted_expiration = expiration.strftime("%Y-%m-%dT%H:%M")
+
+            poll_metadata.add(
+                dominate.tags.span(
+                    dominate.util.raw(
+                        self.localizer["poll_ended_on"].format(  # type: ignore
+                            ended_date=HTMLTimeTag(human_readable_expiration, datetime=formatted_expiration).render(
+                                pretty=False
+                            )
+                        )
+                    )
+                )
+            )
+
+        footer.add(poll_metadata)
         poll_block.add(poll_body, footer)
 
         if now > expiration:
@@ -610,7 +654,12 @@ class Formatter(helpers.CursorIterator):
 
                     self.post.add(
                         dominate.tags.div(
-                            misc.format_ask(layout.attribution, *layout_items, url_handler=self.url_handler),
+                            misc.format_ask(
+                                layout.attribution,
+                                *layout_items,
+                                url_handler=self.url_handler,
+                                localizer=self.localizer,
+                            ),
                             cls="layout-ask",
                         )
                     )
