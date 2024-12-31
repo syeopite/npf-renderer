@@ -213,7 +213,11 @@ img.ab-poster {
   margin: 0 0 10px 0;
 }
 
-.poll-body {
+.poll-choices {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -254,6 +258,7 @@ img.ab-poster {
 }
 
 .answer {
+  margin: 0;
   flex: 1;
 }
 
