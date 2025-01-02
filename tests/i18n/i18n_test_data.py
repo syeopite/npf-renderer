@@ -203,12 +203,12 @@ def generate_mock_poll_based_on_number(number, expected_plural_form, poll_footer
                     dominate.tags.p(number, cls="vote-count"),
                     cls=poll_choice_winner_classes,
                 ),
-                cls="poll-choices"
+                cls="poll-choices",
             ),
         ),
         poll_footer,
         cls="poll-block" + (" expired-poll" if expired else "") + " populated",
-        aria_label="poll"
+        aria_label="poll",
     )
 
 
