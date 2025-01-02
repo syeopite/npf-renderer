@@ -175,37 +175,40 @@ def generate_mock_poll_based_on_number(number, expected_plural_form, poll_footer
             ),
         )
 
-    return dominate.tags.section(
+    return dominate.tags.article(
         dominate.tags.header(dominate.tags.h3("This is a question")),
-        dominate.tags.div(
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_attrs),
-                dominate.tags.span("answer 1", cls="answer"),
-                dominate.tags.span(0, cls="vote-count"),
-                cls=poll_choice_classes,
+        dominate.tags.section(
+            dominate.tags.ul(
+                dominate.tags.li(
+                    dominate.tags.h4("answer 1", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_attrs),
+                    dominate.tags.p(0, cls="vote-count"),
+                    cls=poll_choice_classes,
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 2", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_attrs),
+                    dominate.tags.p(0, cls="vote-count"),
+                    cls=poll_choice_classes,
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 3", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_attrs),
+                    dominate.tags.p(0, cls="vote-count"),
+                    cls=poll_choice_classes,
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 4", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_winner_attrs),
+                    dominate.tags.p(number, cls="vote-count"),
+                    cls=poll_choice_winner_classes,
+                ),
+                cls="poll-choices"
             ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_attrs),
-                dominate.tags.span("answer 2", cls="answer"),
-                dominate.tags.span(0, cls="vote-count"),
-                cls=poll_choice_classes,
-            ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_attrs),
-                dominate.tags.span("answer 3", cls="answer"),
-                dominate.tags.span(0, cls="vote-count"),
-                cls=poll_choice_classes,
-            ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_winner_attrs),
-                dominate.tags.span("answer 4", cls="answer"),
-                dominate.tags.span(number, cls="vote-count"),
-                cls=poll_choice_winner_classes,
-            ),
-            cls="poll-body",
         ),
         poll_footer,
         cls="poll-block" + (" expired-poll" if expired else "") + " populated",
+        aria_label="poll"
     )
 
 
