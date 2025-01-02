@@ -45,32 +45,34 @@ basic_poll_data = (
         },
         "timestamp": "1706611836",
     },
-    dominate.tags.div(
-        dominate.tags.div(
-            dominate.tags.span(cls="vote-proportion", style="width: 1.235%;"),
-            dominate.tags.span("answer 1", cls="answer"),
-            dominate.tags.span(10, cls="vote-count"),
-            cls="poll-choice",
+    dominate.tags.section(
+        dominate.tags.ul(
+            dominate.tags.li(
+                dominate.tags.h4("answer 1", cls="answer"),
+                dominate.tags.span(cls="vote-proportion", style="width: 1.235%;"),
+                dominate.tags.p(10, cls="vote-count"),
+                cls="poll-choice",
+            ),
+            dominate.tags.li(
+                dominate.tags.h4("answer 2", cls="answer"),
+                dominate.tags.span(cls="vote-proportion", style="width: 6.173%;"),
+                dominate.tags.p(50, cls="vote-count"),
+                cls="poll-choice",
+            ),
+            dominate.tags.li(
+                dominate.tags.h4("answer 3", cls="answer"),
+                dominate.tags.span(cls="vote-proportion", style="width: 61.728%;"),
+                dominate.tags.p(500, cls="vote-count"),
+                cls="poll-choice poll-winner",
+            ),
+            dominate.tags.li(
+                dominate.tags.h4("answer 4", cls="answer"),
+                dominate.tags.span(cls="vote-proportion", style="width: 30.864%;"),
+                dominate.tags.p(250, cls="vote-count"),
+                cls="poll-choice",
+            ),
+            cls="poll-choices",
         ),
-        dominate.tags.div(
-            dominate.tags.span(cls="vote-proportion", style="width: 6.173%;"),
-            dominate.tags.span("answer 2", cls="answer"),
-            dominate.tags.span(50, cls="vote-count"),
-            cls="poll-choice",
-        ),
-        dominate.tags.div(
-            dominate.tags.span(cls="vote-proportion", style="width: 61.728%;"),
-            dominate.tags.span("answer 3", cls="answer"),
-            dominate.tags.span(500, cls="vote-count"),
-            cls="poll-choice poll-winner",
-        ),
-        dominate.tags.div(
-            dominate.tags.span(cls="vote-proportion", style="width: 30.864%;"),
-            dominate.tags.span("answer 4", cls="answer"),
-            dominate.tags.span(250, cls="vote-count"),
-            cls="poll-choice",
-        ),
-        cls="poll-body",
     ),
 )
 
@@ -78,14 +80,16 @@ basic_poll_data = (
 simple_poll_expired = (
     {**basic_poll_data[0], "timestamp": 1672531220, "settings": {"expireAfter": "604800"}},
     objects.poll_block.PollBlock(**basic_poll_data[1], creation_timestamp=1672531220, expires_after=604800),
-    dominate.tags.section(
+    dominate.tags.article(
         dominate.tags.header(dominate.tags.h3("This is a question")),
-        dominate.tags.div(
-            dominate.tags.div(dominate.tags.span("answer 1", cls="answer"), cls="poll-choice"),
-            dominate.tags.div(dominate.tags.span("answer 2", cls="answer"), cls="poll-choice"),
-            dominate.tags.div(dominate.tags.span("answer 3", cls="answer"), cls="poll-choice"),
-            dominate.tags.div(dominate.tags.span("answer 4", cls="answer"), cls="poll-choice"),
-            cls="poll-body",
+        dominate.tags.section(
+            dominate.tags.ul(
+                dominate.tags.li(dominate.tags.h4("answer 1", cls="answer"), cls="poll-choice"),
+                dominate.tags.li(dominate.tags.h4("answer 2", cls="answer"), cls="poll-choice"),
+                dominate.tags.li(dominate.tags.h4("answer 3", cls="answer"), cls="poll-choice"),
+                dominate.tags.li(dominate.tags.h4("answer 4", cls="answer"), cls="poll-choice"),
+                cls="poll-choices",
+            ),
         ),
         dominate.tags.footer(
             dominate.tags.div(
@@ -99,8 +103,9 @@ simple_poll_expired = (
             ),
         ),
         cls="poll-block expired-poll",
+        aria_label="poll",
     ),
-    dominate.tags.section(
+    dominate.tags.article(
         dominate.tags.header(dominate.tags.h3("This is a question")),
         basic_poll_data[3],  # Answers
         dominate.tags.footer(
@@ -117,6 +122,7 @@ simple_poll_expired = (
             ),
         ),
         cls="poll-block expired-poll populated",
+        aria_label="poll",
     ),
 )
 
@@ -124,14 +130,16 @@ simple_poll_expired = (
 simple_ongoing_poll = (
     {**basic_poll_data[0], "timestamp": "1672531200", "settings": {"expireAfter": "604800"}},
     objects.poll_block.PollBlock(**basic_poll_data[1], creation_timestamp=1672531200, expires_after=604800),
-    dominate.tags.section(
+    dominate.tags.article(
         dominate.tags.header(dominate.tags.h3("This is a question")),
-        dominate.tags.div(
-            dominate.tags.div(dominate.tags.span("answer 1", cls="answer"), cls="poll-choice"),
-            dominate.tags.div(dominate.tags.span("answer 2", cls="answer"), cls="poll-choice"),
-            dominate.tags.div(dominate.tags.span("answer 3", cls="answer"), cls="poll-choice"),
-            dominate.tags.div(dominate.tags.span("answer 4", cls="answer"), cls="poll-choice"),
-            cls="poll-body",
+        dominate.tags.section(
+            dominate.tags.ul(
+                dominate.tags.li(dominate.tags.h4("answer 1", cls="answer"), cls="poll-choice"),
+                dominate.tags.li(dominate.tags.h4("answer 2", cls="answer"), cls="poll-choice"),
+                dominate.tags.li(dominate.tags.h4("answer 3", cls="answer"), cls="poll-choice"),
+                dominate.tags.li(dominate.tags.h4("answer 4", cls="answer"), cls="poll-choice"),
+                cls="poll-choices",
+            ),
         ),
         dominate.tags.footer(
             dominate.tags.div(
@@ -143,8 +151,9 @@ simple_ongoing_poll = (
             ),
         ),
         cls="poll-block",
+        aria_label="poll",
     ),
-    dominate.tags.section(
+    dominate.tags.article(
         dominate.tags.header(dominate.tags.h3("This is a question")),
         basic_poll_data[3],  # Answers
         dominate.tags.footer(
@@ -159,6 +168,7 @@ simple_ongoing_poll = (
             ),
         ),
         cls="poll-block populated",
+        aria_label="poll",
     ),
 )
 
@@ -190,40 +200,42 @@ poll_with_extra_choice_without_any_results_attached = (
         creation_timestamp=1672531220,
         expires_after=604800,
     ),
-    dominate.tags.section(
+    dominate.tags.article(
         dominate.tags.header(dominate.tags.h3("This is a question")),
-        dominate.tags.div(
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 1.235%;"),
-                dominate.tags.span("answer 1", cls="answer"),
-                dominate.tags.span(10, cls="vote-count"),
-                cls="poll-choice",
+        dominate.tags.section(
+            dominate.tags.ul(
+                dominate.tags.li(
+                    dominate.tags.h4("answer 1", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 1.235%;"),
+                    dominate.tags.p(10, cls="vote-count"),
+                    cls="poll-choice",
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 2", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 6.173%;"),
+                    dominate.tags.p(50, cls="vote-count"),
+                    cls="poll-choice",
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 3", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 61.728%;"),
+                    dominate.tags.p(500, cls="vote-count"),
+                    cls="poll-choice poll-winner",
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 4", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 30.864%;"),
+                    dominate.tags.p(250, cls="vote-count"),
+                    cls="poll-choice",
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 5", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 0.0%;"),
+                    dominate.tags.p(0, cls="vote-count"),
+                    cls="poll-choice",
+                ),
+                cls="poll-choices",
             ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 6.173%;"),
-                dominate.tags.span("answer 2", cls="answer"),
-                dominate.tags.span(50, cls="vote-count"),
-                cls="poll-choice",
-            ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 61.728%;"),
-                dominate.tags.span("answer 3", cls="answer"),
-                dominate.tags.span(500, cls="vote-count"),
-                cls="poll-choice poll-winner",
-            ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 30.864%;"),
-                dominate.tags.span("answer 4", cls="answer"),
-                dominate.tags.span(250, cls="vote-count"),
-                cls="poll-choice",
-            ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 0.0%;"),
-                dominate.tags.span("answer 5", cls="answer"),
-                dominate.tags.span(0, cls="vote-count"),
-                cls="poll-choice",
-            ),
-            cls="poll-body",
         ),
         dominate.tags.footer(
             dominate.tags.div(
@@ -239,6 +251,7 @@ poll_with_extra_choice_without_any_results_attached = (
             ),
         ),
         cls="poll-block expired-poll populated",
+        aria_label="poll",
     ),
 )
 
@@ -277,34 +290,36 @@ mock_tied_poll = (
         },
         "timestamp": "1706611836",
     },
-    dominate.tags.section(
+    dominate.tags.article(
         dominate.tags.header(dominate.tags.h3("This is a question")),
-        dominate.tags.div(
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 0.943%;"),
-                dominate.tags.span("answer 1", cls="answer"),
-                dominate.tags.span(10, cls="vote-count"),
-                cls="poll-choice",
+        dominate.tags.section(
+            dominate.tags.ul(
+                dominate.tags.li(
+                    dominate.tags.h4("answer 1", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 0.943%;"),
+                    dominate.tags.p(10, cls="vote-count"),
+                    cls="poll-choice",
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 2", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 4.717%;"),
+                    dominate.tags.p(50, cls="vote-count"),
+                    cls="poll-choice",
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 3", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 47.17%;"),
+                    dominate.tags.p(500, cls="vote-count"),
+                    cls="poll-choice poll-winner",
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 4", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 47.17%;"),
+                    dominate.tags.p(500, cls="vote-count"),
+                    cls="poll-choice poll-winner",
+                ),
+                cls="poll-choices",
             ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 4.717%;"),
-                dominate.tags.span("answer 2", cls="answer"),
-                dominate.tags.span(50, cls="vote-count"),
-                cls="poll-choice",
-            ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 47.17%;"),
-                dominate.tags.span("answer 3", cls="answer"),
-                dominate.tags.span(500, cls="vote-count"),
-                cls="poll-choice poll-winner",
-            ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 47.17%;"),
-                dominate.tags.span("answer 4", cls="answer"),
-                dominate.tags.span(500, cls="vote-count"),
-                cls="poll-choice poll-winner",
-            ),
-            cls="poll-body",
         ),
         dominate.tags.footer(
             dominate.tags.div(
@@ -320,6 +335,7 @@ mock_tied_poll = (
             ),
         ),
         cls="poll-block expired-poll populated",
+        aria_label="poll",
     ),
 )
 
@@ -358,34 +374,36 @@ mock_multiple_winners_poll = (
         },
         "timestamp": "1706611836",
     },
-    dominate.tags.section(
+    dominate.tags.article(
         dominate.tags.header(dominate.tags.h3("This is a question")),
-        dominate.tags.div(
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 25.0%;"),
-                dominate.tags.span("answer 1", cls="answer"),
-                dominate.tags.span(500, cls="vote-count"),
-                cls="poll-choice poll-winner",
-            ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 25.0%;"),
-                dominate.tags.span("answer 2", cls="answer"),
-                dominate.tags.span(500, cls="vote-count"),
-                cls="poll-choice poll-winner",
-            ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 25.0%;"),
-                dominate.tags.span("answer 3", cls="answer"),
-                dominate.tags.span(500, cls="vote-count"),
-                cls="poll-choice poll-winner",
-            ),
-            dominate.tags.div(
-                dominate.tags.span(cls="vote-proportion", style="width: 25.0%;"),
-                dominate.tags.span("answer 4", cls="answer"),
-                dominate.tags.span(500, cls="vote-count"),
-                cls="poll-choice poll-winner",
-            ),
-            cls="poll-body",
+        dominate.tags.section(
+            dominate.tags.ul(
+                dominate.tags.li(
+                    dominate.tags.h4("answer 1", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 25.0%;"),
+                    dominate.tags.p(500, cls="vote-count"),
+                    cls="poll-choice poll-winner",
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 2", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 25.0%;"),
+                    dominate.tags.p(500, cls="vote-count"),
+                    cls="poll-choice poll-winner",
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 3", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 25.0%;"),
+                    dominate.tags.p(500, cls="vote-count"),
+                    cls="poll-choice poll-winner",
+                ),
+                dominate.tags.li(
+                    dominate.tags.h4("answer 4", cls="answer"),
+                    dominate.tags.span(cls="vote-proportion", style="width: 25.0%;"),
+                    dominate.tags.p(500, cls="vote-count"),
+                    cls="poll-choice poll-winner",
+                ),
+                cls="poll-choices",
+            )
         ),
         dominate.tags.footer(
             dominate.tags.div(
@@ -401,5 +419,6 @@ mock_multiple_winners_poll = (
             ),
         ),
         cls="poll-block expired-poll populated",
+        aria_label="poll",
     ),
 )

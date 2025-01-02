@@ -374,34 +374,35 @@ class Formatter(helpers.CursorIterator):
 
     def _format_poll(self, block):
         """Renders a parsed NPF poll block into HTML"""
-        poll_block = dominate.tags.section(cls="poll-block")
+        poll_block = dominate.tags.article(cls="poll-block", aria_label="poll")
         with poll_block:
             with dominate.tags.header():
                 dominate.tags.h3(block.question)
 
-        poll_body = dominate.tags.div(cls="poll-body")
+        poll_body = dominate.tags.section()
+        poll_choices = dominate.tags.ul(cls="poll-choices")
 
         for answer_id, answer in block.answers.items():
-            poll_choice = dominate.tags.div(cls="poll-choice")
-            poll_answer = dominate.tags.span(answer, cls="answer")
+            with dominate.tags.li(cls="poll-choice") as poll_choice:
+                dominate.tags.h4(answer, cls="answer")
 
-            if block.votes:
-                votes = block.votes.results.get(answer_id, [False, 0])
+                if block.votes:
+                    votes = block.votes.results.get(answer_id, [False, 0])
 
-                if votes[0] is True:
-                    poll_choice["class"] += " poll-winner"
+                    if votes[0] is True:
+                        poll_choice["class"] += " poll-winner"
 
-                poll_vote_proportion_element = dominate.tags.span(cls="vote-proportion")
-                if block.total_votes != 0:
-                    poll_vote_proportion_element["style"] = f"width: {round((votes[1]/block.total_votes) * 100, 3)}%;"
+                    poll_vote_proportion_element = dominate.tags.span(cls="vote-proportion")
+                    if block.total_votes != 0:
+                        poll_vote_proportion_element["style"] = (
+                            f"width: {round((votes[1]/block.total_votes) * 100, 3)}%;"
+                        )
 
-                poll_vote_count = dominate.tags.span(votes[1], cls="vote-count")
+                    dominate.tags.p(votes[1], cls="vote-count")
 
-                poll_choice.add(poll_vote_proportion_element, poll_answer, poll_vote_count)
-            else:
-                poll_choice.add(poll_answer)
+            poll_choices.add(poll_choice)
 
-            poll_body.add(poll_choice)
+        poll_body.add(poll_choices)
 
         footer = dominate.tags.footer()
 
