@@ -40,13 +40,9 @@ BASIC_LAYOUT_CSS = """
     position: relative;
 }
 
-.image-container img {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
 .image-container img, .link-block img {
+  display: block;
+
   height: 100%;
   width: 100%;
   max-width: 100%;

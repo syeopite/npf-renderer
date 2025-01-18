@@ -21,7 +21,7 @@ def format_image(
     image_block,
     row_length=1,
     url_handler=lambda url: url,
-    override_padding=None,
+    override_aspect_ratio=None,
     original_media=None,
     localizer: dict = {},
 ):
@@ -43,8 +43,8 @@ def format_image(
 
     processed_media_blocks = []
 
-    # Whether or not to preserve image space based on the aspect ratio
-    pad = True
+    # Whether images should follow a specific aspect ratio
+    with_aspect_ratio = True
 
     # Skip cropped images and attempt to fetch the media object with the
     # original dimensions to be used in the src= attribute
@@ -73,14 +73,14 @@ def format_image(
             # TODO find more examples of these bugged images and find a proper solution
             # Perhaps this could be a RenderDisclaimerError ? The post itself is fine. It is just weird.
             image_attributes["style"] = f"width: {original_media.width}px; height: {original_media.height}px;"
-            pad = False
+            with_aspect_ratio = False
 
-    if pad:
-        if override_padding:
-            container_attributes["style"] = f"padding-bottom: {override_padding}%;"
+    if with_aspect_ratio:
+        if override_aspect_ratio:
+            container_attributes["style"] = f"aspect-ratio: {override_aspect_ratio};"
         else:
             height, width = original_media.height, original_media.width
-            container_attributes["style"] = f"padding-bottom: {round((height / width) * 100, 4)}%;"
+            container_attributes["style"] = f"aspect-ratio: {round(width/height, 4)};"
 
     container = dominate.tags.div(**container_attributes)
 
