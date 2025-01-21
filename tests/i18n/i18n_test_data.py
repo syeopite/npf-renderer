@@ -14,7 +14,7 @@ def generate_image_block_html(index, siblings):
                 alt="image",
             ),
             cls="image-container",
-            style="padding-bottom: 75.0%;",
+            style="aspect-ratio: 1.3333;",
         ),
     )
 

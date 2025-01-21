@@ -90,12 +90,16 @@ class Formatter(helpers.CursorIterator):
 
         return unsupported
 
-    def _format_image(self, block, row_length=1, override_padding=None):
+    def _format_image(self, block, row_length=1, override_aspect_ratio=None):
         """Renders an ImageBlock into HTML"""
         figure = dominate.tags.figure(cls="image-block")
 
         image_container = image.format_image(
-            block, row_length, url_handler=self.url_handler, override_padding=override_padding, localizer=self.localizer
+            block,
+            row_length,
+            url_handler=self.url_handler,
+            override_aspect_ratio=override_aspect_ratio,
+            localizer=self.localizer,
         )
 
         figure.add(image_container)
@@ -619,12 +623,12 @@ class Formatter(helpers.CursorIterator):
                                     continue
 
                                 images_in_row.append((item_index, item[0]))
-                                original_media_ratios.append(round((item[1].height / item[1].width) * 100, 4))
+                                original_media_ratios.append(round((item[1].width / item[1].height), 4))
 
-                            padding_ratio = min(original_media_ratios)
+                            aspect_ratio = max(original_media_ratios)
                             for index, render_instruction_args in images_in_row:
                                 row_items[index] = self._format_image(
-                                    *render_instruction_args, len(images_in_row), override_padding=padding_ratio
+                                    *render_instruction_args, len(images_in_row), override_aspect_ratio=aspect_ratio
                                 )
 
                         row_tag = dominate.tags.div(cls="layout-row")

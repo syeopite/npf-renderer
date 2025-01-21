@@ -90,7 +90,7 @@ basic_image_block = (
                     sizes="(max-width: 540px) 100vh, 540px",
                 ),
                 cls="image-container",
-                style="padding-bottom: 84.0625%;",
+                style="aspect-ratio: 1.1896;",
             ),
             dominate.tags.figcaption("I'm living my best life on earth.", cls="image-caption"),
             cls="image-block",
@@ -138,9 +138,10 @@ basic_gif_image_block = (
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
-        container_style="padding-bottom: 80.0%;",
+        container_style="aspect-ratio: 1.25;",
     ),
 )
+
 
 image_block_with_color_attr = (
     [
@@ -181,7 +182,7 @@ image_block_with_color_attr = (
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
-        container_style="padding-bottom: 83.8281%;",
+        container_style="aspect-ratio: 1.1929;",
     ),
 )
 
@@ -237,7 +238,7 @@ gif_image_block_with_poster = (
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
-        container_style="padding-bottom: 80.0%;",
+        container_style="aspect-ratio: 1.25;",
     ),
 )
 
@@ -293,7 +294,7 @@ gif_image_block_with_post_attribution = (
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
-        container_style="padding-bottom: 48.7395%;",
+        container_style="aspect-ratio: 2.0517;",
         figure_children=(
             dominate.tags.div(
                 dominate.tags.a(
@@ -360,7 +361,7 @@ gif_image_block_with_link_attribution = (
             sizes="(max-width: 540px) 100vh, 540px",
             alt="image",
         ),
-        container_style="padding-bottom: 140.0%;",
+        container_style="aspect-ratio: 0.7143;",
         figure_children=(
             dominate.tags.div(
                 dominate.tags.a(
@@ -488,7 +489,7 @@ image_block_with_app_attribution = (
                     alt="image",
                 ),
                 cls="image-container",
-                style="padding-bottom: 92.8205%;",
+                style="aspect-ratio: 1.0773;",
             ),
             cls="image-block",
         ),
@@ -511,7 +512,7 @@ image_block_with_app_attribution = (
                     alt="image",
                 ),
                 cls="image-container",
-                style="padding-bottom: 130.292%;",
+                style="aspect-ratio: 0.7675;",
             ),
             dominate.tags.div(
                 dominate.tags.a(
@@ -656,7 +657,7 @@ image_block_with_blog_attribution = (
                     alt="image",
                 ),
                 cls="image-container",
-                style="padding-bottom: 92.8205%;",
+                style="aspect-ratio: 1.0773;",
             ),
             cls="image-block",
         ),
@@ -679,7 +680,7 @@ image_block_with_blog_attribution = (
                     alt="image",
                 ),
                 cls="image-container",
-                style="padding-bottom: 130.292%;",
+                style="aspect-ratio: 0.7675;",
             ),
             dominate.tags.div(
                 dominate.tags.a(
@@ -805,7 +806,7 @@ image_block_with_unknown_attribution = (
                     alt="image",
                 ),
                 cls="image-container",
-                style="padding-bottom: 92.8205%;",
+                style="aspect-ratio: 1.0773;",
             ),
             cls="image-block",
         ),
@@ -828,7 +829,7 @@ image_block_with_unknown_attribution = (
                     alt="image",
                 ),
                 cls="image-container",
-                style="padding-bottom: 130.292%;",
+                style="aspect-ratio: 0.7675;",
             ),
             dominate.tags.div(
                 dominate.tags.p(
@@ -918,7 +919,7 @@ image_block_with_replaced_link = (
                     sizes="(max-width: 540px) 100vh, 540px",
                 ),
                 cls="image-container",
-                style="padding-bottom: 84.0625%;",
+                style="aspect-ratio: 1.1896;",
             ),
             dominate.tags.figcaption("I'm living my best life on earth.", cls="image-caption"),
             cls="image-block",
@@ -975,7 +976,7 @@ skips_cropped_image_block_test = (
                     sizes="(max-width: 540px) 100vh, 540px",
                 ),
                 cls="image-container",
-                style="padding-bottom: 150.0%;",
+                style="aspect-ratio: 0.6667;",
             ),
             cls="image-block",
         ),
