@@ -95,7 +95,11 @@ class Formatter(helpers.CursorIterator):
         figure = dominate.tags.figure(cls="image-block")
 
         image_container = image.format_image(
-            block, row_length, url_handler=self.url_handler, override_aspect_ratio=override_aspect_ratio, localizer=self.localizer
+            block,
+            row_length,
+            url_handler=self.url_handler,
+            override_aspect_ratio=override_aspect_ratio,
+            localizer=self.localizer,
         )
 
         figure.add(image_container)
