@@ -32,8 +32,6 @@ DEFAULT_LOCALIZATION = {
         "blog_attribution": "Created by {author}",
         "app_attribution": "View on {platform}",
         "unsupported_attribution": 'Attributed via an unsupported ("{attributee}") attribution type. Please report this over at https://github.com/syeopite/npf-renderer',
-        "format_duration_func": lambda duration: str(duration),
-        "format_datetime_func": lambda datetime: str(datetime),
     },
     "formats": {
         "duration": {
