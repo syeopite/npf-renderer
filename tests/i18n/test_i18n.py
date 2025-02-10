@@ -82,3 +82,22 @@ def test_can_format_datetime():
         poll_callback=lambda _: mocks.generate_results_for_poll(250),
         test_localizer=mocks.can_format_datetime["localizer"],
     )
+
+
+@freeze_time("2024-01-01 00:00:00")
+def test_can_format_numbers():
+    helper_function(
+        content=mocks.can_format_numbers["contents"],
+        answer=dominate.tags.div(
+            mocks.generate_mock_poll_based_on_number(
+                "2,500!",
+                None,
+                poll_footer=mocks.can_format_numbers["poll_footer"],
+                expired=True,
+                other_vote_count_strings="0!",
+            ),
+            cls="post-body",
+        ),
+        poll_callback=lambda _: mocks.generate_results_for_poll(2500),
+        test_localizer=mocks.can_format_numbers["localizer"],
+    )

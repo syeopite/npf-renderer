@@ -25,7 +25,7 @@ DEFAULT_LOCALIZATION = {
         "error_audio_link_block_fallback_heading": "Error: unable to render audio block",
         "audio_link_block_fallback_description": "Please click me to listen on the original site",
         "error_link_block_fallback_native_audio_player_non_tumblr_source": "Error: non-tumblr source for audio player",
-        "plural_poll_total_votes": lambda votes: f"{votes} votes",
+        "plural_poll_total_votes": lambda votes: "{votes} votes",
         "poll_remaining_time": "Remaining time: {duration}",
         "poll_ended_on": "Ended on: {ended_date}",
         "post_attribution": "From {author}",
@@ -43,6 +43,11 @@ DEFAULT_LOCALIZATION = {
         "datetime": {
             "__default__": lambda datetime: str(datetime)
             # "poll_ended_on": lambda duration: str(duration)
+        },
+        "decimal": {
+            "__default__": lambda decimal: decimal
+            # "poll_votes": lambda decimal: decimal
+            # "poll-choice-vote-count": lambda decimal: decimal
         },
     },
 }
@@ -64,25 +69,27 @@ def translate(localizer, key, *, number=None, **substitution):
         raise MissingTranslationKey()
 
 
-# Retrieves and formats a datetime with the given key. Fallbacks to __default__ key if the given key cannot be found
+def _format_value(localizer, value_type, key, *args, **kwargs):
+    try:
+        formats_localizer = localizer["formats"][value_type]
+        format_func = formats_localizer.get(key, formats_localizer.get("__default__"))
+
+        if format_func is not None:
+            return format_func(*args, **kwargs)
+        else:
+            raise MissingTranslationKey()
+    except KeyError:
+        raise MissingTranslationKey()
+
+
+# Specific functions for formatting datetime, duration, and decimal
 def format_datetime(localizer, key, *args, **kwargs):
-    try:
-        formats_localizer = localizer["formats"]["datetime"]
-        if (format_func := formats_localizer.get(key, None)) and format_func is not None:
-            return format_func(*args, **kwargs)
-        else:
-            return formats_localizer["__default__"](*args, **kwargs)
-    except KeyError:
-        raise MissingTranslationKey()
+    return _format_value(localizer, "datetime", key, *args, **kwargs)
 
 
-# Retrieves and formats a duration with the given key. Fallbacks to __default__ key if the given key cannot be found
 def format_duration(localizer, key, *args, **kwargs):
-    try:
-        formats_localizer = localizer["formats"]["duration"]
-        if (format_func := formats_localizer.get(key, None)) and format_func is not None:
-            return format_func(*args, **kwargs)
-        else:
-            return formats_localizer["__default__"](*args, **kwargs)
-    except KeyError:
-        raise MissingTranslationKey()
+    return _format_value(localizer, "duration", key, *args, **kwargs)
+
+
+def format_decimal(localizer, key, *args, **kwargs):
+    return _format_value(localizer, "decimal", key, *args, **kwargs)

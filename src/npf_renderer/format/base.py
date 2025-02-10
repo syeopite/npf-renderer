@@ -405,7 +405,9 @@ class Formatter(helpers.CursorIterator):
                             f"width: {round((votes[1]/block.total_votes) * 100, 3)}%;"
                         )
 
-                    dominate.tags.p(votes[1], cls="vote-count")
+                    dominate.tags.p(
+                        i18n.format_decimal(self.localizer, "poll-choice-vote-count", votes[1]), cls="vote-count"
+                    )
 
             poll_choices.add(poll_choice)
 
@@ -428,7 +430,14 @@ class Formatter(helpers.CursorIterator):
 
         if block.votes:
             poll_metadata.add(
-                dominate.tags.span(i18n.translate(self.localizer, "plural_poll_total_votes", number=block.total_votes)),
+                dominate.tags.span(
+                    i18n.translate(
+                        self.localizer,
+                        "plural_poll_total_votes",
+                        number=block.total_votes,
+                        votes=i18n.format_decimal(self.localizer, "poll_votes", block.total_votes),
+                    )
+                ),
                 dominate.tags.span("•", cls="separator"),
             )
 
