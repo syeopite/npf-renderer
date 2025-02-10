@@ -3,6 +3,7 @@ from typing import Callable
 
 import dominate.tags
 
+from . import i18n
 from .. import objects
 
 
@@ -20,7 +21,9 @@ def format_post_attribution(attr: objects.attribution.PostAttribution, url_handl
     return dominate.tags.div(
         dominate.tags.a(
             dominate.util.raw(
-                localizer["post_attribution"].format(dominate.tags.b(attr.blog.name).render(pretty=False))
+                i18n.translate(
+                    localizer, "post_attribution", author=dominate.tags.b(attr.blog.name).render(pretty=False)
+                )
             ),
             href=url_handler(attr.url),
         ),
@@ -32,7 +35,9 @@ def format_blog_attribution(attr: objects.attribution.BlogAttribution, url_handl
     result = dominate.tags.div(
         dominate.tags.a(
             dominate.util.raw(
-                localizer["blog_attribution"].format(dominate.tags.b(attr.name or "Anonymous").render(pretty=False))
+                i18n.translate(
+                    localizer, "blog_attribution", author=dominate.tags.b(attr.name or "Anonymous").render(pretty=False)
+                )
             ),
             href=url_handler(attr.url),
         ),
@@ -45,7 +50,11 @@ def format_blog_attribution(attr: objects.attribution.BlogAttribution, url_handl
 def format_app_attribution(attr: objects.attribution.AppAttribution, url_handler: Callable, localizer):
     return dominate.tags.div(
         dominate.tags.a(
-            dominate.util.raw(localizer["app_attribution"].format(dominate.tags.b(attr.app_name).render(pretty=False))),
+            dominate.util.raw(
+                i18n.translate(
+                    localizer, "app_attribution", platform=dominate.tags.b(attr.app_name).render(pretty=False)
+                )
+            ),
             href=url_handler(attr.url),
         ),
         cls="post-attribution",
@@ -55,7 +64,7 @@ def format_app_attribution(attr: objects.attribution.AppAttribution, url_handler
 def format_unsupported_attribution(attr: objects.attribution.UnsupportedAttribution, localizer):
     return dominate.tags.div(
         dominate.tags.p(
-            localizer["unsupported_attribution"].format(attr.type_),
+            i18n.translate(localizer, "unsupported_attribution", attributee=attr.type_),
         ),
         cls="unknown-attribution",
     )

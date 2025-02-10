@@ -1,6 +1,6 @@
 import dominate.tags
 
-from .. import objects
+from . import i18n
 
 
 def create_srcset(media_blocks, url_handler):
@@ -90,7 +90,7 @@ def format_image(
             srcset=", ".join(create_srcset(processed_media_blocks, url_handler)),
             cls="image",
             loading="lazy",
-            alt=image_block.alt_text or localizer["generic_image_alt_text"],
+            alt=image_block.alt_text or i18n.translate(localizer, "generic_image_alt_text"),
             sizes=f"(max-width: 540px) {int(100 / row_length)}vh, {int(540 / row_length)}px",
             **image_attributes,
         )
