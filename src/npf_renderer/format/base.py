@@ -85,8 +85,8 @@ class Formatter(helpers.CursorIterator):
 
         with dominate.tags.div(cls="unsupported-content-block") as unsupported:
             with dominate.tags.div(cls="unsupported-content-block-message"):
-                dominate.tags.h1(self.localizer["unsupported_block_header"])
-                dominate.tags.p(self.localizer["unsupported_block_description"])
+                dominate.tags.h1(i18n.translate(self.localizer, "unsupported_block_header"))
+                dominate.tags.p(i18n.translate(self.localizer, "unsupported_block_description"))
 
         return unsupported
 
@@ -136,7 +136,8 @@ class Formatter(helpers.CursorIterator):
             poster_container.add(
                 dominate.tags.img(
                     srcset=srcset,
-                    alt=block.site_name or self.localizer["link_block_poster_alt_text"].format(site=block.url),
+                    alt=block.site_name
+                    or i18n.translate(self.localizer, "link_block_poster_alt_text").format(site=block.url),
                     sizes="(max-width: 540px) 100vh, 540px",
                 )
             )
@@ -212,8 +213,10 @@ class Formatter(helpers.CursorIterator):
             if not media_url.hostname.endswith(".tumblr.com"):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    title=self.localizer["error_link_block_fallback_native_video_player_non_tumblr_source"],
-                    description=self.localizer["video_link_block_fallback_description"],
+                    title=i18n.translate(
+                        self.localizer, "error_link_block_fallback_native_video_player_non_tumblr_source"
+                    ),
+                    description=i18n.translate(self.localizer, "video_link_block_fallback_description"),
                 )
 
             additional_attrs = {}
@@ -260,14 +263,14 @@ class Formatter(helpers.CursorIterator):
             if self.forbid_external_iframes and (block.embed_html or block.embed_url or block.embed_iframe):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    self.localizer["link_block_fallback_embeds_are_disabled"],  # type: ignore
-                    self.localizer["video_link_block_fallback_description"],  # type: ignore
+                    i18n.translate(self.localizer, "link_block_fallback_embeds_are_disabled"),  # type: ignore
+                    i18n.translate(self.localizer, "video_link_block_fallback_description"),  # type: ignore
                 )
             else:
                 return self._audiovisual_link_block_fallback(
                     block,
-                    self.localizer["error_video_link_block_fallback_heading"],  # type: ignore
-                    self.localizer["video_link_block_fallback_description"],  # type: ignore
+                    i18n.translate(self.localizer, "error_video_link_block_fallback_heading"),  # type: ignore
+                    i18n.translate(self.localizer, "video_link_block_fallback_description"),  # type: ignore
                 )
 
         video_block = dominate.tags.div(**root_video_block_attrs)
@@ -304,8 +307,8 @@ class Formatter(helpers.CursorIterator):
             if not media_url.hostname.endswith(".tumblr.com"):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    title=self.localizer["error_link_block_fallback_native_audio_player_non_tumblr_source"],  # type: ignore
-                    description=self.localizer["audio_link_block_fallback_description"],  # type: ignore
+                    title=i18n.translate(self.localizer, "error_link_block_fallback_native_audio_player_non_tumblr_source"),  # type: ignore
+                    description=i18n.translate(self.localizer, "audio_link_block_fallback_description"),  # type: ignore
                     site_name=media_url.hostname,
                 )
 
@@ -333,7 +336,7 @@ class Formatter(helpers.CursorIterator):
                     dominate.tags.img(
                         src=self.url_handler(block.poster[0].url),
                         srcset=", ".join(image.create_srcset(block.poster, self.url_handler)),
-                        alt=block.title or self.localizer["fallback_audio_block_thumbnail_alt_text"],
+                        alt=block.title or i18n.translate(self.localizer, "fallback_audio_block_thumbnail_alt_text"),
                         sizes="(max-width: 540px) 100vh, 540px",
                         cls="ab-poster",
                     )
@@ -362,14 +365,14 @@ class Formatter(helpers.CursorIterator):
             if self.forbid_external_iframes and (block.embed_html or block.embed_url):
                 return self._audiovisual_link_block_fallback(
                     block,
-                    self.localizer["link_block_fallback_embeds_are_disabled"],  # type: ignore
-                    self.localizer["audio_link_block_fallback_description"],  # type: ignore
+                    i18n.translate(self.localizer, "link_block_fallback_embeds_are_disabled"),  # type: ignore
+                    i18n.translate(self.localizer, "audio_link_block_fallback_description"),  # type: ignore
                 )
             else:
                 return self._audiovisual_link_block_fallback(
                     block,
-                    self.localizer["error_audio_link_block_fallback_heading"],  # type: ignore
-                    self.localizer["audio_link_block_fallback_description"],  # type: ignore
+                    i18n.translate(self.localizer, "error_audio_link_block_fallback_heading"),  # type: ignore
+                    i18n.translate(self.localizer, "audio_link_block_fallback_description"),  # type: ignore
                 )
 
         audio_block = dominate.tags.div(cls="audio-block")
@@ -402,7 +405,9 @@ class Formatter(helpers.CursorIterator):
                             f"width: {round((votes[1]/block.total_votes) * 100, 3)}%;"
                         )
 
-                    dominate.tags.p(votes[1], cls="vote-count")
+                    dominate.tags.p(
+                        i18n.format_decimal(self.localizer, "poll-choice-vote-count", votes[1]), cls="vote-count"
+                    )
 
             poll_choices.add(poll_choice)
 
@@ -425,7 +430,14 @@ class Formatter(helpers.CursorIterator):
 
         if block.votes:
             poll_metadata.add(
-                dominate.tags.span(self.localizer["plural_poll_total_votes"](block.total_votes)),
+                dominate.tags.span(
+                    i18n.translate(
+                        self.localizer,
+                        "plural_poll_total_votes",
+                        number=block.total_votes,
+                        votes=i18n.format_decimal(self.localizer, "poll_votes", block.total_votes),
+                    )
+                ),
                 dominate.tags.span("•", cls="separator"),
             )
 
@@ -434,31 +446,37 @@ class Formatter(helpers.CursorIterator):
         if expiration > now:
             # Build time duration string
             remaining_time = expiration - now
-            duration_string = self.localizer["format_duration_func"](remaining_time)  # type: ignore
+            duration_string = i18n.format_duration(self.localizer, "poll_duration", remaining_time)  # type: ignore
 
             poll_metadata.add(
                 dominate.tags.span(
                     dominate.util.raw(
-                        self.localizer["poll_remaining_time"].format(  # type: ignore
-                            duration=HTMLTimeTag(
-                                duration_string, datetime=helpers.build_duration_string(remaining_time)
-                            ).render(pretty=False)
+                        i18n.translate(
+                            self.localizer,
+                            "poll_remaining_time",
+                            duration=(
+                                HTMLTimeTag(
+                                    duration_string, datetime=helpers.build_duration_string(remaining_time)
+                                ).render(pretty=False)
+                            ),
                         )
                     )
                 )
             )
 
         else:
-            human_readable_expiration = self.localizer["format_datetime_func"](expiration)  # type: ignore
+            human_readable_expiration = i18n.format_datetime(self.localizer, "poll_ended_on", expiration)  # type: ignore
             formatted_expiration = expiration.strftime("%Y-%m-%dT%H:%M")
 
             poll_metadata.add(
                 dominate.tags.span(
                     dominate.util.raw(
-                        self.localizer["poll_ended_on"].format(  # type: ignore
+                        i18n.translate(
+                            self.localizer,
+                            "poll_ended_on",
                             ended_date=HTMLTimeTag(human_readable_expiration, datetime=formatted_expiration).render(
                                 pretty=False
-                            )
+                            ),
                         )
                     )
                 )

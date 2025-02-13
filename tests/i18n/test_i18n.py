@@ -1,4 +1,5 @@
 import logging
+import copy
 
 import pytest
 import dominate
@@ -8,8 +9,12 @@ from npf_renderer import format_npf, DEFAULT_LOCALIZATION
 import i18n_test_data as mocks
 
 
-def helper_function(content, answer, layouts=None, localizer={}, poll_callback=None):
-    localizer = DEFAULT_LOCALIZATION | localizer
+def helper_function(content, answer, layouts=None, test_localizer={}, poll_callback=None):
+    localizer = copy.copy(DEFAULT_LOCALIZATION)
+
+    for localizer_type in localizer.keys():
+        if localizer_type in test_localizer:
+            localizer[localizer_type] = localizer[localizer_type] | test_localizer[localizer_type]
 
     has_error, formatted_result = format_npf(
         content, layouts, localizer=localizer, pretty_html=True, poll_result_callback=poll_callback
@@ -27,7 +32,7 @@ def test_can_modify_strings():
     helper_function(
         mocks.basic_string_modification["contents"],
         mocks.basic_string_modification["answer"],
-        localizer=mocks.basic_string_modification["localizer"],
+        test_localizer=mocks.basic_string_modification["localizer"],
     )
 
 
@@ -36,7 +41,7 @@ def test_can_translate_strings_in_ask():
         mocks.ask_i18n["contents"],
         mocks.ask_i18n["answer"],
         layouts=mocks.ask_i18n["layouts"],
-        localizer=mocks.ask_i18n["localizer"],
+        test_localizer=mocks.ask_i18n["localizer"],
     )
 
 
@@ -47,7 +52,7 @@ def test_can_delgate_plurals(number, expected_plural):
         content=mocks.can_format_plurals["contents"],
         answer=dominate.tags.div(mocks.generate_mock_poll_based_on_number(number, expected_plural), cls="post-body"),
         poll_callback=lambda _: mocks.generate_results_for_poll(number),
-        localizer=mocks.can_format_plurals["localizer"],
+        test_localizer=mocks.can_format_plurals["localizer"],
     )
 
 
@@ -60,7 +65,7 @@ def test_can_format_duration():
             cls="post-body",
         ),
         poll_callback=lambda _: mocks.generate_results_for_poll(250),
-        localizer=mocks.can_format_duration["localizer"],
+        test_localizer=mocks.can_format_duration["localizer"],
     )
 
 
@@ -75,5 +80,24 @@ def test_can_format_datetime():
             cls="post-body",
         ),
         poll_callback=lambda _: mocks.generate_results_for_poll(250),
-        localizer=mocks.can_format_datetime["localizer"],
+        test_localizer=mocks.can_format_datetime["localizer"],
+    )
+
+
+@freeze_time("2024-01-01 00:00:00")
+def test_can_format_numbers():
+    helper_function(
+        content=mocks.can_format_numbers["contents"],
+        answer=dominate.tags.div(
+            mocks.generate_mock_poll_based_on_number(
+                "2,500!",
+                None,
+                poll_footer=mocks.can_format_numbers["poll_footer"],
+                expired=True,
+                other_vote_count_strings="0!",
+            ),
+            cls="post-body",
+        ),
+        poll_callback=lambda _: mocks.generate_results_for_poll(2500),
+        test_localizer=mocks.can_format_numbers["localizer"],
     )

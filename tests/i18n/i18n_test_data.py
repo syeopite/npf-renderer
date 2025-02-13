@@ -24,8 +24,10 @@ def generate_image_block_html(index, siblings):
 basic_string_modification = {
     "contents": ({"type": "video", "url": "https://example.com/somevideo.mp4"},),
     "localizer": {
-        "error_video_link_block_fallback_heading": "Oops! Unable to produce a video renderer",
-        "video_link_block_fallback_description": "Instead... have a link! Click me to watch on the original site",
+        "strings": {
+            "error_video_link_block_fallback_heading": "Oops! Unable to produce a video renderer",
+            "video_link_block_fallback_description": "Instead... have a link! Click me to watch on the original site",
+        }
     },
     "answer": (
         dominate.tags.div(
@@ -65,7 +67,7 @@ ask_i18n = {
         {"type": "image", "media": [{"url": "https://example.com/example-image-4.png"}]},
         {"type": "image", "media": [{"url": "https://example.com/example-image-5.png"}]},
     ],
-    "localizer": {"asker_and_ask_verb": "asked by {name}:", "asker_with_no_attribution": "Unknown User"},
+    "localizer": {"strings": {"asker_and_ask_verb": "asked by {name}:", "asker_with_no_attribution": "Unknown User"}},
     "layouts": [
         {
             "type": "ask",
@@ -148,7 +150,11 @@ class HTMLTimeTag(dominate.tags.html_tag):
     tagname = "time"
 
 
-def generate_mock_poll_based_on_number(number, expected_plural_form, poll_footer=None, expired=False):
+def generate_mock_poll_based_on_number(
+    number, expected_plural_form, poll_footer=None, expired=False, other_vote_count_strings=""
+):
+    other_vote_count_strings = other_vote_count_strings or 0
+
     if number == 0:
         poll_choice_proportion_attrs = {}
         poll_choice_proportion_winner_attrs = {}
@@ -182,19 +188,19 @@ def generate_mock_poll_based_on_number(number, expected_plural_form, poll_footer
                 dominate.tags.li(
                     dominate.tags.h4("answer 1", cls="answer"),
                     dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_attrs),
-                    dominate.tags.p(0, cls="vote-count"),
+                    dominate.tags.p(other_vote_count_strings, cls="vote-count"),
                     cls=poll_choice_classes,
                 ),
                 dominate.tags.li(
                     dominate.tags.h4("answer 2", cls="answer"),
                     dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_attrs),
-                    dominate.tags.p(0, cls="vote-count"),
+                    dominate.tags.p(other_vote_count_strings, cls="vote-count"),
                     cls=poll_choice_classes,
                 ),
                 dominate.tags.li(
                     dominate.tags.h4("answer 3", cls="answer"),
                     dominate.tags.span(cls="vote-proportion", **poll_choice_proportion_attrs),
-                    dominate.tags.p(0, cls="vote-count"),
+                    dominate.tags.p(other_vote_count_strings, cls="vote-count"),
                     cls=poll_choice_classes,
                 ),
                 dominate.tags.li(
@@ -240,16 +246,14 @@ can_format_plurals = {
             "settings": {"expireAfter": "604800"},
         },
     ),
-    "localizer": {
-        "plural_poll_total_votes": lambda votes: f"{votes} ({sample_plural_handler(votes)})",
-    },
+    "localizer": {"strings": {"plural_poll_total_votes": lambda votes: f"{votes} ({sample_plural_handler(votes)})"}},
 }
 
 
 can_format_duration = {
     "contents": can_format_plurals["contents"],
     "localizer": {
-        "format_duration_func": lambda duration: f"Just {duration.days} days remaining!",
+        "formats": {"duration": {"poll_duration": lambda duration: f"Just {duration.days} days remaining!"}},
     },
     "poll_footer": dominate.tags.footer(
         dominate.tags.div(
@@ -268,7 +272,11 @@ can_format_duration = {
 can_format_datetime = {
     "contents": can_format_plurals["contents"],
     "localizer": {
-        "format_datetime_func": lambda datetime: f"{datetime.strftime('Ended on %Y-%m-%d')}",
+        "formats": {
+            "datetime": {
+                "poll_ended_on": lambda datetime: f"{datetime.strftime('Ended on %Y-%m-%d')}",
+            }
+        },
     },
     "poll_footer": dominate.tags.footer(
         dominate.tags.div(
@@ -277,6 +285,30 @@ can_format_datetime = {
             dominate.tags.span(
                 "Ended on: ",
                 dominate.util.raw(HTMLTimeTag("Ended on 2023-01-08", datetime="2023-01-08T00:00").render(pretty=False)),
+            ),
+            cls="poll-metadata",
+        ),
+    ),
+}
+
+
+can_format_numbers = {
+    "contents": can_format_plurals["contents"],
+    "localizer": {
+        "formats": {
+            "decimal": {
+                "__default__": lambda votes: "{:,}".format(votes),
+                "poll-choice-vote-count": lambda votes: "{:,}!".format(votes),
+            }
+        },
+    },
+    "poll_footer": dominate.tags.footer(
+        dominate.tags.div(
+            dominate.tags.span(f"2,500 votes"),
+            dominate.tags.span("•", cls="separator"),
+            dominate.tags.span(
+                "Ended on: ",
+                dominate.util.raw(HTMLTimeTag("2023-01-08 00:00:00", datetime="2023-01-08T00:00").render(pretty=False)),
             ),
             cls="poll-metadata",
         ),
