@@ -86,7 +86,9 @@ class Formatter(helpers.CursorIterator):
         with dominate.tags.div(cls="unsupported-content-block") as unsupported:
             with dominate.tags.div(cls="unsupported-content-block-message"):
                 dominate.tags.h1(i18n.translate(self.localizer, "unsupported_block_header"))
-                dominate.tags.p(i18n.translate(self.localizer, "unsupported_block_description"))
+                dominate.tags.p(
+                    i18n.translate(self.localizer, "unsupported_block_description").format(block=block.type)
+                )
 
         return unsupported
 
